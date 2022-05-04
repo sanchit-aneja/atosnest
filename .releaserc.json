@@ -26,7 +26,8 @@
             "@semantic-release/git",
             {
                 "assets": [
-                    "app/package.json"
+                    "app/package.json",
+                    "version.txt"
                 ],
                 "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
             }
@@ -35,7 +36,8 @@
         [
             "@semantic-release/exec",
             {
-                "successCmd": "echo 'export SEMANTIC_RELEASE_CREATED=true;' > success.sh && echo ${nextRelease.version} > version.txt"
+                "verifyReleaseCmd": "echo ${nextRelease.version} > version.txt",
+                "successCmd": "echo 'export SEMANTIC_RELEASE_CREATED=true;' > success.sh"
             }
         ]
     ]
