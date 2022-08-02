@@ -1,0 +1,26 @@
+{
+    "entryFile": "./",
+    "noImplicitAdditionalProperties": "throw-on-extras",
+    "controllerPathGlobs": [
+        "./controllers/*.ts"
+    ],
+    "spec": {
+        "name": "Contribution Index APIs",
+        "description": "REST APIs for Contribution Index",
+        "version": "",
+        "host": "localhost:7071",
+        "basePath": "/api",
+        "specVersion": 4,
+        "outputDirectory": "./swagger",
+        "schemes": [
+            "http"
+        ],
+        "securityDefinitions": {
+            "api_key": {
+                "type": "apiKey",
+                "name": "x-functions-key",
+                "in": "header"
+            }
+        }
+    }
+}

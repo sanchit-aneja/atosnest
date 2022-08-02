@@ -1,0 +1,19 @@
+{
+  "bindings": [
+    {
+      "name": "mySbMsg",
+      "type": "serviceBusTrigger",
+      "direction": "in",
+      "queueName": "contribution_header_file_added",
+      "connection": "contribution_ServiceBusConnectString"
+    },
+    {
+      "type": "eventGrid",
+      "name": "outputEvent",
+      "topicEndpointUri": "contribution_EventTopicUri",
+      "topicKeySetting": "contribution_EventKey",
+      "direction": "out"
+    }
+  ],
+  "scriptFile": "../dist/contribution-header-validation/index.js"
+}
