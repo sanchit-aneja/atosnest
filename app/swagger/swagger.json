@@ -1,0 +1,576 @@
+{
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"ContributionHeaderResponse": {
+				"properties": {
+					"nestScheduleReference": {
+						"type": "string"
+					},
+					"externalScheduleReference": {
+						"type": "string"
+					},
+					"scheduleType": {
+						"type": "string"
+					},
+					"scheduleStatusCd": {
+						"type": "string"
+					},
+					"scheduleGenerationDate": {
+						"type": "string",
+						"format": "date"
+					},
+					"employerNestId": {
+						"type": "string"
+					},
+					"groupSchemeID": {
+						"type": "string"
+					},
+					"subSchemeId": {
+						"type": "string"
+					},
+					"earningPeriodStartDate": {
+						"type": "string",
+						"format": "date"
+					},
+					"earningPeriodEndDate": {
+						"type": "string",
+						"format": "date"
+					},
+					"paymentPlanNo": {
+						"type": "string"
+					},
+					"paymentReference": {
+						"type": "string"
+					},
+					"paymentSourceName": {
+						"type": "string"
+					},
+					"paymentMethod": {
+						"type": "string"
+					},
+					"paymentMethodDesc": {
+						"type": "string"
+					},
+					"paymentFrequency": {
+						"type": "string"
+					},
+					"paymentFrequencyDesc": {
+						"type": "string"
+					},
+					"taxPayFrequencyInd": {
+						"type": "string"
+					},
+					"futurePaymentDate": {
+						"type": "string",
+						"format": "date"
+					},
+					"paymentDueDate": {
+						"type": "string",
+						"format": "date"
+					},
+					"pegaCaseReference": {
+						"type": "string"
+					},
+					"totContrAmt": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"recordStartDate": {
+						"type": "string",
+						"format": "date"
+					},
+					"recordEndDate": {
+						"type": "string",
+						"format": "date"
+					},
+					"createdBy": {
+						"type": "string"
+					},
+					"updatedBy": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"nestScheduleReference",
+					"scheduleType",
+					"scheduleStatusCd",
+					"scheduleGenerationDate",
+					"employerNestId",
+					"groupSchemeID",
+					"earningPeriodEndDate",
+					"paymentSourceName",
+					"paymentMethod",
+					"paymentMethodDesc",
+					"paymentDueDate"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ContributionStgScheduleResponse": {
+				"properties": {
+					"scheduleReference": {
+						"type": "string"
+					},
+					"groupSchemeID": {
+						"type": "string"
+					},
+					"subSchemeId": {
+						"type": "string"
+					},
+					"effectiveDate": {
+						"type": "string",
+						"format": "date"
+					},
+					"scheduleType": {
+						"type": "string"
+					},
+					"paymentPlanNo": {
+						"type": "number",
+						"format": "double"
+					},
+					"payReference": {
+						"type": "string"
+					},
+					"paymentDueDate": {
+						"type": "string",
+						"format": "date"
+					},
+					"startDate": {
+						"type": "string",
+						"format": "date"
+					},
+					"endDate": {
+						"type": "string",
+						"format": "date"
+					},
+					"mopType": {
+						"type": "string"
+					},
+					"mopTypeDesc": {
+						"type": "string"
+					},
+					"premFrequency": {
+						"type": "string"
+					},
+					"premFrequencyDesc": {
+						"type": "string"
+					},
+					"taxPeriodFreqInd": {
+						"type": "string"
+					},
+					"numberOfMembers": {
+						"type": "number",
+						"format": "double"
+					},
+					"recordStartDate": {
+						"type": "string",
+						"format": "date"
+					},
+					"recordEndDate": {
+						"type": "string",
+						"format": "date"
+					},
+					"createdBy": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"scheduleReference",
+					"effectiveDate",
+					"scheduleType",
+					"paymentPlanNo",
+					"mopType"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ContributionStgMemberResponse": {
+				"properties": {
+					"recordId": {
+						"type": "string"
+					},
+					"scheduleReference": {
+						"type": "string"
+					},
+					"cmPartyId": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"crmPartyId": {
+						"type": "string"
+					},
+					"planReference": {
+						"type": "string"
+					},
+					"membershipId": {
+						"type": "string"
+					},
+					"schemePayrollReference": {
+						"type": "string"
+					},
+					"nino": {
+						"type": "string"
+					},
+					"forename": {
+						"type": "string"
+					},
+					"surname": {
+						"type": "string"
+					},
+					"membershipEffectiveDate": {
+						"type": "string",
+						"format": "date"
+					},
+					"membershipStatus": {
+						"type": "string"
+					},
+					"membershipStatusDesc": {
+						"type": "string"
+					},
+					"category": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"categoryName": {
+						"type": "string"
+					},
+					"pensionableSalary": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"reasonCode": {
+						"type": "string"
+					},
+					"currentEmployerContribution": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"currentMemberContribution": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"newEmployerContribution": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"newSalary": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"recordStartDate": {
+						"type": "string",
+						"format": "date"
+					},
+					"recordEndDate": {
+						"type": "string",
+						"format": "date"
+					},
+					"createdBy": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"recordId",
+					"scheduleReference",
+					"cmPartyId",
+					"crmPartyId",
+					"planReference",
+					"membershipId",
+					"schemePayrollReference",
+					"nino",
+					"forename",
+					"surname",
+					"membershipEffectiveDate",
+					"membershipStatus",
+					"membershipStatusDesc",
+					"category",
+					"categoryName",
+					"pensionableSalary",
+					"reasonCode",
+					"currentEmployerContribution",
+					"currentMemberContribution",
+					"newEmployerContribution",
+					"newSalary"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ContributionStgPolicyResponse": {
+				"properties": {
+					"contrPolicyId": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"recordId": {
+						"type": "string"
+					},
+					"scheduleReference": {
+						"type": "string"
+					},
+					"planReference": {
+						"type": "string"
+					},
+					"policyId": {
+						"type": "string"
+					},
+					"taxReliefStatus": {
+						"type": "string"
+					},
+					"taxReliefStatusDesc": {
+						"type": "string"
+					},
+					"salaryBasis": {
+						"type": "string"
+					},
+					"salaryBasisDesc": {
+						"type": "string"
+					},
+					"regularContributionType": {
+						"type": "string"
+					},
+					"regularContributionTypeDesc": {
+						"type": "string"
+					},
+					"contributionPercentage": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"lastPaidAmount": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"recordStartDate": {
+						"type": "string",
+						"format": "date"
+					},
+					"recordEndDate": {
+						"type": "string",
+						"format": "date"
+					},
+					"createdBy": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"contrPolicyId",
+					"recordId",
+					"scheduleReference",
+					"planReference",
+					"policyId",
+					"taxReliefStatus",
+					"taxReliefStatusDesc",
+					"salaryBasis",
+					"salaryBasisDesc",
+					"regularContributionType",
+					"regularContributionTypeDesc",
+					"contributionPercentage",
+					"lastPaidAmount"
+				],
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
+		"securitySchemes": {
+			"api_key": {
+				"type": "apiKey",
+				"name": "x-functions-key",
+				"in": "header"
+			}
+		}
+	},
+	"info": {
+		"title": "Contribution Index APIs",
+		"version": "2.22.0",
+		"description": "REST APIs for Contribution Index",
+		"contact": {}
+	},
+	"openapi": "3.0.0",
+	"paths": {
+		"/contribution/header": {
+			"post": {
+				"operationId": "CreateContributionHeader",
+				"responses": {
+					"200": {
+						"description": "Success Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ContributionHeaderResponse"
+										},
+										{}
+									]
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid Request"
+					},
+					"404": {
+						"description": "Record does not exist"
+					},
+					"500": {
+						"description": "Internal Server Error"
+					}
+				},
+				"description": "5101 API Catalogue Number\r\nCreates a new contribution header record with nested request object of all related entities",
+				"security": [
+					{
+						"api_key": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/contribution/schedule": {
+			"post": {
+				"operationId": "CreateContributionScheduleStg",
+				"responses": {
+					"200": {
+						"description": "Success Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ContributionStgScheduleResponse"
+										},
+										{}
+									]
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid Request"
+					},
+					"404": {
+						"description": "Record does not exist"
+					},
+					"500": {
+						"description": "Internal Server Error"
+					}
+				},
+				"description": "5001 API Catalogue Number\r\nCreates a new contribution staging schedule record which contains CSV file data",
+				"security": [
+					{
+						"api_key": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": false,
+					"content": {
+						"application/json": {
+							"schema": {}
+						}
+					}
+				}
+			}
+		},
+		"/contribution/member": {
+			"post": {
+				"operationId": "CreateContributionMemberStg",
+				"responses": {
+					"200": {
+						"description": "Success Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ContributionStgMemberResponse"
+										},
+										{}
+									]
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid Request"
+					},
+					"404": {
+						"description": "Record does not exist"
+					},
+					"500": {
+						"description": "Internal Server Error"
+					}
+				},
+				"description": "5003 API Catalogue Number\r\nCreates a new contribution staging member record which contains CSV file data",
+				"security": [
+					{
+						"api_key": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": false,
+					"content": {
+						"application/json": {
+							"schema": {}
+						}
+					}
+				}
+			}
+		},
+		"/contribution/policy": {
+			"post": {
+				"operationId": "CreateContributionPolicyStg",
+				"responses": {
+					"200": {
+						"description": "Success Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ContributionStgPolicyResponse"
+										},
+										{}
+									]
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid Request"
+					},
+					"404": {
+						"description": "Record does not exist"
+					},
+					"500": {
+						"description": "Internal Server Error"
+					}
+				},
+				"description": "5005 API Catalogue Number\r\nCreates a new contribution staging policy record which contains CSV file data",
+				"security": [
+					{
+						"api_key": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": false,
+					"content": {
+						"application/json": {
+							"schema": {}
+						}
+					}
+				}
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "http://localhost:7071/api"
+		}
+	]
+}

@@ -1,0 +1,9 @@
+{
+  id: "7b11c4ce-1c34-4416-848b-1730e766f126",
+  subject: 'load-normalisation',
+  dataVersion: '1.0',
+  eventType: 'normalisation',
+  data: {
+      message: "start normalisation"
+  }
+}
