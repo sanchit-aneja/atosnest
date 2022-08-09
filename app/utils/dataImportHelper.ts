@@ -17,7 +17,7 @@ class DataImportHelper {
     private context: any
 
     /** DataImportHelper */
-    public DataImportHelper() {}
+    constructor() {}
     /**
      * 
      * @param data - CSV Files with namePrefix, columns and table name to import
