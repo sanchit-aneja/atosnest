@@ -126,6 +126,10 @@ File.init(
         updatedBy: {
             type: DataTypes.STRING(50),
             field: "updated_by"
+        },
+        filePegaCaseRef: {
+            type: DataTypes.STRING(30),
+            field: "file_pega_case_ref"
         }
     },
     {
