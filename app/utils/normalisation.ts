@@ -3,13 +3,13 @@ import { CustomError } from "../Errors";
 
 const normalisation = {
 
-  moveDataToContributionHeader: async function (transaction, context) {
+  moveDataToContributionHeader: async function (transaction, context, fileId): Promise<any> {
     try {
       const schema = process.env.contribution_DBSchema;
       const results = await sequelize.query(`INSERT INTO ${schema}."Contribution_Header"
       (file_id,nest_schedule_ref,external_schedule_ref,schedule_type,schedule_status_cd,schedule_generation_date,employer_nest_id,group_scheme_id,sub_scheme_id,earning_period_start_date,earning_period_end_date,payment_plan_no,payment_ref,payment_source_name,payment_method,payment_method_desc,payment_frequency,payment_frequency_desc,tax_pay_frequency_ind,future_payment_date,payment_due_date,pega_case_ref,no_of_membs,tot_schedule_amt,orig_schedule_ref,record_start_date,record_end_date,created_by,updated_by,last_updated_timestamp)
           Select
-          0 as fileId,
+          '${fileId}' as fileId,
           ROW_NUMBER() OVER (ORDER BY (SELECT 1)) as nestScheduleRef,
           sch.schedule_reference as externalScheduleRef,
           sch.schedule_type as scheduleType,
@@ -41,7 +41,8 @@ const normalisation = {
           CURRENT_TIMESTAMP as last_updated_timestamp
       FROM ${schema}."Stg_Contr_Sch" sch;
       `, { transaction })
-      context.log("Contribution_Header-> Number Rows going insert : ", results)
+      context.log("Contribution_Header-> Number Rows going insert : ", results);
+      return results[1];
     } catch (error) {
       context.log("normalisation::moveDataToContributionHeader::", error)
       throw new CustomError("BULK_INSERT_CONTRIBUTION_HEADER_FAILED", `${error?.name - error?.message - error?.moreDetails}`);

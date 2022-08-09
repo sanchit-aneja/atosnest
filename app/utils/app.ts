@@ -4,6 +4,7 @@ import * as csvf from 'fast-csv';
 import { regexPattern } from './constants';
 import Status from "../utils/config";
 import { CustomError } from "../Errors";
+import { FilterElements } from "../schemas/response-schema";
 
 const app = {
   DEFAULT_DATE_FORMAT: "YYYY-MM-DD",
@@ -52,6 +53,77 @@ const app = {
       deletedBy: this.loggedUser,
       deletedTimestamp: moment().toISOString(),
     };
+  },
+
+  mapFilterElements(request: FilterElements, defFilter) {
+    try {
+      const defOptions = {
+        limit: this.DEFAULT_LIMIT,
+        offset: this.DEFAULT_OFFSET,
+        sort: [],
+      };
+      let options;
+      let params = {};
+      if (!this.isNullEmpty(request.options)) {
+        options = this.mapFilterOptions(request.options, defOptions, defFilter);
+      }
+      params = request.params;
+      return { options, params };
+    } catch (e) {
+      return null;
+    }
+  },
+  mapFilterOptions(
+    reqOptions: FilterElements["options"],
+    optionsObj,
+    defFilter
+  ) {
+    try {
+      const options = optionsObj;
+      reqOptions &&
+        Object.entries(reqOptions).forEach(([key, value]) => {
+          let optionsKey = key.toString().toLowerCase();
+          if (optionsKey == "limit") {
+            options["limit"] = isNaN(value)
+              ? this.DEFAULT_LIMIT
+              : parseInt(value);
+          } else if (optionsKey == "offset") {
+            options["offset"] = isNaN(value)
+              ? this.DEFAULT_OFFSET
+              : parseInt(value);
+          } else if (optionsKey == "sort") {
+            options["sort"] = (value && value.length > 0) ? this.mapFilterSorting(value, defFilter) : this.mapFilterSorting("earningPeriodEndDate.desc", defFilter);
+          }
+        });
+      return options;
+    } catch (e) {
+      return {};
+    }
+  },
+
+  mapFilterSorting(value, defFilter) {
+    try {
+      let sortArr = [];
+      value &&
+        value.forEach((ele) => {
+          if (ele && ele.includes(".")) {
+            const [ipField, ipOrder] = ele.split(".");
+            const element = defFilter[ipField] && defFilter[ipField].split(".");
+            if (element && element.length && element[0] == "ContributionHeader") {
+              sortArr.push([element[1], ipOrder]);
+            } else {
+              ipOrder && element.push(ipOrder);
+              sortArr.push(element);
+            }
+          } else {
+            const element = defFilter[ele] && defFilter[ele].split(".");
+            element && element.length && sortArr.push(element);
+          }
+        });
+      return sortArr;
+    } catch (e) {
+      return [];
+    }
   },
 
   validateFilterParams(request, filterParams) {
@@ -291,9 +363,10 @@ class fieldVal {
   }
 
   isAlphaNumeric(length) {
-    if (!this.errors && this.val != undefined) {
+    if (!this.errors && this.val != undefined && this.val != '') {
       if (!regexPattern.alphaNumPattern.test(this.val) || this.val?.length > length) {
-        this.errMsg = `${this.fieldName} is should be alphanumeric & max ${length} chars`;
+        this.errMsg = `${this.fieldName} is should be alphanumeric & max ${length} chars -- 
+        value received ${this.val} `;
         this.errors = true;
       }
     }
@@ -323,7 +396,7 @@ class fieldVal {
   isDecimal([digits, precision]) {
     if (this.val?.indexOf('.')) {
       let number = this.val?.split('.');
-      if ((number[0]?.length <= digits) && (number[1]?.length <= digits) && (number[1]?.length <= precision)) {
+      if ((number[0]?.length > digits) && (number[1]?.length > precision)) {
         this.errMsg = `${this.fieldName} is not valid decimal number`;
         this.errors = true;
       }

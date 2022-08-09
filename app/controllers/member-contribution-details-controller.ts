@@ -1,6 +1,7 @@
 import {
   Get,
   Response,
+  Route,
   Security,
   SuccessResponse
 } from "tsoa";
@@ -10,16 +11,17 @@ import Status from "../utils/config";
 import sequelize from "../utils/database";
 import app from "../utils/app";
 
+@Route('/contribution')
 export class MemberContributionDetailsController {
 
   /**
   * 5202 API Catalogue Number
   * Retrieves the Member Contribution Details list based on scheduleReference passed.
-  * @param nestScheduleReference scheduleReference of the Member Contribution Details record to be fetched
+  * @param nestScheduleRef scheduleReference of the Member Contribution Details record to be fetched
   * @return Member Contribution Details list with Array< MemberContributionDetails> based on scheduleReference
   */
   @Security("api_key")
-  @Get("{nestScheduleReference}")
+  @Get("{nestScheduleRef}")
   @SuccessResponse("200", Status.SUCCESS_MSG)
   @Response("400", Status.BAD_REQUEST_MSG)
   @Response("404", Status.NOT_FOUND_MSG)

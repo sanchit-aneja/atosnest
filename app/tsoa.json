@@ -10,7 +10,7 @@
         "version": "",
         "host": "localhost:7071",
         "basePath": "/api",
-        "specVersion": 4,
+        "specVersion": 3,
         "outputDirectory": "./swagger",
         "schemes": [
             "http"

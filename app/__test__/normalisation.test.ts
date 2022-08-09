@@ -11,7 +11,7 @@ jest.mock('sequelize', () => {
         transaction: jest.fn(),
     };
     // Static methods
-    class Model {}
+    class Model { }
     Object.assign(Model, {
         init: jest.fn(),
         beforeCreate: jest.fn(),
@@ -33,6 +33,7 @@ import StgContrSchedule from "../models/stgcontrschedule";
 
 describe("Test: Normalisation functions", () => {
     let context: Context;
+    const fileId = 1;
 
     beforeEach(() => {
         context = { log: jest.fn() } as unknown as Context;
@@ -59,7 +60,7 @@ describe("Test: Normalisation functions", () => {
         ContributionHeader.bulkCreate = jest.fn().mockImplementation((rows) => Promise.resolve(rows));
         //Act
         const transaction = await sequelize.transaction();
-        await normalisation.moveDataToContributionHeader(transaction, context);
+        await normalisation.moveDataToContributionHeader(transaction, context, fileId);
 
         //Assert
         expect(StgContrSchedule.findAndCountAll).toBeCalled();
@@ -83,14 +84,14 @@ describe("Test: Normalisation functions", () => {
             }))
         });
 
-        app.mappingContributionHeader = jest.fn().mockImplementation((_rows) => {throw new CustomError("MAPPING_CONTRIBUTION_HEADER_FAILED", {message:"Something"}) });
+        app.mappingContributionHeader = jest.fn().mockImplementation((_rows) => { throw new CustomError("MAPPING_CONTRIBUTION_HEADER_FAILED", { message: "Something" }) });
 
         ContributionHeader.bulkCreate = jest.fn().mockImplementation((rows) => Promise.resolve(rows));
         //Act
         const transaction = await sequelize.transaction();
 
         //Assert
-        await expect(normalisation.moveDataToContributionHeader(transaction, context)).rejects.toThrow(CustomError);
+        await expect(normalisation.moveDataToContributionHeader(transaction, context, fileId)).rejects.toThrow(CustomError);
         expect(StgContrSchedule.findAndCountAll).toBeCalled();
     });
 
@@ -112,7 +113,7 @@ describe("Test: Normalisation functions", () => {
         const transaction = await sequelize.transaction();
 
         //Assert
-        await expect(normalisation.moveDataToContributionHeader(transaction, context)).rejects.toThrow(CustomError);
+        await expect(normalisation.moveDataToContributionHeader(transaction, context, fileId)).rejects.toThrow(CustomError);
         expect(StgContrSchedule.findAndCountAll).toBeCalled();
         expect(app.mappingContributionHeader).toBeCalledWith(dummyRows);
         expect(ContributionHeader.bulkCreate).toBeCalledTimes(0)
@@ -136,7 +137,7 @@ describe("Test: Normalisation functions", () => {
         const transaction = await sequelize.transaction();
 
         //Assert
-        await expect(normalisation.moveDataToContributionHeader(transaction, context)).rejects.toThrow(CustomError);
+        await expect(normalisation.moveDataToContributionHeader(transaction, context, fileId)).rejects.toThrow(CustomError);
         expect(StgContrSchedule.findAndCountAll).toBeCalled();
         expect(app.mappingContributionHeader).toBeCalledWith(dummyRows);
         expect(ContributionHeader.bulkCreate).toBeCalled();

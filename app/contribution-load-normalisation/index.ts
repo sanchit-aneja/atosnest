@@ -18,22 +18,13 @@ const eventGridTrigger: AzureFunction = async function (context: Context, eventG
         //Step1: Start transaction
         transaction = await sequelize.transaction();
 
-        //Step 2: move data to contribution header, using sequelize bluk insert.
-        // Think will be slow compare to direct SQL script to move from stag to this table.. TODO: R&D required
-        const noOfHeaderRec = await normalisation.moveDataToContributionHeader(transaction, context);
-
-        //Step 3: move data member contribution details
-        await normalisation.moveDataToMemberContributionDetails(transaction, context);
-
-        // Step4: All success commit
-        await transaction.commit();
-
-        // Step5: Save File Log
+        // Step2: Save File Log
+        const fileId = uuidv4();
         const blobServiceClient = blobHelper.getBlobServiceClient();
         const blobName = `Contribution_Header_File_${eventGridEvent?.data?.fileTimeStamp}`;
         const properties = await blobHelper.getBlobProperties(blobName, blobServiceClient);
         await File.create({
-            fileId: uuidv4(),
+            fileId: fileId,
             fileName: blobName,
             fileType: "CSE",
             fileSize: properties.contentLength,
@@ -44,9 +35,25 @@ const eventGridTrigger: AzureFunction = async function (context: Context, eventG
             fileProcessedDate: new Date().toISOString(),
             fileUploadedOn: new Date().toISOString(),
             fileSentDate: new Date().toISOString(),
-            noOfRecs: noOfHeaderRec,
+            noOfRecs: 0,
             noOfErrors: 0
         })
+
+
+
+        //Step 3: move data to contribution header, using sequelize bluk insert.
+        const noOfHeaderRec = await normalisation.moveDataToContributionHeader(transaction, context, fileId);
+        context.log("noOfHeaderRec", noOfHeaderRec);
+        //Step 4: move data member contribution details
+        await normalisation.moveDataToMemberContributionDetails(transaction, context);
+
+        //Step 5 : update the file table with no of records
+        await File.update({ noOfRecs: noOfHeaderRec }, {
+            where: { 'fileId': fileId },
+        });
+
+        // Ster5: All success commit
+        await transaction.commit();
     } catch (error) {
         context.log("normalisation failed : ", error);
         //FailedStep: Rollback changes

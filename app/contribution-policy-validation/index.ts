@@ -2,7 +2,6 @@ import { AzureFunction, Context } from "@azure/functions";
 import { v4 as uuidv4 } from 'uuid';
 import blobHelper from "../utils/blobHelper";
 import { policyColumns, policyFormats, LOADING_DATA_ERROR_CODES } from "../utils/constants";
-import { CustomError } from "../Errors";
 import app from "../utils/app";
 import { KafkaHelper } from "../utils";
 
@@ -23,7 +22,13 @@ const eventGridTrigger: AzureFunction = async function (context: Context, eventG
                     newItem = onResolved;
                 },
                 (onRejected) => {
-                    throw new CustomError("CONTRIBUTION_POLICY_VALIDATION_FAILED", onRejected);
+                    const errorPayload = {
+                        ...LOADING_DATA_ERROR_CODES.POLICY_VALIDATION,
+                        File_Name: fileName,
+                        Time_Of_Processing: (new Date()).toUTCString(),
+                        Error_Details: `${JSON.stringify(onRejected)}`
+                    }
+                    context.log(errorPayload);
                 });
         if (newItem) {
             const timeStamp = new Date().toUTCString();
