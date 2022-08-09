@@ -230,7 +230,6 @@ CREATE TABLE contribution_index_schema."File"
     File_Sent_Date       date  NULL ,
     No_Of_Recs           numeric(8,0)  NULL ,
     No_Of_Errors         numeric(5,0)  NULL ,
-    No_Of_Memb_Upd       numeric(8,0)  NULL ,
     Record_Start_Date    date  NULL ,
     Record_End_Date      date  NULL ,
     Created_By           VARCHAR2(50)  NULL ,
