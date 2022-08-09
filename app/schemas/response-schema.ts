@@ -183,117 +183,97 @@ export interface ContributionHeaderResponse {
 }
 
 export interface MemberContributionDetailsResponse {
-
-  schdlMembStatusCd: string;
+  /**
+  * @isInt
+  */
+  membContribDetlId: number;
+  nestScheduleRef: string;
+  membEnrolmentRef: string;
   /**
   * @isDate
   */
-  contributionDueDate: Date;
-  enrolmentReference: string;
+  membContriDueDate: Date;
+  membPlanRef?: string;
   /**
   * @isInt
   */
-  fileId?: number;
-  firstName: string;
-  lastName: string;
-  crmPartyId: string;
-  /**
-  * @isInt
-  */
-  cmPartyID: number;
-  nino: string;
-  alternativeID: string;
-  groupRefNum: string;
+  empGroupId: number;
   groupName: string;
+  schdlMembStatusCd: string;
+  membPartyId: string;
+  scmPartyId?: string;
+  nino?: string;
+  alternativeID?: string;
   /**
-  * @isInt
+  * @isFloat
   */
-  lastPaidPensEarnings: number;
-  lastReasonCode: string;
+  lastPaidPensEarnings?: number;
+  lastPaidReasonCode?: string;
   /**
-  * @isInt
+  * @isFloat
   */
-  lastPaidEmplContriAmt: number;
+  lastPaidEmplContriAmt?: number;
   /**
-  * @isInt
+  * @isFloat
   */
-  lastPaidMemblContriAmt: number;
-  enrolmentType: string;
+  lastPaidMembContriAmt?: number;
+  autoCalcFlag?: string;
   /**
-  * @isInt
+  * @isFloat
   */
-  pensEarnings: number;
+  pensEarnings?: number;
   /**
-  * @isInt
+  * @isFloat
   */
-  emplContriAmt: number;
-  /**
-  * @isInt
-  */
-  membContriAmt: number;
-  /**
-  * @isInt
-  */
-  emplContriPct: number;
-  /**
-  * @isInt
-  */
-  membContriPct: number;
-  autoCalcFlag: string;
+  emplContriAmt?: number;
   membNonPayReason: string;
   /**
-  * @isInt
+  * @isFloat
   */
-  membLeaveEarnings: number;
-  newGroupRefNum: string;
-  newGroupName: string;
+  membLeaveEarnings?: number;
   /**
   * @isInt
   */
-  newGroupPensEarnings: number;
+  newEmpGroupId?: number;
+  newGroupName?: string;
   /**
-  * @isInt
+  * @isFloat
   */
-  newGroupEmplContriAmt: number;
+  newGroupPensEarnings?: number;
   /**
-  * @isInt
+  * @isFloat
   */
-  newGroupMembContriAmt: number;
+  newGroupEmplContriAmt?: number;
   /**
-  * @isInt
+  * @isFloat
   */
-  newGroupEmplContriPct: number;
-  /**
-  * @isInt
-  */
-  newGroupMembContriPct: number;
-  optoutRefNum: string;
-  optoutDeclarationFlag: string;
-  newPaymentPlanNo: string;
-  newPaymentSourceName: string;
+  newGroupMembContriAmt?: number;
+  optoutRefNum?: string;
+  optoutDeclarationFlag?: string;
+  newPaymentPlanNo?: string;
+  newPaymentSourceName?: string;
   /**
   * @isDate
   */
-  membNonPayEffDate: Date;
-  newEnrolmentType: string;
+  membNonPayEffDate?: Date;
   /**
-  * @isInt
+  * @isFloat
   */
-  secEnrolPensEarnings: number;
+  secEnrolPensEarnings?: number;
   /**
-  * @isInt
+  * @isFloat
   */
-  secEnrolEmplContriAmt: number;
+  secEnrolEmplContriAmt?: number;
   /**
-  * @isInt
+  * @isFloat
   */
-  secEnrolMembContriAmt: number;
+  secEnrolMembContriAmt?: number;
+  channelType?: string;
+  memberExcludedFlag?: string;
   /**
   * @isDate
   */
-  memberLevelDueDate: Date;
-  memberExclusionFlag: string;
-  scheduleReference: string;
+  membPaymentDueDate?: Date;
   /**
   * @isDate
   */
@@ -304,4 +284,32 @@ export interface MemberContributionDetailsResponse {
   recordEndDate?: Date;
   createdBy?: string;
   updatedBy?: string;
+}
+
+interface FilterOptions {
+  /**
+   * @isInt
+   */
+  limit?: number;
+  /**
+   * @isInt
+   */
+  offset?: number;
+  sort?: string[];
+}
+
+interface FilterParams {
+  contribHeaderId?: string;
+  nestScheduleRef?: string;
+  employerNestId?: string;
+}
+
+export interface FilterElements {
+  options?: FilterOptions;
+  params: FilterParams;
+}
+
+export interface SearchResultsetResponse<T> {
+  totalRecordCount: number;
+  results: T[];
 }

@@ -2,7 +2,6 @@ import * as Joi from "joi";
 import { DataTypes, Model } from "sequelize";
 import { joiOption } from "../utils/constants";
 import sequelize from "../utils/database";
-import { v4 as uuidv4 } from 'uuid';
 
 class File extends Model { }
 
@@ -10,7 +9,6 @@ File.init(
     {
         fileId: {
             type: DataTypes.UUID,
-            defaultValue: uuidv4(),
             allowNull: false,
             primaryKey: true,
             field: "file_id",

@@ -2,6 +2,8 @@ import * as Joi from "joi";
 import { DataTypes, Model } from "sequelize";
 import { joiOption } from "../utils/constants";
 import sequelize from "../utils/database";
+import File from "./file";
+import RDScheduleStatus from "./rdschedulestatus";
 
 class ContributionHeader extends Model { }
 
@@ -23,7 +25,7 @@ ContributionHeader.init(
       },
     },
     fileId: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.UUID,
       field: "file_id"
     },
     nestScheduleRef: {
@@ -264,6 +266,32 @@ ContributionHeader.init(
     timestamps: true
   }
 );
+
+ContributionHeader.hasOne(File, {
+  sourceKey: "fileId",
+  foreignKey: "fileId",
+  as: "file",
+});
+File.belongsTo(ContributionHeader, {
+  as: "contributionheader",
+  targetKey: "fileId",
+  foreignKey: { name: "fileId", allowNull: false },
+  constraints: true,
+  onDelete: "CASCADE",
+});
+
+ContributionHeader.hasOne(RDScheduleStatus, {
+  sourceKey: "scheduleStatusCd",
+  foreignKey: "scheduleStatusCode",
+  as: "rdschedulestatus",
+});
+RDScheduleStatus.belongsTo(ContributionHeader, {
+  as: "contributionheader",
+  targetKey: "scheduleStatusCd",
+  foreignKey: { name: "scheduleStatusCode", allowNull: false },
+  constraints: true,
+  onDelete: "CASCADE",
+});
 
 ContributionHeader.addHook("beforeValidate", (contributionheader, _options) => {
   const schema = Joi.object({

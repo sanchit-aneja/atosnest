@@ -184,7 +184,7 @@ ContributionDetails.init(
       type: DataTypes.BIGINT,
       field: "new_emp_group_id"
     },
-    NewGroupName: {
+    newGroupName: {
       type: DataTypes.STRING(40),
       field: "new_group_name"
     },
