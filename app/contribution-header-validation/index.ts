@@ -3,6 +3,7 @@ import app from "../utils/app";
 import blobHelper from '../utils/blobHelper';
 import { headerColumns, headerColumnFormats, LOADING_DATA_ERROR_CODES } from "../utils/constants";
 import { v4 as uuidv4 } from 'uuid';
+import { KafkaHelper } from "../utils";
 
 const serviceBusQueueTrigger: AzureFunction = async function (context: Context, mySbMsg: any): Promise<void> {
     const fileName = app.getFileName(mySbMsg.subject);
@@ -55,6 +56,10 @@ const serviceBusQueueTrigger: AzureFunction = async function (context: Context, 
             Error_Details: `${error?.message} - ${error?.name} - ${error?.moreDetails}`
         }
 
+        //KafkaSend: Send error payload message
+        const kafkaHelper = new KafkaHelper(context);
+        await kafkaHelper.sendMessageToTopic( process.env.contribution_KafkaFailureTopic, errorPayload);
+        
         context.log('errorPayload', errorPayload);
     }
 };

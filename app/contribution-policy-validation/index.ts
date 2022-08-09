@@ -4,6 +4,7 @@ import blobHelper from "../utils/blobHelper";
 import { policyColumns, policyFormats, LOADING_DATA_ERROR_CODES } from "../utils/constants";
 import { CustomError } from "../Errors";
 import app from "../utils/app";
+import { KafkaHelper } from "../utils";
 
 const eventGridTrigger: AzureFunction = async function (context: Context, eventGridEvent: any): Promise<void> {
     context.log(" Policy Validation started: " + JSON.stringify(eventGridEvent));
@@ -48,6 +49,10 @@ const eventGridTrigger: AzureFunction = async function (context: Context, eventG
             Time_Of_Processing: (new Date()).toUTCString(),
             Error_Details: `${error?.message} - ${error?.name} - ${error?.moreDetails}`
         }
+        //KafkaSend: Send error payload message
+        const kafkaHelper = new KafkaHelper(context);
+        await kafkaHelper.sendMessageToTopic( process.env.contribution_KafkaFailureTopic, errorPayload);
+        
         console.log(errorPayload);
     }
 

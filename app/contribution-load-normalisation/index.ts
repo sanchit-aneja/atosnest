@@ -5,6 +5,7 @@ import { LOADING_DATA_ERROR_CODES, CSV_FILES } from "../utils/constants"
 import { File } from "../models"
 import { v4 as uuidv4 } from 'uuid';
 import blobHelper from '../utils/blobHelper';
+import { KafkaHelper } from "../utils";
 
 const eventGridTrigger: AzureFunction = async function (context: Context, eventGridEvent: any): Promise<void> {
     const startedTime = new Date();
@@ -58,6 +59,10 @@ const eventGridTrigger: AzureFunction = async function (context: Context, eventG
             Time_Of_Processing: (new Date()).toUTCString(),
             Error_Details: `${error?.message} - ${error?.name} - ${error?.moreDetails}`
         }
+
+        //KafkaSend: Send error payload message
+        const kafkaHelper = new KafkaHelper(context);
+        await kafkaHelper.sendMessageToTopic( process.env.contribution_KafkaFailureTopic, errorPayload);
         context.log('errorPayload', errorPayload);
     }
     const endTime = new Date();

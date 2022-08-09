@@ -21,6 +21,7 @@
     "fast-csv": "^4.3.6",
     "http": "0.0.1-security",
     "joi": "^17.6.0",
+    "kafkajs": "2.1.0",
     "pg": "^8.7.3",
     "pg-copy-streams": "^6.0.2",
     "pg-hstore": "^2.3.4",
