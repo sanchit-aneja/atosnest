@@ -1,0 +1,16 @@
+{
+    "contributionDetail": [
+        {
+            "membContribDetlId":1,
+            "membPlanRef": "N6957099",
+            "schdlMembStatusCd": "MS1",
+            "nestScheduleRef":"AAA23032022014",
+            "autoCalcFlag": "Y"
+        },
+        {
+            "membContribDetlId":2,
+            "membPlanRef": "N9288722",
+            "schdlMembStatusCd": "MS1"
+        }
+    ]
+}

@@ -3,6 +3,11 @@ import { DataTypes, Model } from "sequelize";
 import sequelize from "../utils/database";
 import * as moment from "moment";
 import app from "../utils/app";
+import { errorDetails, joiOption } from "../utils/constants";
+import { ContributionMemberDetails } from "../schemas";
+import { Context } from "@azure/functions";
+import Status from "../utils/config";
+import { CustomError } from "../Errors";
 
 class ContributionDetails extends Model { }
 
@@ -127,7 +132,7 @@ ContributionDetails.init(
       type: DataTypes.STRING(9),
       field: "nino"
     },
-    alternativeID: {
+    alternativeId: {
       type: DataTypes.STRING(16),
       field: "alternative_id"
     },
@@ -262,15 +267,130 @@ ContributionDetails.init(
       field: "updated_by",
     },
     lastUpdatedTimestamp: {
-      type: DataTypes.NOW,
+      type: DataTypes.DATE,
       field: "last_updated_timestamp"
     }
   },
   {
     sequelize,
     tableName: "Member_Contribution_Details",
-    timestamps: false
+    updatedAt: "last_updated_timestamp",
+    timestamps: true,
+    createdAt: false
   }
 );
 
+/**
+ * Before update hook
+ */
+ContributionDetails.beforeUpdate((contributionDetails, _options) => {
+  try {
+    const schema = Joi.object({
+      membPlanRef: Joi.string().max(16).optional().allow(null, ""),
+      schdlMembStatusCd: Joi.string().max(5).optional().allow(null, ""),
+      membPartyId: Joi.string().max(36).optional().allow(null, ""),
+      scmPartyId: Joi.string().max(16).optional().allow(null, ""),
+      nino: Joi.string().max(9).optional().allow(null, ""),
+      alternativeId: Joi.string().max(16).optional().allow(null, ""),
+      autoCalcFlag: Joi.string().max(1).min(1).optional().allow(null, ""),
+      membNonPayReason: Joi.string().max(5).optional().allow(null, ""),
+      newGroupName: Joi.string().max(40).optional().allow(null, ""),
+      
+      optoutRefNum: Joi.string().max(20).optional().allow(null, ""),
+      optoutDeclarationFlag: Joi.string().max(1).min(1).optional().allow(null, ""),
+      newPaymentPlanNo: Joi.string().max(11).optional().allow(null, ""),
+      newPaymentSourceName: Joi.string().max(40).optional().allow(null, ""),
+      
+      channelType:  Joi.string().max(3).optional().allow(null, ""),
+      memberExcludedFlag: Joi.string().max(1).min(1).optional().allow(null, ""),
+
+
+      membPaymentDueDate:  Joi.date().iso().optional().allow(null, ""),
+      recordStartDate: Joi.date().iso().optional().allow(null, ""),
+      recordEndDate: Joi.date().iso().optional().allow(null, ""),
+      membNonPayEffDate: Joi.date().iso().optional().allow(null, ""),
+
+
+      secEnrolPensEarnings: Joi.number().optional().allow(null, ""),
+      secEnrolEmplContriAmt: Joi.number().optional().allow(null, ""),
+      secEnrolMembContriAmt: Joi.number().optional().allow(null, ""),
+      newGroupPensEarnings: Joi.number().optional().allow(null, ""),
+      newGroupEmplContriAmt: Joi.number().optional().allow(null, ""),
+      newGroupMembContriAmt: Joi.number().optional().allow(null, ""),
+      membLeaveEarnings: Joi.number().optional().allow(null, ""),
+      pensEarnings:  Joi.number().optional().allow(null, ""),
+      emplContriAmt: Joi.number().optional().allow(null, ""),
+      membContriAmt: Joi.number().optional().allow(null, ""),
+      newEmpGroupId: Joi.number().integer().optional().allow(null, ""),
+    });
+  
+    Joi.assert(contributionDetails, schema, {
+      allowUnknown:true
+    });
+    
+  } catch (error) {
+      throw new CustomError("CONTRIBUTION_DETAILS_VALIDATION_FAILED", error.message);
+  }
+  
+})
+
+// Model helper methods
+
+/**
+ * This is helper method to update one by one member details
+ * @param membContribDetlId 
+ * @param currentMemberDetails 
+ * @param currentIndex 
+ * @param allErrors 
+ * @param transaction 
+ * @param context 
+ * @returns 
+ */
+ export const contributionDetailsUpdateHelper =  async function(membContribDetlId: number, currentMemberDetails: ContributionMemberDetails, currentIndex: number, allErrors: Array<UpdateError>, transaction, context: Context) {
+  if (app.isNullEmpty(currentMemberDetails)) {
+    context.log(`currentMemberDetails is empty object`);
+    allErrors.push({
+      statusCode: Status.BAD_REQUEST,
+      errorCode: errorDetails.CIA0600[0],
+      errorDetail: errorDetails.CIA0600[1]
+    });
+  } else if (!membContribDetlId) {
+    context.log(`membContribDetlId is not present or undefined! value is ${membContribDetlId}`);
+    allErrors.push({
+      statusCode: Status.NOT_FOUND,
+      errorCode: errorDetails.CIA0601[0],
+      errorDetail: errorDetails.CIA0601[1]
+    });
+  } else {
+    currentMemberDetails["updatedBy"] = "SYSTEM"; // This need be changed once we confirm
+    const effectRows = await ContributionDetails.update({
+      ...currentMemberDetails
+    }, {
+      where: { 'membContribDetlId': membContribDetlId },
+      transaction,
+      individualHooks: true
+    }) as any;
+
+    // Expecting effect rows may be zero when same value passed, but find row will present
+    // If zero rows effected the not found
+    if (effectRows[1]?.length === 0) {
+      context.log(`Update of membContribDetlId:${membContribDetlId} is failed..! ${effectRows}`)
+      allErrors.push({
+        statusCode: Status.NOT_FOUND,
+        errorCode: errorDetails.CIA0601[0],
+        errorDetail: errorDetails.CIA0601[1]
+      })
+    }
+  }
+  return allErrors;
+}
+
+
 export default ContributionDetails;
+
+export interface UpdateError{
+  statusCode: Status,
+  errorDetail: string,
+  errorCode: string,
+  membContribDetlId?: string
+}

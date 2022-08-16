@@ -229,7 +229,7 @@
 					"nino": {
 						"type": "string"
 					},
-					"alternativeID": {
+					"alternativeId": {
 						"type": "string"
 					},
 					"lastPaidPensEarnings": {

@@ -1,0 +1,20 @@
+{
+  "bindings": [
+    {
+      "authLevel": "function",
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "req",
+      "methods": [
+        "put"
+      ],
+      "route": "contribution/contributionDetails"
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "res"
+    }
+  ],
+  "scriptFile": "../dist/member-contribution-details-update/index.js"
+}

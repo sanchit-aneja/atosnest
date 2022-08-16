@@ -20,6 +20,9 @@ export const errorDetails = {
   CIA0501: ["CIA-0501", "Unique reference already exists"],
   CIA0502: ["CIA-0502", "Invalid data format"],
   CIA0503: ["CIA-0503", "Unique reference does not exists"],
+  CIA0600: ["CIA-0600", "Validation failed on request data"],
+  CIA0601: ["CIA-0601", "One or more membContribDetlId not found"],
+  CIA0602: ["CIA-0602", "Something went wrong, update fails"],
 };
 
 export const joiOption = {
@@ -274,3 +277,6 @@ export const headerFilterParams = {
   employerNestId: "ContributionHeader.employer_nest_id",
   earningPeriodEndDate: "ContributionHeader.earning_period_end_date"
 };
+
+export const READONLY_CONTRIBUTION_DETAILS_COLUMNS_FOR_UPDATE = ['membContribDetlId', 'nestScheduleRef', 'membEnrolmentRef', 'membContriDueDate',
+'groupName', 'createdBy', 'updatedBy', 'lastUpdatedTimestamp'];
