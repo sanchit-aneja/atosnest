@@ -203,7 +203,7 @@ export interface MemberContributionDetailsResponse {
   membPartyId: string;
   scmPartyId?: string;
   nino?: string;
-  alternativeID?: string;
+  alternativeId?: string;
   /**
   * @isFloat
   */

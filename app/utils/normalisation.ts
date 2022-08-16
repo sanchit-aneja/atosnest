@@ -65,7 +65,7 @@ const normalisation = {
           mem.crm_party_id as membPartyId,
           mem.cm_party_id as scmPartyId,
           mem.nino as nino,
-          mem.scheme_payroll_reference as alternativeID,
+          mem.scheme_payroll_reference as alternativeId,
           mem.pensionable_salary as lastPaidPensEarnings,
           mem.reason_code as lastPaidReasonCode,
           er_pol.last_paid_amount as lastPaidEmplContriAmt,
