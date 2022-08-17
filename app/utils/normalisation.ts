@@ -71,7 +71,7 @@ const normalisation = {
           er_pol.last_paid_amount as lastPaidEmplContriAmt,
           mr_pol.last_paid_amount as lastPaidMembContriAmt,
           'Y' as autoCalcFlag,
-          'RN' as membNonPayReason,
+          'CON01' as membNonPayReason,
           'WEB' as channelType,
           'SYSTEM' as createdBy,
           'SYSTEM' as updatedBy,

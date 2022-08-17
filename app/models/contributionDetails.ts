@@ -3,12 +3,13 @@ import { DataTypes, Model } from "sequelize";
 import sequelize from "../utils/database";
 import * as moment from "moment";
 import app from "../utils/app";
-import { errorDetails, joiOption } from "../utils/constants";
+import { errorDetails } from "../utils/constants";
 import { ContributionMemberDetails } from "../schemas";
 import { Context } from "@azure/functions";
 import Status from "../utils/config";
 import { CustomError } from "../Errors";
-
+import RDScheduleMemberStatus from "./rdschedulememberstatus";
+import RDPartContribReason from "./rdpartcontribreason";
 class ContributionDetails extends Model { }
 
 ContributionDetails.init(
@@ -279,6 +280,31 @@ ContributionDetails.init(
     createdAt: false
   }
 );
+ContributionDetails.hasOne(RDScheduleMemberStatus, {
+  sourceKey: "schdlMembStatusCd",
+  foreignKey: "schdlMembStatusCode",
+  as: "rdschedulememberstatus",
+});
+RDScheduleMemberStatus.belongsTo(ContributionDetails, {
+  as: "contributiondetails",
+  targetKey: "schdlMembStatusCd",
+  foreignKey: { name: "schdlMembStatusCode", allowNull: false },
+  constraints: true,
+  onDelete: "CASCADE",
+});
+
+ContributionDetails.hasOne(RDPartContribReason, {
+  sourceKey: "membNonPayReason",
+  foreignKey: "reasonCode",
+  as: "rdpartcontribreason",
+});
+RDPartContribReason.belongsTo(ContributionDetails, {
+  as: "contributiondetails",
+  targetKey: "membNonPayReason",
+  foreignKey: { name: "reasonCode", allowNull: false },
+  constraints: true,
+  onDelete: "CASCADE",
+});
 
 /**
  * Before update hook
@@ -295,17 +321,17 @@ ContributionDetails.beforeUpdate((contributionDetails, _options) => {
       autoCalcFlag: Joi.string().max(1).min(1).optional().allow(null, ""),
       membNonPayReason: Joi.string().max(5).optional().allow(null, ""),
       newGroupName: Joi.string().max(40).optional().allow(null, ""),
-      
+
       optoutRefNum: Joi.string().max(20).optional().allow(null, ""),
       optoutDeclarationFlag: Joi.string().max(1).min(1).optional().allow(null, ""),
       newPaymentPlanNo: Joi.string().max(11).optional().allow(null, ""),
       newPaymentSourceName: Joi.string().max(40).optional().allow(null, ""),
-      
-      channelType:  Joi.string().max(3).optional().allow(null, ""),
+
+      channelType: Joi.string().max(3).optional().allow(null, ""),
       memberExcludedFlag: Joi.string().max(1).min(1).optional().allow(null, ""),
 
 
-      membPaymentDueDate:  Joi.date().iso().optional().allow(null, ""),
+      membPaymentDueDate: Joi.date().iso().optional().allow(null, ""),
       recordStartDate: Joi.date().iso().optional().allow(null, ""),
       recordEndDate: Joi.date().iso().optional().allow(null, ""),
       membNonPayEffDate: Joi.date().iso().optional().allow(null, ""),
@@ -318,20 +344,20 @@ ContributionDetails.beforeUpdate((contributionDetails, _options) => {
       newGroupEmplContriAmt: Joi.number().optional().allow(null, ""),
       newGroupMembContriAmt: Joi.number().optional().allow(null, ""),
       membLeaveEarnings: Joi.number().optional().allow(null, ""),
-      pensEarnings:  Joi.number().optional().allow(null, ""),
+      pensEarnings: Joi.number().optional().allow(null, ""),
       emplContriAmt: Joi.number().optional().allow(null, ""),
       membContriAmt: Joi.number().optional().allow(null, ""),
       newEmpGroupId: Joi.number().integer().optional().allow(null, ""),
     });
-  
+
     Joi.assert(contributionDetails, schema, {
-      allowUnknown:true
+      allowUnknown: true
     });
-    
+
   } catch (error) {
-      throw new CustomError("CONTRIBUTION_DETAILS_VALIDATION_FAILED", error.message);
+    throw new CustomError("CONTRIBUTION_DETAILS_VALIDATION_FAILED", error.message);
   }
-  
+
 })
 
 // Model helper methods
@@ -346,7 +372,7 @@ ContributionDetails.beforeUpdate((contributionDetails, _options) => {
  * @param context 
  * @returns 
  */
- export const contributionDetailsUpdateHelper =  async function(membContribDetlId: number, currentMemberDetails: ContributionMemberDetails, currentIndex: number, allErrors: Array<UpdateError>, transaction, context: Context) {
+export const contributionDetailsUpdateHelper = async function (membContribDetlId: number, currentMemberDetails: ContributionMemberDetails, currentIndex: number, allErrors: Array<UpdateError>, transaction, context: Context) {
   if (app.isNullEmpty(currentMemberDetails)) {
     context.log(`currentMemberDetails is empty object`);
     allErrors.push({
@@ -388,7 +414,7 @@ ContributionDetails.beforeUpdate((contributionDetails, _options) => {
 
 export default ContributionDetails;
 
-export interface UpdateError{
+export interface UpdateError {
   statusCode: Status,
   errorDetail: string,
   errorCode: string,

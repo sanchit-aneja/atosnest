@@ -4,7 +4,7 @@ import * as csvf from 'fast-csv';
 import { regexPattern } from './constants';
 import Status from "../utils/config";
 import { CustomError } from "../Errors";
-import { FilterElements } from "../schemas/response-schema";
+import { DetailsFilterElements, HeaderFilterElements } from "../schemas/response-schema";
 
 const app = {
   DEFAULT_DATE_FORMAT: "YYYY-MM-DD",
@@ -55,44 +55,68 @@ const app = {
     };
   },
 
-  mapFilterElements(request: FilterElements, defFilter) {
-    try {
-      const defOptions = {
-        limit: this.DEFAULT_LIMIT,
-        offset: this.DEFAULT_OFFSET,
-        sort: [],
-      };
-      let options;
-      let params = {};
-      if (!this.isNullEmpty(request.options)) {
-        options = this.mapFilterOptions(request.options, defOptions, defFilter);
+  mapFilterElements(request, defFilter, type) {
+    const defOptions = {
+      limit: this.DEFAULT_LIMIT,
+      offset: this.DEFAULT_OFFSET,
+      sort: [],
+    };
+    let options;
+    let params = {};
+    if (!this.isNullEmpty(request.options)) {
+      if (type == "CH") {
+        options = this.mapHeaderFilterOptions(request.options, defOptions, defFilter, type);
+      } else {
+        options = this.mapDetailsFilterOptions(request.options, defOptions, defFilter, type);
       }
-      params = request.params;
-      return { options, params };
+    }
+    params = request.params;
+    return { options, params };
+  },
+
+  mapHeaderFilterElements(request: HeaderFilterElements, defFilter, type) {
+    try {
+      return this.mapFilterElements(request, defFilter, type);
     } catch (e) {
       return null;
     }
   },
-  mapFilterOptions(
-    reqOptions: FilterElements["options"],
+
+  mapDetailsFilterElements(request: DetailsFilterElements, defFilter, type) {
+    try {
+      return this.mapFilterElements(request, defFilter, type);
+    } catch (e) {
+      return null;
+    }
+  },
+
+  mapFilterOptions(reqOptions,
     optionsObj,
-    defFilter
-  ) {
+    defFilter,
+    type) {
     try {
       const options = optionsObj;
       reqOptions &&
-        Object.entries(reqOptions).forEach(([key, value]) => {
+        Object.entries(reqOptions).forEach(([key, value]: any) => {
           let optionsKey = key.toString().toLowerCase();
-          if (optionsKey == "limit") {
-            options["limit"] = isNaN(value)
-              ? this.DEFAULT_LIMIT
-              : parseInt(value);
-          } else if (optionsKey == "offset") {
-            options["offset"] = isNaN(value)
-              ? this.DEFAULT_OFFSET
-              : parseInt(value);
-          } else if (optionsKey == "sort") {
-            options["sort"] = (value && value.length > 0) ? this.mapFilterSorting(value, defFilter) : this.mapFilterSorting("earningPeriodEndDate.desc", defFilter);
+          switch (optionsKey) {
+            case 'limit':
+              options["limit"] = isNaN(value)
+                ? this.DEFAULT_LIMIT
+                : parseInt(value);
+              break;
+            case 'offset':
+              options["offset"] = isNaN(value)
+                ? this.DEFAULT_OFFSET
+                : parseInt(value);
+              break;
+            case 'sort':
+              if (type == "CH") {
+                options["sort"] = (value && value.length > 0) ? this.mapFilterSorting(value, defFilter) : this.mapFilterSorting("earningPeriodEndDate.desc", defFilter);
+              } else {
+                options["sort"] = this.mapFilterSorting(value, defFilter);
+              }
+              break;
           }
         });
       return options;
@@ -100,7 +124,36 @@ const app = {
       return {};
     }
   },
-
+  mapHeaderFilterOptions(
+    reqOptions: HeaderFilterElements["options"],
+    optionsObj,
+    defFilter,
+    type
+  ) {
+    try {
+      return this.mapFilterOptions(reqOptions,
+        optionsObj,
+        defFilter,
+        type);
+    } catch (e) {
+      return null;
+    }
+  },
+  mapDetailsFilterOptions(
+    reqOptions: DetailsFilterElements["options"],
+    optionsObj,
+    defFilter,
+    type
+  ) {
+    try {
+      return this.mapFilterOptions(reqOptions,
+        optionsObj,
+        defFilter,
+        type);
+    } catch (e) {
+      return null;
+    }
+  },
   mapFilterSorting(value, defFilter) {
     try {
       let sortArr = [];
@@ -109,7 +162,7 @@ const app = {
           if (ele && ele.includes(".")) {
             const [ipField, ipOrder] = ele.split(".");
             const element = defFilter[ipField] && defFilter[ipField].split(".");
-            if (element && element.length && element[0] == "ContributionHeader") {
+            if (element && element.length && (element[0] == "ContributionHeader" || element[0] == "ContributionDetails")) {
               sortArr.push([element[1], ipOrder]);
             } else {
               ipOrder && element.push(ipOrder);

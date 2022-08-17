@@ -29,25 +29,27 @@ const httpTrigger: AzureFunction = async function (
       );
       const resp = await app.errorResponse(400, data);
       context.res = resp;
-    } else {
-      queryReq.params = filterParams;
-      const ctrl = new ContributionHeaderController();
-      const item = await ctrl.getHeaderByFilter(queryReq);
-      if (item.results) {
-        const resp = await app.successResponse(item);
-        context.res = resp;
-      } else {
-        const data = errorHandler.mapHandleErrorResponse(
-          "",
-          "",
-          500,
-          item.message,
-          ""
-        );
-        const resp = await app.errorResponse(500, data);
-        context.res = resp;
-      }
+      return;
     }
+
+    queryReq.params = filterParams;
+    const ctrl = new ContributionHeaderController();
+    const item = await ctrl.getHeaderByFilter(queryReq);
+    if (item.results) {
+      const resp = await app.successResponse(item);
+      context.res = resp;
+    } else {
+      const data = errorHandler.mapHandleErrorResponse(
+        "",
+        "",
+        500,
+        item.message,
+        ""
+      );
+      const resp = await app.errorResponse(500, data);
+      context.res = resp;
+    }
+
   } catch (err) {
     context.log("Error found ", context.invocationId, err.message);
     const data = errorHandler.mapHandleErrorResponse(
