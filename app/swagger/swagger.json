@@ -161,7 +161,7 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"FilterParams": {
+			"HeaderFilterParams": {
 				"properties": {
 					"contribHeaderId": {
 						"type": "string"
@@ -176,13 +176,13 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"FilterElements": {
+			"HeaderFilterElements": {
 				"properties": {
 					"options": {
 						"$ref": "#/components/schemas/FilterOptions"
 					},
 					"params": {
-						"$ref": "#/components/schemas/FilterParams"
+						"$ref": "#/components/schemas/HeaderFilterParams"
 					}
 				},
 				"required": [
@@ -350,6 +350,229 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"SearchResultsetResponse_MemberContributionDetailsResponse_": {
+				"properties": {
+					"totalRecordCount": {
+						"type": "number",
+						"format": "double"
+					},
+					"results": {
+						"items": {
+							"$ref": "#/components/schemas/MemberContributionDetailsResponse"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"totalRecordCount",
+					"results"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"DetailsFilterParams": {
+				"properties": {
+					"nestScheduleRef": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"nestScheduleRef"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"DetailsFilterElements": {
+				"properties": {
+					"options": {
+						"$ref": "#/components/schemas/FilterOptions"
+					},
+					"params": {
+						"$ref": "#/components/schemas/DetailsFilterParams"
+					}
+				},
+				"required": [
+					"params"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ContributionDetailsUpdateError": {
+				"properties": {
+					"errorCode": {
+						"type": "string"
+					},
+					"errorDetail": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"errorCode",
+					"errorDetail"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ContributionDetailsResponseDTO": {
+				"properties": {
+					"message": {
+						"type": "string"
+					},
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/ContributionDetailsUpdateError"
+						},
+						"type": "array"
+					},
+					"type": {
+						"type": "string"
+					},
+					"instance": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"type",
+					"instance"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ContributionMemberDetails": {
+				"description": "This is Contribution member details interface",
+				"properties": {
+					"membContribDetlId": {
+						"type": "number",
+						"format": "double"
+					},
+					"membPlanRef": {
+						"type": "string"
+					},
+					"schdlMembStatusCd": {
+						"type": "string"
+					},
+					"membPartyId": {
+						"type": "string"
+					},
+					"scmPartyId": {
+						"type": "string"
+					},
+					"nino": {
+						"type": "string"
+					},
+					"alternativeId": {
+						"type": "string"
+					},
+					"autoCalcFlag": {
+						"type": "string"
+					},
+					"pensEarnings": {
+						"type": "number",
+						"format": "double"
+					},
+					"emplContriAmt": {
+						"type": "number",
+						"format": "double"
+					},
+					"membContriAmt": {
+						"type": "number",
+						"format": "double"
+					},
+					"membNonPayReason": {
+						"type": "string"
+					},
+					"membLeaveEarnings": {
+						"type": "number",
+						"format": "double"
+					},
+					"newEmpGroupId": {
+						"type": "number",
+						"format": "double"
+					},
+					"newGroupName": {
+						"type": "string"
+					},
+					"newGroupPensEarnings": {
+						"type": "number",
+						"format": "double"
+					},
+					"newGroupEmplContriAmt": {
+						"type": "number",
+						"format": "double"
+					},
+					"newGroupMembContriAmt": {
+						"type": "number",
+						"format": "double"
+					},
+					"optoutRefNum": {
+						"type": "string"
+					},
+					"optoutDeclarationFlag": {
+						"type": "string"
+					},
+					"newPaymentPlanNo": {
+						"type": "string"
+					},
+					"newPaymentSourceName": {
+						"type": "string"
+					},
+					"membNonPayEffDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"secEnrolPensEarnings": {
+						"type": "number",
+						"format": "double"
+					},
+					"secEnrolEmplContriAmt": {
+						"type": "number",
+						"format": "double"
+					},
+					"secEnrolMembContriAmt": {
+						"type": "number",
+						"format": "double"
+					},
+					"channelType": {
+						"type": "string"
+					},
+					"memberExcludedFlag": {
+						"type": "string"
+					},
+					"membPaymentDueDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"recordStartDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"recordEndDate": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"membContribDetlId"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ContributionDetailsRequestDTO": {
+				"description": "This is Contribution member details update API Request DTO interface",
+				"properties": {
+					"contributionDetail": {
+						"items": {
+							"$ref": "#/components/schemas/ContributionMemberDetails"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"contributionDetail"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {
@@ -362,7 +585,7 @@
 	},
 	"info": {
 		"title": "Contribution Index APIs",
-		"version": "1.0.0",
+		"version": "1.5.0",
 		"description": "REST APIs for Contribution Index",
 		"contact": {}
 	},
@@ -417,7 +640,7 @@
 			}
 		},
 		"/contribution/retrievescheduleheaders": {
-			"post": {
+			"put": {
 				"operationId": "GetHeaderByFilter",
 				"responses": {
 					"200": {
@@ -457,7 +680,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/FilterElements"
+								"$ref": "#/components/schemas/HeaderFilterElements"
 							}
 						}
 					}
@@ -510,6 +733,102 @@
 						}
 					}
 				]
+			}
+		},
+		"/contribution/retrieveContributionDetails": {
+			"put": {
+				"operationId": "GetDetailsByFilter",
+				"responses": {
+					"200": {
+						"description": "Success Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/SearchResultsetResponse_MemberContributionDetailsResponse_"
+										},
+										{}
+									]
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid Request"
+					},
+					"404": {
+						"description": "Record does not exist"
+					},
+					"500": {
+						"description": "Internal Server Error"
+					}
+				},
+				"description": "5205 API Catalogue Number\r\nRetrieves a list of details with filter criterias",
+				"security": [
+					{
+						"api_key": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/DetailsFilterElements"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/contribution/contributionDetails": {
+			"put": {
+				"operationId": "UpdateMemberContributionDetails",
+				"responses": {
+					"200": {
+						"description": "Success Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ContributionDetailsResponseDTO"
+										},
+										{}
+									]
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid Request"
+					},
+					"404": {
+						"description": "Record does not exist"
+					},
+					"500": {
+						"description": "Internal Server Error"
+					}
+				},
+				"description": "5204 API Catalogue Number\r\nUpdate the Contribution Details",
+				"security": [
+					{
+						"api_key": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ContributionDetailsRequestDTO"
+							}
+						}
+					}
+				}
 			}
 		}
 	},

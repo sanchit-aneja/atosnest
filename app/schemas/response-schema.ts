@@ -298,15 +298,24 @@ interface FilterOptions {
   sort?: string[];
 }
 
-interface FilterParams {
+interface HeaderFilterParams {
   contribHeaderId?: string;
   nestScheduleRef?: string;
   employerNestId?: string;
 }
 
-export interface FilterElements {
+export interface HeaderFilterElements {
   options?: FilterOptions;
-  params: FilterParams;
+  params: HeaderFilterParams;
+}
+
+interface DetailsFilterParams {
+  nestScheduleRef: string;
+}
+
+export interface DetailsFilterElements {
+  options?: FilterOptions;
+  params: DetailsFilterParams;
 }
 
 export interface SearchResultsetResponse<T> {

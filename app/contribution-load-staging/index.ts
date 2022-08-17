@@ -6,7 +6,10 @@ import { LOADING_DATA_ERROR_CODES, CSV_FILES } from "../utils/constants"
 import { KafkaHelper } from "../utils";
 
 const eventGridTrigger: AzureFunction = async function (context: Context, eventGridEvent: any): Promise<void> {
+    const startedTime = new Date();
+    context.log(`staging started on : ${startedTime.toUTCString()}`);
     try {
+
         logger.generateLogger.info(
             "contribution-load-staging",
             { url: (typeof eventGridEvent) },
@@ -41,9 +44,12 @@ const eventGridTrigger: AzureFunction = async function (context: Context, eventG
         }
         //KafkaSend: Send error payload message
         const kafkaHelper = new KafkaHelper(context);
-        await kafkaHelper.sendMessageToTopic( process.env.contribution_KafkaFailureTopic, errorPayload);
+        await kafkaHelper.sendMessageToTopic(process.env.contribution_KafkaFailureTopic, errorPayload);
         console.log(errorPayload);
     }
+    const endTime = new Date();
+    context.log(`staging ended on : ${endTime.toUTCString()}`);
+    context.log(`Total time taken for staging: ${(endTime.getTime() - startedTime.getTime()) / 1000} sec`)
 };
 
 export default eventGridTrigger;

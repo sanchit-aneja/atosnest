@@ -278,5 +278,9 @@ export const headerFilterParams = {
   earningPeriodEndDate: "ContributionHeader.earning_period_end_date"
 };
 
+export const memberFilterParams = {
+  nestScheduleRef: "ContributionDetails.nest_schedule_ref"
+};
+
 export const READONLY_CONTRIBUTION_DETAILS_COLUMNS_FOR_UPDATE = ['membContribDetlId', 'nestScheduleRef', 'membEnrolmentRef', 'membContriDueDate',
 'groupName', 'createdBy', 'updatedBy', 'lastUpdatedTimestamp'];

@@ -1,14 +1,14 @@
 import {
   Body,
   Get,
-  Post,
+  Put,
   Response,
   Route,
   Security,
   SuccessResponse
 } from "tsoa";
 import ContributionHeader from "../models/contributionheader";
-import { ContributionHeaderResponse, SearchResultsetResponse, FilterElements } from "../schemas/response-schema";
+import { ContributionHeaderResponse, SearchResultsetResponse, HeaderFilterElements } from "../schemas/response-schema";
 import Status from "../utils/config";
 import app from "../utils/app";
 import sequelize from "../utils/database";
@@ -58,18 +58,19 @@ export class ContributionHeaderController {
   * @return Contribution Header list with Array<Contribution_Header>
   */
   @Security("api_key")
-  @Post("/retrievescheduleheaders")
+  @Put("/retrievescheduleheaders")
   @SuccessResponse("200", Status.SUCCESS_MSG)
   @Response("400", Status.BAD_REQUEST_MSG)
   @Response("404", Status.NOT_FOUND_MSG)
   @Response("500", Status.FAILURE_MSG)
   async getHeaderByFilter(
-    @Body() requestObj: FilterElements
+    @Body() requestObj: HeaderFilterElements
   ): Promise<SearchResultsetResponse<ContributionHeaderResponse> | any> {
     try {
-      const element = app.mapFilterElements(
+      const element = app.mapHeaderFilterElements(
         requestObj,
-        headerFilterParams
+        headerFilterParams,
+        "CH"
       );
       let whereCdtn = {
         ...element.params,
