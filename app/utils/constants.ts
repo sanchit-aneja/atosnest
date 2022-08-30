@@ -1,20 +1,3 @@
-export const contributionHeaderFilterParams = {
-  scheduleGenerationDate: 'ContributionHeader.schedule_generation_date',
-  paymentMethodDesc: 'ContributionHeader.payment_method_desc',
-  paymentReference: 'ContributionHeader.payment_reference',
-  paymentSourceName: 'ContributionHeader.payment_source_name',
-  scheduleReference: 'ContributionHeader.schedule_reference',
-  scheduleType: 'ContributionHeader.schedule_type',
-  subSchemeId: 'ContributionHeader.sub_scheme_id',
-  paymentMethod: 'ContributionHeader.payment_method',
-  paymentDueDate: 'ContributionHeader.payment_due_date',
-  paymentFrequency: 'ContributionHeader.payment_frequency',
-  paymentFrequencyDesc: 'ContributionHeader.payment_frequency_desc',
-  numberOfMembers: 'ContributionHeader.number_of_members',
-  groupSchemeID: 'ContributionHeader.group_scheme_id',
-  taxPayFrequencyInd: 'ContributionHeader.tax_pay_frequency_ind'
-};
-
 export const errorDetails = {
   CIA0500: ["CIA-0500", "Data item missing"],
   CIA0501: ["CIA-0501", "Unique reference already exists"],
@@ -184,10 +167,9 @@ export const regexPattern = {
 
 export const CSV_FILES: { namePrefix: string, columns: string[], tableName: string }[] = [
   {
-    namePrefix: "Contribution_Header_File_",
+    namePrefix: "Contribution_Header_File_", // schedule
     columns: [
       "schedule_reference",
-      "group_scheme_id",
       "sub_scheme_id",
       "effective_date",
       "schedule_type",
@@ -287,4 +269,4 @@ export const memberFilterParams = {
 };
 
 export const READONLY_CONTRIBUTION_DETAILS_COLUMNS_FOR_UPDATE = ['membContribDetlId', 'nestScheduleRef', 'membEnrolmentRef', 'membContriDueDate',
-'groupName', 'createdBy', 'updatedBy', 'lastUpdatedTimestamp'];
+  'groupName', 'createdBy', 'updatedBy', 'lastUpdatedTimestamp', 'membPlanRef'];

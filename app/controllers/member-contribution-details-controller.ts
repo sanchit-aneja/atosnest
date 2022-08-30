@@ -210,5 +210,4 @@ export class MemberContributionDetailsController {
       return app.errorResponse(allErrors[0].statusCode, data);
     }
   }
-
 }

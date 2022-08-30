@@ -95,7 +95,6 @@ export interface ContributionStgMemberResponse {
 
 export interface ContributionStgScheduleResponse {
   scheduleReference: string;
-  groupSchemeID?: string;
   subSchemeId?: string;
   /**
   * @isDate
@@ -144,7 +143,6 @@ export interface ContributionHeaderResponse {
   */
   scheduleGenerationDate: Date;
   employerNestId: string;
-  groupSchemeId: string;
   subSchemeId?: string;
   /**
   * @isDate
@@ -169,7 +167,6 @@ export interface ContributionHeaderResponse {
   pegaCaseRef?: string;
   noOfMembs?: number;
   totScheduleAmt?: number,
-  origScheduleRef?: string;
   /**
   * @isDate
   */
@@ -284,6 +281,9 @@ export interface MemberContributionDetailsResponse {
   recordEndDate?: Date;
   createdBy?: string;
   updatedBy?: string;
+  employerNestId?: string,
+  origScheduleRef?: string
+
 }
 
 interface FilterOptions {
