@@ -170,6 +170,7 @@ export const CSV_FILES: { namePrefix: string, columns: string[], tableName: stri
     namePrefix: "Contribution_Header_File_", // schedule
     columns: [
       "schedule_reference",
+      "group_scheme_id",
       "sub_scheme_id",
       "effective_date",
       "schedule_type",
