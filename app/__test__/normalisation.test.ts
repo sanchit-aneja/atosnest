@@ -1,6 +1,6 @@
 import sequelize from "../utils/database";
 import { Context } from "@azure/functions";
-import app from "../utils/app"
+import app from "../utils/app";
 import { CustomError } from "../Errors";
 import normalisation from "../utils/normalisation";
 
@@ -55,16 +55,16 @@ describe("Test: Normalisation functions", () => {
             }))
         });
 
-        app.mappingContributionHeader = jest.fn().mockImplementation((rows) => rows);
+        normalisation.mappingContributionHeader = jest.fn().mockImplementation((rows) => rows);
 
         ContributionHeader.bulkCreate = jest.fn().mockImplementation((rows) => Promise.resolve(rows));
         //Act
         const transaction = await sequelize.transaction();
-        await normalisation.moveDataToContributionHeader(transaction, context, fileId);
+        await normalisation.createContributionHeader(context, fileId);
 
         //Assert
         expect(StgContrSchedule.findAndCountAll).toBeCalled();
-        expect(app.mappingContributionHeader).toBeCalledWith(dummyRows);
+        expect(normalisation.mappingContributionHeader).toBeCalledWith(dummyRows);
         expect(ContributionHeader.bulkCreate).toBeCalledWith(dummyRows, {
             validate: true,
             transaction
@@ -84,14 +84,14 @@ describe("Test: Normalisation functions", () => {
             }))
         });
 
-        app.mappingContributionHeader = jest.fn().mockImplementation((_rows) => { throw new CustomError("MAPPING_CONTRIBUTION_HEADER_FAILED", { message: "Something" }) });
+        normalisation.mappingContributionHeader = jest.fn().mockImplementation((_rows) => { throw new CustomError("MAPPING_CONTRIBUTION_HEADER_FAILED", { message: "Something" }) });
 
         ContributionHeader.bulkCreate = jest.fn().mockImplementation((rows) => Promise.resolve(rows));
         //Act
         const transaction = await sequelize.transaction();
 
         //Assert
-        await expect(normalisation.moveDataToContributionHeader(transaction, context, fileId)).rejects.toThrow(CustomError);
+        await expect(normalisation.createContributionHeader(context, fileId)).rejects.toThrow(CustomError);
         expect(StgContrSchedule.findAndCountAll).toBeCalled();
     });
 
@@ -106,16 +106,16 @@ describe("Test: Normalisation functions", () => {
             }))
         });
 
-        app.mappingContributionHeader = jest.fn().mockImplementation((_rows) => []);
+        normalisation.mappingContributionHeader = jest.fn().mockImplementation((_rows) => []);
 
         ContributionHeader.bulkCreate = jest.fn().mockImplementation((rows, _options) => Promise.resolve(rows));
         //Act
         const transaction = await sequelize.transaction();
 
         //Assert
-        await expect(normalisation.moveDataToContributionHeader(transaction, context, fileId)).rejects.toThrow(CustomError);
+        await expect(normalisation.createContributionHeader(context, fileId)).rejects.toThrow(CustomError);
         expect(StgContrSchedule.findAndCountAll).toBeCalled();
-        expect(app.mappingContributionHeader).toBeCalledWith(dummyRows);
+        expect(normalisation.mappingContributionHeader).toBeCalledWith(dummyRows);
         expect(ContributionHeader.bulkCreate).toBeCalledTimes(0)
     });
 
@@ -130,16 +130,16 @@ describe("Test: Normalisation functions", () => {
             }))
         });
 
-        app.mappingContributionHeader = jest.fn().mockImplementation((rows) => rows);
+        normalisation.mappingContributionHeader = jest.fn().mockImplementation((rows) => rows);
 
         ContributionHeader.bulkCreate = jest.fn().mockImplementation((_rows, _options) => Promise.reject("Something went wrong..!"));
         //Act
         const transaction = await sequelize.transaction();
 
         //Assert
-        await expect(normalisation.moveDataToContributionHeader(transaction, context, fileId)).rejects.toThrow(CustomError);
+        await expect(normalisation.createContributionHeader(context, fileId)).rejects.toThrow(CustomError);
         expect(StgContrSchedule.findAndCountAll).toBeCalled();
-        expect(app.mappingContributionHeader).toBeCalledWith(dummyRows);
+        expect(normalisation.mappingContributionHeader).toBeCalledWith(dummyRows);
         expect(ContributionHeader.bulkCreate).toBeCalled();
     });
 });

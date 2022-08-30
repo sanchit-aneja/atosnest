@@ -6,6 +6,8 @@ import { File } from "../models"
 import { v4 as uuidv4 } from 'uuid';
 import blobHelper from '../utils/blobHelper';
 import { KafkaHelper } from "../utils";
+import { ContributionHeaderController } from "../controllers/contribution-header-controller";
+import { MemberContributionDetailsController } from "../controllers/member-contribution-details-controller";
 
 const eventGridTrigger: AzureFunction = async function (context: Context, eventGridEvent: any): Promise<void> {
     const startedTime = new Date();
@@ -39,20 +41,15 @@ const eventGridTrigger: AzureFunction = async function (context: Context, eventG
             noOfErrors: 0
         })
 
-
-
         //Step 3: move data to contribution header, using sequelize bluk insert.
-        const noOfHeaderRec = await normalisation.moveDataToContributionHeader(transaction, context, fileId);
-        context.log("noOfHeaderRec", noOfHeaderRec);
+        const noOfHeaderRec = await normalisation.createContributionHeader(context, fileId);
         //Step 4: move data member contribution details
-        await normalisation.moveDataToMemberContributionDetails(transaction, context);
-
+        await normalisation.createContributionDetails(context);
         //Step 5 : update the file table with no of records
-        await File.update({ noOfRecs: noOfHeaderRec }, {
+        await File.update({ noOfRecs: noOfHeaderRec.count }, {
             where: { 'fileId': fileId },
         });
-
-        // Ster5: All success commit
+        // Ster 6: All success commit
         await transaction.commit();
     } catch (error) {
         context.log("normalisation failed : ", error);
@@ -69,7 +66,7 @@ const eventGridTrigger: AzureFunction = async function (context: Context, eventG
 
         //KafkaSend: Send error payload message
         const kafkaHelper = new KafkaHelper(context);
-        await kafkaHelper.sendMessageToTopic( process.env.contribution_KafkaFailureTopic, errorPayload);
+        await kafkaHelper.sendMessageToTopic(process.env.contribution_KafkaFailureTopic, errorPayload);
         context.log('errorPayload', errorPayload);
     }
     const endTime = new Date();

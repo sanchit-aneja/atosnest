@@ -274,46 +274,24 @@ const app = {
       }
     };
   },
-
-  mappingContributionHeader(request): any {
-    try {
-      let results = [];
-      Object.entries(request).forEach(([key, value]: any) => {
-        let params = {};
-        params = {
-          nestScheduleReference: 'CS' + (value._previousDataValues.premFrequency).trim() + moment(value._previousDataValues.endDate).format("DDMMYYYY") + this.addLeadingZeros(parseInt(key) + 1, 3),
-          externalScheduleReference: value._previousDataValues.scheduleReference,
-          scheduleType: value._previousDataValues.scheduleType,
-          scheduleStatusCd: 'CS1',
-          scheduleGenerationDate: value._previousDataValues.effectiveDate,
-          employerNestId: value._previousDataValues.groupSchemeID,
-          groupSchemeID: value._previousDataValues.groupSchemeID,
-          subSchemeId: value._previousDataValues.subSchemeId,
-          earningsPeriodStartDate: value._previousDataValues.startDate,
-          earningsPeriodEndDate: value._previousDataValues.endDate,
-          paymentPlanNo: value._previousDataValues.paymentPlanNo,
-          paymentReference: value._previousDataValues.payReference,
-          paymentSourceName: value._previousDataValues.paymentSourceName || 'paymentSourceName',
-          paymentMethod: value._previousDataValues.mopType,
-          paymentMethodDesc: value._previousDataValues.mopTypeDesc,
-          paymentFrequency: value._previousDataValues.premFrequency,
-          paymentFrequencyDesc: value._previousDataValues.premFrequencyDesc,
-          taxPayFrequencyInd: value._previousDataValues.taxPeriodFreqInd,
-          futurePaymentDate: '9999-12-12',
-          paymentDueDate: value._previousDataValues.paymentDueDate,
-          pegaCaseReference: 'pegaCase',
-          totContrAmt: 0,
-          recordStartDate: value._previousDataValues.recordStartDate,
-          recordEndDate: value._previousDataValues.recordEndDate,
-          createdBy: value._previousDataValues.createdBy,
-          updatedBy: ''
-        }
-        results.push(params);
-      });
-      return results;
-    } catch (e) {
-      throw new CustomError("MAPPING_CONTRIBUTION_HEADER_FAILED", e)
+  checkEmployerNestId(arr, val) {
+    let maxCount = 0;
+    let minCount = 0;
+    arr.forEach(element => {
+      if ((element._previousDataValues?.groupSchemeID).trim() === val) {
+        maxCount++;
+        minCount = 0;
+      }
+    });
+    if (minCount == 0 && maxCount == 1) {
+      return minCount;
+    } else {
+      return maxCount;
     }
+  },
+
+  getLastThreeChars(id) {
+    return id.substr(id.length - 3);
   },
 
   async getCSVDataFromReadStream(readStream: NodeJS.ReadableStream, columns: string[], formats: Array<Array<any>>): Promise<Array<any>> {

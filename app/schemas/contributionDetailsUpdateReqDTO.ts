@@ -3,7 +3,6 @@
  */
 export interface ContributionMemberDetails{
     membContribDetlId: number;
-    membPlanRef?: string;
     schdlMembStatusCd?: string;
     membPartyId?: string;
     scmPartyId?: string;

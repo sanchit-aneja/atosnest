@@ -1,7 +1,9 @@
 import * as Joi from "joi";
-import { DataTypes, Model } from "sequelize";
+import { DataTypes, Model, Sequelize } from "sequelize";
+import  StgContrMember  from "./stgcontrmember";
 import { joiOption } from "../utils/constants";
 import sequelize from "../utils/database";
+import ContributionDetails from "./contributionDetails";
 import File from "./file";
 import RDScheduleStatus from "./rdschedulestatus";
 
@@ -10,10 +12,10 @@ class ContributionHeader extends Model { }
 ContributionHeader.init(
   {
     contribHeaderId: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.UUID,
       allowNull: false,
-      autoIncrement: true,
       primaryKey: true,
+      defaultValue: Sequelize.literal("uuid_generate_v4()"),
       field: "contrib_header_id",
       validate: {
         notEmpty: {
@@ -96,10 +98,6 @@ ContributionHeader.init(
           msg: "employerNestId field cannot be null",
         },
       },
-    },
-    groupSchemeId: {
-      type: DataTypes.STRING(16),
-      field: "group_scheme_id"
     },
     subSchemeId: {
       type: DataTypes.STRING(16),
@@ -208,10 +206,6 @@ ContributionHeader.init(
       type: DataTypes.STRING(1),
       field: "tax_pay_frequency_ind"
     },
-    futurePaymentDate: {
-      type: DataTypes.DATE,
-      field: "future_payment_date"
-    },
     paymentDueDate: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -236,10 +230,6 @@ ContributionHeader.init(
     totScheduleAmt: {
       type: DataTypes.DECIMAL,
       field: "tot_schedule_amt"
-    },
-    origScheduleRef: {
-      type: DataTypes.STRING(14),
-      field: "orig_schedule_ref"
     },
     recordStartDate: {
       type: DataTypes.DATE,
@@ -293,6 +283,31 @@ RDScheduleStatus.belongsTo(ContributionHeader, {
   onDelete: "CASCADE",
 });
 
+ContributionHeader.hasOne(StgContrMember, {
+  sourceKey: "externalScheduleRef",
+  foreignKey: "scheduleReference",
+  as: "stgcontrmember",
+});
+StgContrMember.belongsTo(ContributionHeader, {
+  as: "contributionheader",
+  targetKey: "externalScheduleRef",
+  foreignKey: { name: "scheduleReference", allowNull: false },
+  constraints: true,
+  onDelete: "CASCADE",
+});
+ContributionHeader.hasOne(ContributionDetails, {
+  sourceKey: "nestScheduleRef",
+  foreignKey: "nestScheduleRef",
+  as: "contributiondetails",
+});
+ContributionDetails.belongsTo(ContributionHeader, {
+  as: "contributionheader",
+  targetKey: "nestScheduleRef",
+  foreignKey: { name: "nestScheduleRef", allowNull: false },
+  constraints: true,
+  onDelete: "CASCADE",
+});
+
 ContributionHeader.addHook("beforeValidate", (contributionheader, _options) => {
   const schema = Joi.object({
     contribHeaderId: Joi.number().optional().allow(null, ""),
@@ -303,7 +318,6 @@ ContributionHeader.addHook("beforeValidate", (contributionheader, _options) => {
     scheduleStatusCd: Joi.string().alphanum().max(5).trim(true).optional().allow(null, ""),
     scheduleGenerationDate: Joi.date().iso().optional().allow(null),
     employerNestId: Joi.string().alphanum().max(30).trim(true).optional().allow(null, ""),
-    groupSchemeId: Joi.string().alphanum().max(16).trim(true).optional().allow(null, ""),
     subSchemeId: Joi.string().alphanum().max(16).trim(true).optional().allow(null, ""),
     earningPeriodStartDate: Joi.date().iso().optional().allow(null),
     earningPeriodEndDate: Joi.date().iso().optional().allow(null),
@@ -315,12 +329,10 @@ ContributionHeader.addHook("beforeValidate", (contributionheader, _options) => {
     paymentFrequency: Joi.string().alphanum().max(2).trim(true).optional().allow(null, ""),
     paymentFrequencyDesc: Joi.string().alphanum().max(30).trim(true).optional().allow(null, ""),
     taxPayFrequencyInd: Joi.string().alphanum().max(1).trim(true).optional().allow(null, ""),
-    futurePaymentDate: Joi.date().iso().optional().allow(null),
     paymentDueDate: Joi.date().iso().optional().allow(null),
     pegaCaseRef: Joi.string().alphanum().max(30).trim(true).optional().allow(null, ""),
     noOfMembs: Joi.number().max(8).optional().allow(null, ""),
     totScheduleAmt: Joi.number().optional().allow(null, ""),
-    origScheduleRef: Joi.string().alphanum().max(14).trim(true).optional().allow(null, ""),
     recordStartDate: Joi.date().iso().optional().allow(null),
     recordEndDate: Joi.date().iso().optional().allow(null),
     createdBy: Joi.string().alphanum().max(50).trim(true).optional().allow(null, ""),

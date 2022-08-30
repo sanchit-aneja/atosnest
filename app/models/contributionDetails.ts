@@ -1,5 +1,5 @@
 import * as Joi from "joi";
-import { DataTypes, Model } from "sequelize";
+import { DataTypes, Model, Sequelize } from "sequelize";
 import sequelize from "../utils/database";
 import * as moment from "moment";
 import app from "../utils/app";
@@ -15,11 +15,10 @@ class ContributionDetails extends Model { }
 ContributionDetails.init(
   {
     membContribDetlId: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.UUID,
       allowNull: false,
-      autoIncrement: true,
-      autoIncrementIdentity: true,
       primaryKey: true,
+      defaultValue: Sequelize.literal("uuid_generate_v4()"),
       field: "memb_contrib_detl_id",
       validate: {
         notEmpty: {
@@ -73,19 +72,6 @@ ContributionDetails.init(
       type: DataTypes.STRING(16),
       field: "memb_plan_ref"
     },
-    empGroupId: {
-      type: DataTypes.BIGINT,
-      allowNull: false,
-      field: "emp_group_id",
-      validate: {
-        notEmpty: {
-          msg: "empGroupId field cannot be empty",
-        },
-        notNull: {
-          msg: "empGroupId field cannot be null",
-        },
-      },
-    },
     groupName: {
       type: DataTypes.STRING(40),
       allowNull: false,
@@ -137,22 +123,6 @@ ContributionDetails.init(
       type: DataTypes.STRING(16),
       field: "alternative_id"
     },
-    lastPaidPensEarnings: {
-      type: DataTypes.DECIMAL,
-      field: "last_paid_pens_earnings"
-    },
-    lastPaidReasonCode: {
-      type: DataTypes.STRING(5),
-      field: "last_paid_reason_code"
-    },
-    lastPaidEmplContriAmt: {
-      type: DataTypes.DECIMAL,
-      field: "last_paid_empl_contri_amt"
-    },
-    lastPaidMembContriAmt: {
-      type: DataTypes.DECIMAL,
-      field: "last_paid_memb_contri_amt"
-    },
     autoCalcFlag: {
       type: DataTypes.STRING(1),
       field: "auto_calc_flag"
@@ -185,10 +155,6 @@ ContributionDetails.init(
     membLeaveEarnings: {
       type: DataTypes.DECIMAL,
       field: "memb_leave_earnings"
-    },
-    newEmpGroupId: {
-      type: DataTypes.BIGINT,
-      field: "new_emp_group_id"
     },
     newGroupName: {
       type: DataTypes.STRING(40),
@@ -270,7 +236,42 @@ ContributionDetails.init(
     lastUpdatedTimestamp: {
       type: DataTypes.DATE,
       field: "last_updated_timestamp"
+    },
+    empGroupId: {
+      type: DataTypes.BIGINT,
+      allowNull: false,
+      field: "emp_group_id",
+      validate: {
+        notEmpty: {
+          msg: "empGroupId field cannot be empty",
+        },
+        notNull: {
+          msg: "empGroupId field cannot be null",
+        },
+      },
+    },
+    newEmpGroupId: {
+      type: DataTypes.BIGINT,
+      field: "new_emp_group_id"
+    },
+    employerNestId: {
+      type: DataTypes.STRING(30),
+      allowNull: false,
+      field: "employer_nest_id",
+      validate: {
+        notEmpty: {
+          msg: "employerNestId field cannot be empty",
+        },
+        notNull: {
+          msg: "employerNestId field cannot be null",
+        },
+      },
+    },
+    origScheduleRef: {
+      type: DataTypes.STRING(14),
+      field: "orig_schedule_ref"
     }
+
   },
   {
     sequelize,
@@ -348,6 +349,7 @@ ContributionDetails.beforeUpdate((contributionDetails, _options) => {
       emplContriAmt: Joi.number().optional().allow(null, ""),
       membContriAmt: Joi.number().optional().allow(null, ""),
       newEmpGroupId: Joi.number().integer().optional().allow(null, ""),
+
     });
 
     Joi.assert(contributionDetails, schema, {
