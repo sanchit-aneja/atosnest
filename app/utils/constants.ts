@@ -268,6 +268,10 @@ export const LOADING_DATA_ERROR_CODES = {
   POLICY_VALIDATION: {
     Error_Code: "POLICY_VALIDATION_FAILED",
     Error_Name: "Policy file has invalid data"
+  },
+  FILE_HEADER_VALIDATION:{
+    Error_Code: "FILE_HEADER_VALIDATION_FAILED",
+    Error_Name: "file header has invalid data"
   }
 }
 
