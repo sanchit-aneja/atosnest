@@ -1,0 +1,37 @@
+{
+    "IsEncrypted": false,
+    "ApplicationInsights": {
+      "InstrumentationKey": "b11db3ad-42b6-4155-8f2c-b0099e411221",
+      "IsEncrypted": false,
+      "Values": {
+        "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+        "FUNCTIONS_WORKER_RUNTIME": "node"
+      }
+    },
+    "Values": {
+      "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+      "FUNCTIONS_WORKER_RUNTIME": "node",
+      "AzureWebJobsSecretStorageType": "files",
+      "AzureWebJobsDashboard": "",
+      "contribution_DBName": "contribution_index",
+      "contribution_DBUser": "coi_functionapp_user",
+      "contribution_DBPass": "admin@135",
+      "contribution_DBHost": "localhost",
+      "contribution_DBPort": 5432,
+      "contribution_DBSchema": "public",
+      "contribution_DBSSL": "true",
+      "INSTRUMENT_KEY": "b11db3ad-42b6-4155-8f2c-b0099e411221",
+      "contribution_BlobConnectString": "DefaultEndpointsProtocol=https;AccountName=csvuploads1;AccountKey=oWc6WJtXMSKHwkslUxulR0klQ9e4kq+qwygjP+tfvGaF6E4QiBglxR889B1O3HQngOKotuCRC/st+ASt5goH2A==;EndpointSuffix=core.windows.net",
+      "contribution_BlobContainerName": "blobs",
+      "contribution_ServiceBusConnectString": "Endpoint=sb://contributionindexservicebus.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=ui/78tSGczgbJiEsD7dxFtxdTexO14e71PbVf+Cc2FY=",
+      "contribution_EventTopicUri": "https://*********.centralus-1.eventgrid.azure.net/api/events",
+      "contribution_EventKey": "Up*************fA1SnKzwrJUrcQ4I7vU=",
+      "contribution_ValidationMemberSubject": "validate-members",
+      "contribution_ValidationPolicySubject": "validate-policy",
+      "contribution_LoadStagingSubject": "load-staging",
+      "contribution_LoadNormalisationSubject": "load-normalisation"
+    },
+    "Host": {
+      "CORS": "*"
+    }
+  }

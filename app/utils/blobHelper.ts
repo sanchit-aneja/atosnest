@@ -3,6 +3,7 @@ import {
     BlobGetPropertiesResponse
 } from '@azure/storage-blob';
 import { CustomError } from '../Errors';
+const { Readable } = require("stream")
 
 const blobHelper = {
     /**
@@ -35,6 +36,28 @@ const blobHelper = {
         }
         
     },
+    /**
+     * stream to string of blob content
+     * @param stream
+     * @returns string
+     */
+    streamToString (stream: NodeJS.ReadableStream):Promise<string> {
+        const chunks = [];
+        return new Promise((resolve, reject) => {
+          stream.on('data', (chunk) => chunks.push(Buffer.from(chunk)));
+          stream.on('error', (err) => reject(err));
+          stream.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')));
+        })
+    },
+    /**
+     * string to stream of blob content
+     * @param data 
+     * @returns 
+     */
+    stringToStream(data:string):NodeJS.ReadableStream{
+        return Readable.from(data);
+    },
+
     /**
      * get Blob properties
      * @param blobName
