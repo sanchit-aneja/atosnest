@@ -13,9 +13,6 @@ const serviceBusQueueTrigger: AzureFunction = async function (
   context: Context,
   mySbMsg: any
 ): Promise<void> {
-  console.log("mySbMsg", mySbMsg.subject);
-  //added console for checking pipeline deploy to dev1
-  console.log("testing pipeline");
   const fileName = app.getFileName(mySbMsg.subject);
   let fileTime = app.getFileTimeStamp(fileName);
   try {
