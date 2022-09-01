@@ -19,6 +19,18 @@ const Type2BValidations = {
           }
     },
     /**
+     * is date valid
+     * @param value
+     */
+    isValidateDate: function(value){
+        const values = value.split("-");
+        const date = new Date(value);
+        if(date.getDate() === parseInt(values[2])){
+            return true
+        }
+        return false
+    },
+    /**
      * Type 2B rules
      */
     rules: {
@@ -66,7 +78,7 @@ const Type2BValidations = {
                 }
                 const pattern = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
                 errorMessage = "Please check the details in the header record field as they appear to be in the wrong format: EPED. Please format dates in this field as YYYY-MM-DD.";
-                if (!pattern.test(epedDate)) { // Only format checking is done. But for example 9999-10-31 is also valid..
+                if (!pattern.test(epedDate) || !Type2BValidations.isValidateDate(epedDate)) { // Only format checking is done. But for example 9999-10-31 is also valid..
                     return errorMessage
                 }
                 return "";
@@ -119,7 +131,7 @@ const Type2BValidations = {
                     return ""
                 }
                 const pattern = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
-                if (!pattern.test(pddDate)) { // Only format checking is done. But for example 9999-10-31 is also valid..
+                if (!pattern.test(pddDate) || !Type2BValidations.isValidateDate(pddDate)) { // Only format checking is done. But for example 9999-10-31 is also valid..
                     return errorMessage
                 }
                 return "";
@@ -136,7 +148,7 @@ const Type2BValidations = {
                     return ""
                 }
                 const pattern = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
-                if (!pattern.test(epsdDate)) { // Only format checking is done. But for example 9999-10-31 is also valid..
+                if (!pattern.test(epsdDate) || !Type2BValidations.isValidateDate(epsdDate)) { // Only format checking is done. But for example 9999-10-31 is also valid..
                     return errorMessage
                 }
                 return "";
