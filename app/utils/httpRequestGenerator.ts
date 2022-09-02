@@ -1,6 +1,5 @@
 import Axios, { AxiosPromise, AxiosInstance } from "axios";
-import https from "https";
-const a = "";
+import * as https from "https";
 export function httpRequestGenerator(
   requestType: "GET" | "POST" | "PATCH" | "PUT" | "DELETE",
   url: string,

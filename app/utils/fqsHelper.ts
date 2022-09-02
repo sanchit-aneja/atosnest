@@ -1,6 +1,8 @@
 import { AxiosResponse } from "axios";
-import { httpRequestGenerator } from "./httpRequestGenerator";
 import { Context } from "@azure/functions";
+import { httpRequestGenerator } from "./httpRequestGenerator";
+import { fqsbody, eventbody, intentAttributes, fqserror } from "./fqsBody";
+
 const ROOT_ENDPOINT = process.env.fqs_Host;
 
 class FQSHelper {
@@ -90,5 +92,41 @@ class FQSHelper {
         });
     });
   }
+  /**
+   * update FQS  finished Status
+   * @param correlationId
+   * @param fileId
+   * @param stage
+   * @param status
+   * @param errors
+   * @returns json
+   */
+  getFQSBody(
+    correlationId: string,
+    fileId: string,
+    stage: string,
+    status: string,
+    errors?: any
+  ) {
+    eventbody.correlationId = correlationId;
+    eventbody.payloadType = "ContIndexFileUpload";
+    eventbody.srcSystemId = "AZURE";
+    eventbody.recievedDateTime = new Date().toUTCString();
+    intentAttributes.FileId = fileId;
+    intentAttributes.Stage = stage;
+    intentAttributes.Status = status;
+
+    if (errors) {
+      intentAttributes.NumberOfErrors = errors.length;
+      const error = errors[0];
+      fqserror.ErrorItem = error.Error_Code;
+      fqserror.ErrorText = error.Error_Name;
+      intentAttributes.error = fqserror;
+    }
+    eventbody.intentAttributes = intentAttributes;
+    fqsbody.eventBody = eventbody;
+    return fqsbody;
+  }
 }
+
 export default FQSHelper;
