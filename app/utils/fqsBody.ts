@@ -1,8 +1,8 @@
-interface FQSBody {
+export interface FQSBody {
   eventBody: EventBody;
 }
 
-interface EventBody {
+export interface EventBody {
   correlationId: string;
   payloadType: string;
   srcSystemId: string;
@@ -10,26 +10,18 @@ interface EventBody {
   intentAttributes: IntentAttributes;
 }
 
-interface IntentAttributes {
+export interface IntentAttributes {
   FileId: string;
   Stage: string;
   Status: string;
   NumberOfErrors: number;
-  error: Error;
+  error: FQSError;
 }
 
-interface Error {
+export interface FQSError {
   ErrorItem: string;
   ErrorText: string;
 }
-
-export const fqsbody = {} as FQSBody;
-
-export const eventbody = {} as EventBody;
-
-export const intentAttributes = {} as IntentAttributes;
-
-export const fqserror = {} as Error;
 
 export const enum fqsStage {
   HEADER = "validateHeader",
