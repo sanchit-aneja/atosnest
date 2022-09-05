@@ -1,7 +1,7 @@
 import { AxiosResponse } from "axios";
 import { Context } from "@azure/functions";
 import { httpRequestGenerator } from "./httpRequestGenerator";
-import { fqsbody, eventbody, intentAttributes, fqserror } from "./fqsBody";
+import { FQSBody, EventBody, IntentAttributes, FQSError } from "./fqsBody";
 
 const ROOT_ENDPOINT = process.env.fqs_Host;
 
@@ -108,6 +108,13 @@ class FQSHelper {
     status: string,
     errors?: any
   ) {
+    const fqsbody = {} as FQSBody;
+
+    const eventbody = {} as EventBody;
+
+    const intentAttributes = {} as IntentAttributes;
+
+    const fqserror = {} as FQSError;
     eventbody.correlationId = correlationId;
     eventbody.payloadType = "ContIndexFileUpload";
     eventbody.srcSystemId = "AZURE";
@@ -120,7 +127,7 @@ class FQSHelper {
       intentAttributes.NumberOfErrors = errors.length;
       const error = errors[0];
       fqserror.ErrorItem = error.Error_Code;
-      fqserror.ErrorText = error.Error_Name;
+      fqserror.ErrorText = error.Error_Details;
       intentAttributes.error = fqserror;
     }
     eventbody.intentAttributes = intentAttributes;
