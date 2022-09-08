@@ -116,18 +116,18 @@ const normalisation = {
         if (value._previousDataValues?.stgcontrmember) {
           let params = {};
           params = {
-            nestScheduleRef: value._previousDataValues.nestScheduleRef, //this.addLeadingZeros(parseInt(key) + 1, 2), //
+            nestScheduleRef: value._previousDataValues.nestScheduleRef.trim(), //this.addLeadingZeros(parseInt(key) + 1, 2), //
             membEnrolmentRef: value._previousDataValues?.stgcontrmember?._previousDataValues?.membershipId,
             membContriDueDate: value._previousDataValues?.earningPeriodEndDate,
-            membPlanRef: value._previousDataValues?.stgcontrmember?._previousDataValues?.planReference,
+            membPlanRef: (value._previousDataValues?.stgcontrmember?._previousDataValues?.planReference).trim(),
             empGroupId: value._previousDataValues?.stgcontrmember?._previousDataValues?.category,
             groupName: 'groupName',
             schdlMembStatusCd: 'MS1',
             membPartyId: 'membPartyId',//value._previousDataValues.crmPartyId,
             scmPartyId: value._previousDataValues?.stgcontrmember?._previousDataValues?.cmPartyId,
-            nino: value._previousDataValues?.stgcontrmember?._previousDataValues?.nino,
-            alternativeId: value._previousDataValues?.stgcontrmember?._previousDataValues?.schemePayrollReference,
-            employerNestId: value._previousDataValues.employerNestId,
+            nino: value._previousDataValues?.stgcontrmember?._previousDataValues?.nino.trim(),
+            alternativeId: (value._previousDataValues?.stgcontrmember?._previousDataValues?.schemePayrollReference).trim(),
+            employerNestId: (value._previousDataValues.employerNestId).trim(),
             autoCalcFlag: 'Y',
             membNonPayReason: 'CON01',
             channelType: 'WEB',
