@@ -74,7 +74,14 @@ export const memberColumns = [
   "membershipStatus",
   "membershipStatusDesc",
   "category",
+  "categoryName",
   "pensionableSalary",
+  "reasonCode",
+  "currentEmployerContribution",
+  "currentMemberContribution",
+  "newEmployerContribution",
+  "newMemberContribution",
+  "newSalary"
 ];
 
 export const memberColumnFormats = [
@@ -205,7 +212,14 @@ export const CSV_FILES: { namePrefix: string, columns: string[], tableName: stri
       "membership_status",
       "membership_status_desc",
       "category",
-      "pensionable_salary"],
+      "category_name",
+      "pensionable_salary",
+      "reason_code",
+      "current_employer_contribution",
+      "current_member_contribution",
+      "new_employer_contribution",
+      "new_member_contribution",
+      "new_salary"],
     tableName: "Stg_Contr_Mem"
   },
   {
@@ -252,7 +266,7 @@ export const LOADING_DATA_ERROR_CODES = {
     Error_Code: "POLICY_VALIDATION_FAILED",
     Error_Name: "Policy file has invalid data"
   },
-  FILE_HEADER_VALIDATION:{
+  FILE_HEADER_VALIDATION: {
     Error_Code: "FILE_HEADER_VALIDATION_FAILED",
     Error_Name: "file header has invalid data"
   }

@@ -2,7 +2,7 @@
  * This is Contribution member details interface
  */
 export interface ContributionMemberDetails{
-    membContribDetlId: number;
+    membContribDetlId: string;
     schdlMembStatusCd?: string;
     membPartyId?: string;
     scmPartyId?: string;

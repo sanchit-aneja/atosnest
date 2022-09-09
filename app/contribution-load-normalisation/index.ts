@@ -6,8 +6,6 @@ import { File } from "../models"
 import { v4 as uuidv4 } from 'uuid';
 import blobHelper from '../utils/blobHelper';
 import { KafkaHelper } from "../utils";
-import { ContributionHeaderController } from "../controllers/contribution-header-controller";
-import { MemberContributionDetailsController } from "../controllers/member-contribution-details-controller";
 
 const eventGridTrigger: AzureFunction = async function (context: Context, eventGridEvent: any): Promise<void> {
     const startedTime = new Date();
