@@ -22,7 +22,13 @@ const eventGridTrigger: AzureFunction = async function (context: Context, eventG
                     newItem = onResolved;
                 },
                 (onRejected) => {
-                    throw new CustomError("CONTRIBUTION_MEMBER_VALIDATION_FAILED", onRejected);
+                    const errorPayload = {
+                        ...LOADING_DATA_ERROR_CODES.MEMBER_VALIDATION,
+                        File_Name: fileName,
+                        Time_Of_Processing: new Date().toUTCString(),
+                        Error_Details: `${onRejected?.message}`,
+                    };
+                    context.log("errorPayload", errorPayload);
                 });
         if (newItem) {
             context.log('SUCCESS', "MEMBER FILE VALIDATED SUCCSSFULLY");
@@ -49,11 +55,11 @@ const eventGridTrigger: AzureFunction = async function (context: Context, eventG
             Time_Of_Processing: (new Date()).toUTCString(),
             Error_Details: `${error?.message} - ${error?.name} - ${error?.moreDetails}`
         }
-        
+
         //KafkaSend: Send error payload message
         const kafkaHelper = new KafkaHelper(context);
-        await kafkaHelper.sendMessageToTopic( process.env.contribution_KafkaFailureTopic, errorPayload);
-        
+        await kafkaHelper.sendMessageToTopic(process.env.contribution_KafkaFailureTopic, errorPayload);
+
         context.log('errorPayload', errorPayload);
     }
 };

@@ -31,9 +31,6 @@
 					"employerNestId": {
 						"type": "string"
 					},
-					"groupSchemeId": {
-						"type": "string"
-					},
 					"subSchemeId": {
 						"type": "string"
 					},
@@ -84,9 +81,6 @@
 						"type": "number",
 						"format": "double"
 					},
-					"origScheduleRef": {
-						"type": "string"
-					},
 					"recordStartDate": {
 						"type": "string",
 						"format": "date"
@@ -108,7 +102,6 @@
 					"scheduleStatusCd",
 					"scheduleGenerationDate",
 					"employerNestId",
-					"groupSchemeId",
 					"earningPeriodStartDate",
 					"earningPeriodEndDate",
 					"paymentSourceName",
@@ -335,6 +328,12 @@
 					},
 					"updatedBy": {
 						"type": "string"
+					},
+					"employerNestId": {
+						"type": "string"
+					},
+					"origScheduleRef": {
+						"type": "string"
 					}
 				},
 				"required": [
@@ -443,10 +442,6 @@
 				"description": "This is Contribution member details interface",
 				"properties": {
 					"membContribDetlId": {
-						"type": "number",
-						"format": "double"
-					},
-					"membPlanRef": {
 						"type": "string"
 					},
 					"schdlMembStatusCd": {
@@ -585,7 +580,7 @@
 	},
 	"info": {
 		"title": "Contribution Index APIs",
-		"version": "1.5.0",
+		"version": "1.17.0",
 		"description": "REST APIs for Contribution Index",
 		"contact": {}
 	},

@@ -374,7 +374,7 @@ ContributionDetails.beforeUpdate((contributionDetails, _options) => {
  * @param context 
  * @returns 
  */
-export const contributionDetailsUpdateHelper = async function (membContribDetlId: number, currentMemberDetails: ContributionMemberDetails, currentIndex: number, allErrors: Array<UpdateError>, transaction, context: Context) {
+export const contributionDetailsUpdateHelper = async function (membContribDetlId: string, currentMemberDetails: ContributionMemberDetails, currentIndex: number, allErrors: Array<UpdateError>, transaction, context: Context) {
   if (app.isNullEmpty(currentMemberDetails)) {
     context.log(`currentMemberDetails is empty object`);
     allErrors.push({
