@@ -8,21 +8,25 @@ const Type2AValidations = {
  * @param callback
  * @returns
  */
-    rowHValidation: function (row, callback) {
-        let errMsg = '';
+    rowHValidation: function (row, callback, index) {
+        if(index !== 0){
+            return null
+        }
         if (row[0] !== 'H') {
-            errMsg = "Please ensure that the first record in your file is marked 'H', to show that it's the header."
+            return  {
+                code: "ID5",
+                message : "Please ensure that the first record in your file is marked 'H', to show that it's the header."
+            }
         }
 
         if(row[row.length - 1].toUpperCase() === 'Y'){
-            errMsg = "There are no detail records in your file. Please ensure there is at least one detail record identified with a 'D', between the header and trailer"
+            return  {
+                code: "ID8",
+                message : "There are no detail records in your file. Please ensure there is at least one detail record identified with a 'D', between the header and trailer"
+            }
         }
 
-        if(errMsg.length > 0){
-            return callback(new Error(errMsg), false, errMsg);
-        } else {
-            return callback(null, true, null);
-        }
+       return null;
     },
 
     /**
@@ -54,7 +58,7 @@ const Type2AValidations = {
         let results = []
         let countDRows = 0;
         let currentRowIndex = -1; // when process start it will increament
-        let errorMessage = { name: '', message: '' };
+        let errorMessage = { code: '', message: '' };
         return new Promise(async function (resolve, reject) {
             try {   
             readStream
@@ -65,25 +69,42 @@ const Type2AValidations = {
                     let errMsg;
                     currentRowIndex++;
                     if (trailerFound) {
-                        errMsg = `Please ensure that the last record in your file is marked 'T', to show that it's the trailer.`
+                        errMsg = `Please ensure that the last record in your file is marked 'T', to show that it's the trailer.`;
+                        errorMessage = {
+                            code: "ID6",
+                            message : errMsg
+                        }
                         return cb(new Error(errMsg), false, errMsg);
                     }
-    
-                    if (currentRowIndex === 0) {
-                        return Type2AValidations.rowHValidation(row, cb);
+                    
+                    const headerRowError = Type2AValidations.rowHValidation(row, cb, currentRowIndex)
+                    if (headerRowError !== null) {
+                        errorMessage = headerRowError;
+                        return cb(new Error(headerRowError.message), false, headerRowError.message);
                     } 
+                    if(currentRowIndex === 0){
+                        return cb(null, true, null);
+                    }
                     trailerFound = Type2AValidations.isRowTValidation(row)
                     if(!trailerFound) { // Checking from T Row
                         const previousCount = countDRows;
                         countDRows = Type2AValidations.isRowDValidation(row, countDRows)
                         if(previousCount === countDRows){
-                            errMsg = "Unknown record types found. Please ensure that all records, between the header and trailer, are marked with the letter ‘D’. This tells us they contain member details."
+                            errMsg = "Unknown record types found. Please ensure that all records, between the header and trailer, are marked with the letter 'D'. This tells us they contain member details."
+                            errorMessage = {
+                                code: "ID7",
+                                message : errMsg
+                            }
                             return cb(new Error(errMsg), false, errMsg);
                         }
                     }
     
                     if (trailerFound && countDRows === 0) {
-                        errMsg = "There are no detail records in your file. Please ensure there is at least one detail record identified with a 'D', between the header and trailer, if you’re unsure. "
+                        errMsg = "There are no detail records in your file. Please ensure there is at least one detail record identified with a 'D', between the header and trailer, if you're unsure. "
+                        errorMessage = {
+                            code: "ID8",
+                            message : errMsg
+                        }
                         return cb(new Error(errMsg), false, errMsg);
                     }
     
@@ -100,16 +121,15 @@ const Type2AValidations = {
                     context.log(`Invalid [rowNumber=${rowNumber}] [row=${JSON.stringify(row)}]`);
                 })
                 .on('error', (e) => {
-                    errorMessage.name = "Invalid File";
-                    errorMessage.message = e.message;
                     console.log('error');
-                    reject(errorMessage);
+                    reject([errorMessage]);
                 })
                 .on('end', (_e,) => {
                     if (!trailerFound) {
-                        errorMessage.name = "Invalid File";
-                        errorMessage.message = "Please ensure that the last record in your file is marked 'T', to show that it's the trailer.";
-                        reject(errorMessage);
+                        reject([{
+                            code: "ID6",
+                            message: "Please ensure that the last record in your file is marked 'T', to show that it's the trailer."
+                        }]);
                         return;
                     }
                     let data = {
