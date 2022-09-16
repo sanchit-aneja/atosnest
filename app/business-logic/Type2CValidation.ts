@@ -18,7 +18,8 @@ export const Type2CValidations = {
             return false;
         }
     },
-    
+    ninos:[],
+    alts:[],
     isNinoFormatted: function(value: String){
        if(!(/[^DFIQUV]/.test(value.charAt(0)))){
             return false; 
@@ -39,8 +40,8 @@ export const Type2CValidations = {
     rules:{
 
         "isNinoAltValid": (row: Array<any>, context: Context) => {
-            const ninos = [];
-            const alts = [];
+            // const ninos = [];
+            // const alts = [];
             const validationError = {
                 code: "ID17",
                 message: "Please ensure your record has valid nino."
@@ -52,7 +53,7 @@ export const Type2CValidations = {
                 const ninoRegex = /[(A-Za-z0-9)]\w+/;
                 const altRegex = /[A-Za-z0-9"‘#$%&\(\)\[\]{}\-\*\+.:\\/=?@!_\s]+/; 
                 let isNinoEmpty = Type2CValidations.isNullOrEmpty(nino);
-                let isAltEmpty = Type2CValidations.isNullOrEmpty(nino)
+                let isAltEmpty = Type2CValidations.isNullOrEmpty(alt)
                 let ninoValid = false;
                 let altValid = false;
                 
@@ -92,8 +93,8 @@ export const Type2CValidations = {
                     }
                 }
                 
-                let isNinoExist = (!isNinoEmpty && ninos.indexOf(nino)>-1);
-                let isAltExist = (!isAltEmpty && alts.indexOf(alt)>-1)
+                let isNinoExist = (!isNinoEmpty && Type2CValidations.ninos.indexOf(nino)>-1);
+                let isAltExist = (!isAltEmpty && Type2CValidations.alts.indexOf(alt)>-1)
                 if( isNinoExist || isAltExist  ) {
                     return {
                         code:"ID20.1",
@@ -103,10 +104,10 @@ export const Type2CValidations = {
                 
                 
                 if(!isNinoEmpty){
-                    ninos.push(nino);
+                    Type2CValidations.ninos.push(nino);
                 }
                 if(!isAltEmpty){
-                    alts.push(alt);
+                    Type2CValidations.alts.push(alt);
                 }
                 
                 return null;
@@ -173,6 +174,10 @@ export const Type2CValidations = {
                 .validate((row: any, cb) => {
                 
                     currentRowIndex++; 
+                    if(currentRowIndex==0){
+                        Type2CValidations.alts=[];
+                        Type2CValidations.ninos=[];
+                    }
                     if(currentRowIndex>0 && row[0].trim()==='D'){
                         Type2CValidations.executeRulesOneByOne(row, context, errorMessages, currentRowIndex);
 
