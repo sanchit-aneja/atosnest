@@ -43,12 +43,19 @@ const eventGridTrigger: AzureFunction = async function (
 
     context.log(`Vaildation done for correlation Id ${correlationId}`);
   } catch (error) {
+    if (!Array.isArray(error)){
+      context.log(`Something went wrong, error ${error.message}`)
+      error = [{
+          code: "ID9999",
+          message: "Someting went wrong"
+      }]
+    }
     const errorPayload = [
       {
         ...LOADING_DATA_ERROR_CODES.FILE_HEADER_VALIDATION,
         File_Name: fileName,
         Time_Of_Processing: new Date().toUTCString(),
-        Error_Details: `${error.message}`,
+        Error_Details: error,
       },
     ];
     const fqsBody = fqsHelper.getFQSBody(
