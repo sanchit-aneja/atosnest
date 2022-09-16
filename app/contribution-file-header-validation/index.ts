@@ -4,6 +4,8 @@ import { LOADING_DATA_ERROR_CODES } from "../utils/constants";
 import { Type2AValidations, Type2BValidations } from "../business-logic";
 import { FQSHelper } from "../utils";
 import { fqsStage, fqsStatus } from "../utils/fqsBody";
+import { Type2CValidations } from "../business-logic/Type2CValidation";
+import { Json } from "sequelize/types/utils";
 
 const eventGridTrigger: AzureFunction = async function (
   context: Context,
@@ -41,13 +43,15 @@ const eventGridTrigger: AzureFunction = async function (
     // Step 2: vaildation Type 2B
     await Type2BValidations.start(blobHelper.stringToStream(fileData), context);
 
-    context.log(`Vaildation done for correlation Id ${correlationId}`);
+    await Type2CValidations.start(blobHelper.stringToStream(fileData), context )
+
+    context.log(`Validation done for correlation Id ${correlationId}`);
   } catch (error) {
     if (!Array.isArray(error)){
-      context.log(`Something went wrong, error ${error.message}`)
+      context.log(`Something went wrong, error ${JSON.stringify(error.message)}`)
       error = [{
           code: "ID9999",
-          message: "Someting went wrong"
+          message: "Something went wrong"
       }]
     }
     const errorPayload = [
@@ -68,7 +72,7 @@ const eventGridTrigger: AzureFunction = async function (
 
     await fqsHelper.updateFQSFinishedStatus(correlationId, fqsBody);
 
-    context.log("Sending Error data to FQS", errorPayload);
+    context.log("Sending Error data to FQS", JSON.stringify(errorPayload));
   }
   context.log(`Vaildation done for correlation Id ${correlationId}`);
 };
