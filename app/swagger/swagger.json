@@ -184,6 +184,33 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"CreateContributionResponse": {
+				"properties": {
+					"ContributionSubmissionRef": {
+						"type": "string"
+					},
+					"ScheduleSubmissionSeq": {
+						"type": "number",
+						"format": "double"
+					},
+					"CountSubmitted": {
+						"type": "number",
+						"format": "double"
+					},
+					"CountRowsSubmitted": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"ContributionSubmissionRef",
+					"ScheduleSubmissionSeq",
+					"CountSubmitted",
+					"CountRowsSubmitted"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"MemberContributionDetailsResponse": {
 				"properties": {
 					"membContribDetlId": {
@@ -580,7 +607,7 @@
 	},
 	"info": {
 		"title": "Contribution Index APIs",
-		"version": "1.17.0",
+		"version": "1.25.0",
 		"description": "REST APIs for Contribution Index",
 		"contact": {}
 	},
@@ -635,7 +662,7 @@
 			}
 		},
 		"/contribution/retrievescheduleheaders": {
-			"put": {
+			"post": {
 				"operationId": "GetHeaderByFilter",
 				"responses": {
 					"200": {
@@ -680,6 +707,54 @@
 						}
 					}
 				}
+			}
+		},
+		"/contribution/submission/createsubmission/{contribHeaderId}": {
+			"put": {
+				"operationId": "CreateContributionSubmission",
+				"responses": {
+					"200": {
+						"description": "Success Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/CreateContributionResponse"
+										},
+										{}
+									]
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid Request"
+					},
+					"404": {
+						"description": "Record does not exist"
+					},
+					"500": {
+						"description": "Internal Server Error"
+					}
+				},
+				"description": "5402 API Catalogue Number\r\nCreate contribution submission using contribHeaderId passed",
+				"security": [
+					{
+						"api_key": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "is the Contribution Header id",
+						"in": "path",
+						"name": "contribHeaderId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
 			}
 		},
 		"/contribution/{nestScheduleRef}": {
@@ -731,7 +806,7 @@
 			}
 		},
 		"/contribution/retrieveContributionDetails": {
-			"put": {
+			"post": {
 				"operationId": "GetDetailsByFilter",
 				"responses": {
 					"200": {

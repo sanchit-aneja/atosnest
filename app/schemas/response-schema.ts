@@ -322,3 +322,10 @@ export interface SearchResultsetResponse<T> {
   totalRecordCount: number;
   results: T[];
 }
+
+export interface CreateContributionResponse {
+  ContributionSubmissionRef: string;
+  ScheduleSubmissionSeq: number;
+  CountSubmitted: number;
+  CountRowsSubmitted: number;
+}

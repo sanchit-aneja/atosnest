@@ -3,8 +3,8 @@ import { Model, Op } from "sequelize";
 import * as csvf from 'fast-csv';
 import { regexPattern } from './constants';
 import Status from "../utils/config";
-import { CustomError } from "../Errors";
 import { DetailsFilterElements, HeaderFilterElements } from "../schemas/response-schema";
+import errorHandler from "../utils/errorHandler";
 
 const app = {
   DEFAULT_DATE_FORMAT: "YYYY-MM-DD",
@@ -273,6 +273,15 @@ const app = {
         "Content-Type": "application/json",
       }
     };
+  },
+  async mapErrorResponse(param1, param2, param3, param4, param5) {
+    return errorHandler.mapHandleErrorResponse(
+      param1,
+      param2,
+      param3,
+      param4,
+      param5
+    );
   },
   checkEmployerNestId(arr, val) {
     let maxCount = 0;
