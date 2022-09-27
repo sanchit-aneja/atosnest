@@ -1,7 +1,7 @@
 import { AzureFunction, Context } from "@azure/functions";
 import blobHelper from "../utils/blobHelper";
 import { LOADING_DATA_ERROR_CODES } from "../utils/constants";
-import { Type2AValidations, Type2BValidations } from "../business-logic";
+import { SaveContributionDetails, Type2AValidations, Type2BValidations } from "../business-logic";
 import { FQSHelper } from "../utils";
 import { fqsStage, fqsStatus } from "../utils/fqsBody";
 import { Type2CValidations } from "../business-logic/Type2CValidation";
@@ -43,7 +43,10 @@ const eventGridTrigger: AzureFunction = async function (
     // Step 2: vaildation Type 2B
     await Type2BValidations.start(blobHelper.stringToStream(fileData), context);
 
-    await Type2CValidations.start(blobHelper.stringToStream(fileData), context )
+    await Type2CValidations.start(blobHelper.stringToStream(fileData), context );
+
+    // Update contribution member details
+    await SaveContributionDetails.updateMemberDetails(blobHelper.stringToStream(fileData), context)
 
     context.log(`Validation done for correlation Id ${correlationId}`);
   } catch (error) {

@@ -226,7 +226,7 @@ export class MemberContributionDetailsController {
 
     if (allErrors.length === 0) {
       this.log("Success: No Error present, updates are commiting.");
-      transaction.commit();
+      await transaction.commit();
       return {
         status: Status.SUCCESS /* Defaults to 200 */,
         body: { message: "Contribution Details are updated." },
@@ -236,7 +236,7 @@ export class MemberContributionDetailsController {
       };
     } else {
       this.log("Error: Updates are rollbacking.");
-      transaction.rollback();
+      await transaction.rollback();
       const data = errorHandler.mapHandleErrorResponse(
         "",
         "",
