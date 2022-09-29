@@ -1,6 +1,6 @@
 import * as Joi from "joi";
 import { DataTypes, Model, Sequelize } from "sequelize";
-import  StgContrMember  from "./stgcontrmember";
+import StgContrMember from "./stgcontrmember";
 import { joiOption } from "../utils/constants";
 import sequelize from "../utils/database";
 import ContributionDetails from "./contributionDetails";
@@ -136,6 +136,19 @@ ContributionHeader.init(
     paymentRef: {
       type: DataTypes.STRING(35),
       field: "payment_ref"
+    },
+    nestPaymentRef: {
+      type: DataTypes.STRING(12),
+      allowNull: false,
+      field: "nest_payment_ref",
+      validate: {
+        notEmpty: {
+          msg: "nestPaymentRef field cannot be empty",
+        },
+        notNull: {
+          msg: "nestPaymentRef field cannot be null",
+        },
+      },
     },
     paymentSourceName: {
       type: DataTypes.STRING(40),

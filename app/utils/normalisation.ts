@@ -88,6 +88,7 @@ const normalisation = {
           earningPeriodEndDate: value._previousDataValues?.endDate,
           paymentPlanNo: value._previousDataValues?.paymentPlanNo,
           paymentRef: value._previousDataValues?.payReference?.trim(),
+          nestPaymentRef: 'IT' + app.addLeadingZeros(key + 1, 10),
           paymentSourceName: value._previousDataValues?.paymentSourceName?.trim() || 'paymentSourceName',
           paymentMethod: value._previousDataValues?.mopType?.trim(),
           paymentMethodDesc: value._previousDataValues?.mopTypeDesc?.trim(),

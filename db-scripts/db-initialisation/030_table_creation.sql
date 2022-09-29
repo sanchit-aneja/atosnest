@@ -90,37 +90,32 @@ CREATE TABLE contribution_index_schema."RD_Schedule_Status"
         CONSTRAINT RD_Memb_Sch_Sts_PKv2 PRIMARY KEY (Schedule_Status_Code)
 );
 
-INSERT INTO contribution_index_schema."RD_Schedule_Status"
-    ("schedule_status_code", "schedule_status_desc", "record_start_date", "record_end_date", "updated_by",  "created_by", "last_updated_timestamp" ) VALUES  ('CS1', 'New schedule', NOW(), NOW(), 'System', 'System', NOW()), ('CS2', 'Attention Needed', NOW(), NOW(), 'System', 'System', NOW()),('CS3', 'Ready to Submit', NOW(), NOW(), 'System', 'System', NOW()),('CS4', 'Submitted', NOW(), NOW(), 'System', 'System', NOW()),('CS5', 'Partially Submitted', NOW(), NOW(), 'System', 'System', NOW()),('CS6', 'Payment needed', NOW(), NOW(), 'System', 'System', NOW()),('CS7', 'Processing payment', NOW(), NOW(), 'System', 'System', NOW()),('CS8', 'Paid', NOW(), NOW(), 'System', 'System', NOW()),('CS9', 'Partially paid', NOW(), NOW(),  'System', 'System', NOW()),('CS10', 'Payment failed', NOW(), NOW(),  'System', 'System', NOW()),('CS11', 'Deleted', NOW(), NOW(),  'System', 'System', NOW()),('CS12', 'Overdue', NOW(), NOW(),  'System', 'System', NOW()
-);
-
 CREATE TABLE contribution_index_schema."File"
     ( 
-    File_Id              UUID  NOT NULL,
-    File_Name            VARCHAR(150)  NOT NULL,
-    File_Type            VARCHAR(3)  NOT NULL,
-    File_Size            NUMERIC(10,0)  NOT NULL,
-    File_Size_Type       VARCHAR(2)  NOT NULL,
-    File_Status          VARCHAR(5)  NULL,
-    File_Format          VARCHAR(3)  NOT NULL,
-    File_Received_Date   DATE  NULL,
-    File_Processed_Date  DATE  NULL,
-    File_Uploaded_On     timestamp  NULL,
-    File_Sent_Date       DATE  NULL,
-    No_Of_Recs           NUMERIC(8,0)  NULL,
-    No_Of_Errors         NUMERIC(5,0)  NULL,
-    Record_Start_Date    DATE  NULL,
-    Record_End_Date      DATE  NULL,
-    Created_By           VARCHAR(50)  NULL,
-    Updated_By           VARCHAR(50)  NULL,
-    Last_Updated_Timestamp TIMESTAMP  NULL,
-    File_Pega_Case_Ref   VARCHAR(30)  NULL,
+    File_Id UUID NOT NULL,
+    Contrib_Header_Id UUID NULL,
+    File_Name VARCHAR(150) NOT NULL,
+    File_Type VARCHAR(3) NOT NULL,
+    File_Size NUMERIC(10,0) NOT NULL,
+    File_Size_Type VARCHAR(2)  NOT NULL,
+    File_Status VARCHAR(5) NULL,
+    File_Format VARCHAR(3) NOT NULL,
+    File_Received_Date DATE NULL,
+    File_Processed_Date DATE NULL,
+    File_Uploaded_On TIMESTAMP NULL,
+    File_Sent_Date DATE NULL,
+    Record_Start_Date DATE NULL,
+    Record_End_Date DATE NULL,
+    Created_By VARCHAR(50) NULL,
+    Updated_By VARCHAR(50) NULL,
+    Last_Updated_Timestamp TIMESTAMP NULL,
     CONSTRAINT File_PK PRIMARY KEY (File_Id)
 );
 
 CREATE TABLE contribution_index_schema."Contribution_Header"
     (
      Contrib_Header_Id UUID NOT NULL DEFAULT uuid_generate_v4(),
+     Orig_Contrib_Header_Id UUID DEFAULT uuid_generate_v4(),
      File_id UUID,
      NEST_Schedule_Ref VARCHAR (14) NOT NULL,
      External_Schedule_Ref VARCHAR (32) NOT NULL,
@@ -133,6 +128,7 @@ CREATE TABLE contribution_index_schema."Contribution_Header"
      Earning_Period_End_Date DATE NOT NULL,
      Payment_Plan_No VARCHAR (11),
      Payment_Ref VARCHAR (35),
+     NEST_Payment_Ref VARCHAR (12) NOT NULL,
      Payment_Source_Name VARCHAR (40) NOT NULL,
      Payment_Method VARCHAR (2) NOT NULL,
      Payment_Method_Desc VARCHAR (30) NOT NULL,
@@ -151,7 +147,8 @@ CREATE TABLE contribution_index_schema."Contribution_Header"
      CONSTRAINT Contrib_Header_UK UNIQUE (NEST_Schedule_Ref,Employer_NEST_Id),
      CONSTRAINT Contrib_Header_PK PRIMARY KEY (Contrib_Header_Id),
      CONSTRAINT Relation_2 FOREIGN KEY (Schedule_Status_Cd) REFERENCES contribution_index_schema."RD_Schedule_Status"(Schedule_Status_Code) ON DELETE CASCADE ON UPDATE CASCADE,
-     CONSTRAINT Relation_45 FOREIGN KEY (File_Id) REFERENCES contribution_index_schema."File"(File_Id) ON UPDATE CASCADE ON DELETE CASCADE
+     CONSTRAINT Relation_45 FOREIGN KEY (File_Id) REFERENCES contribution_index_schema."File"(File_Id) ON UPDATE CASCADE ON DELETE CASCADE,
+     CONSTRAINT R_33 FOREIGN KEY (Orig_Contrib_Header_Id) REFERENCES contribution_index_schema."Contribution_Header"(Contrib_Header_Id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE contribution_index_schema."RD_Part_Contrib_Reason"
@@ -166,10 +163,6 @@ CREATE TABLE contribution_index_schema."RD_Part_Contrib_Reason"
         CONSTRAINT RD_Memb_Sch_Sts_PK PRIMARY KEY (Reason_Code)
 );
 
-INSERT INTO contribution_index_schema."RD_Part_Contrib_Reason"
-    ("reason_code", "reason_description", "record_start_date", "record_end_date", "updated_by",  "created_by", "last_updated_timestamp" ) VALUES  ('CON01', 'Member is temporarily absent', NOW(), NOW(), 'System', 'System', NOW()), ('CON02', 'Member is on Family Leave', NOW(), NOW(), 'System', 'System', NOW()),('CON05', 'Meeting Member Duties Elsewhere', NOW(), NOW(), 'System', 'System', NOW()),('CON07', 'Withheld as within Opt Out Period', NOW(), NOW(), 'System', 'System', NOW()),('CON09', 'Processing payment', NOW(), NOW(), 'Adhoc Late Contribution', 'System', NOW()),('CON10', 'No Further Contributions Payable', NOW(), NOW(), 'System', 'System', NOW()),('CON11', 'Member stopped contributions', NOW(), NOW(), 'System', 'System', NOW()),('CON12', 'Member has Insufficient Earnings', NOW(), NOW(), 'System', 'System', NOW()),('CON13', 'Transferring Member to a Different Payment Source', NOW(), NOW(), 'System', 'System', NOW()),('CON14', 'Change Member Groups and Pay Contributions', NOW(), NOW(), 'System', 'System', NOW()),('CON15', 'Pay for Previous and New Group', NOW(), NOW(), 'System', 'System', NOW()),('CON16', 'Member has Opted Out', NOW(), NOW(), 'System', 'System', NOW()),('CON17', 'Pay For More Than 1 Enrolment', NOW(), NOW(), 'System', 'System', NOW()),('CON18', 'Change of Payment Source and Group', NOW(), NOW(), 'System', 'System', NOW()
-);
-
 CREATE TABLE contribution_index_schema."RD_Schedule_Memb_Status"
     (
         Schdl_Memb_Status_Code VARCHAR (5) NOT NULL,
@@ -180,10 +173,6 @@ CREATE TABLE contribution_index_schema."RD_Schedule_Memb_Status"
         Updated_By VARCHAR (50),
         Last_Updated_Timestamp TIMESTAMP,
         CONSTRAINT RD_Memb_Sch_Sts_PKv1 PRIMARY KEY (Schdl_Memb_Status_Code)
-);
-
-INSERT INTO contribution_index_schema."RD_Schedule_Memb_Status"
-    ("schdl_memb_status_code", "schdl_memb_status_desc", "record_start_date", "record_end_date", "updated_by",  "created_by", "last_updated_timestamp" ) VALUES  ('MS1', 'To be reviewed', NOW(), NOW(), 'System', 'System', NOW()), ('MS2', 'Ready to submit', NOW(), NOW(), 'System', 'System', NOW()),('MS3', 'Action needed', NOW(), NOW(), 'System', 'System', NOW()),('MS4', 'Submitted', NOW(), NOW(), 'System', 'System', NOW()),('MS5', 'Processing payment', NOW(), NOW(), 'System', 'System', NOW()),('MS6', 'Paid', NOW(), NOW(), 'System', 'System', NOW()),('MS7', 'Payment Failed', NOW(), NOW(), 'System', 'System', NOW()
 );
 
 CREATE TABLE contribution_index_schema."Member_Contribution_Details"
@@ -236,6 +225,25 @@ CREATE TABLE contribution_index_schema."Member_Contribution_Details"
      CONSTRAINT Relation_1 FOREIGN KEY (NEST_Schedule_Ref,Employer_NEST_Id) REFERENCES contribution_index_schema."Contribution_Header"(NEST_Schedule_Ref,Employer_NEST_Id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS contribution_index_schema."File_Error_Details"
+  ( 
+	Error_Log_Id BIGINT GENERATED BY DEFAULT AS IDENTITY NOT NULL,
+    Memb_Contrib_Detl_Id UUID NULL,
+	Error_File_Id UUID NOT NULL,
+	Orig_File_Id UUID NULL,
+	Error_Type VARCHAR(2) NULL,
+	Error_Sequence_Num NUMERIC(10,0) NOT NULL,
+	Source_Record_ID VARCHAR(30) NULL,
+	Error_Code VARCHAR(20) NULL,
+	Error_Message VARCHAR(2500) NOT NULL,
+	Created_On TIMESTAMP NULL,
+	Created_By VARCHAR(50) NULL,
+    CONSTRAINT CS_Error_PK PRIMARY KEY (Error_Log_Id),
+    CONSTRAINT Relation_47 FOREIGN KEY (Orig_File_Id) REFERENCES contribution_index_schema."File"(File_Id) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT Relation_7 FOREIGN KEY (Error_File_Id) REFERENCES contribution_index_schema."File"(File_Id) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT R_35 FOREIGN KEY (Memb_Contrib_Detl_Id) REFERENCES contribution_index_schema."Member_Contribution_Details"(Memb_Contrib_Detl_Id) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS contribution_index_schema."Contribution_Header_Submission"
     (
     Contrib_Submission_Ref UUID NOT NULL DEFAULT uuid_generate_v4(),
@@ -265,3 +273,71 @@ CREATE TABLE IF NOT EXISTS contribution_index_schema."Member_Contribution_Submis
     CONSTRAINT Relation_28 FOREIGN KEY (Memb_Contrib_Detl_Id) REFERENCES contribution_index_schema."Member_Contribution_Details"(Memb_Contrib_Detl_Id) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT Relation_29 FOREIGN KEY (Contrib_Submission_Ref) REFERENCES contribution_index_schema."Contribution_Header_Submission"(Contrib_Submission_Ref) ON UPDATE CASCADE ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS contribution_index_schema."Debit_Card_Txns"
+ ( 
+	Debit_Card_Txn_Id BIGINT GENERATED BY DEFAULT AS IDENTITY NOT NULL,
+	Card_Transaction_Ref VARCHAR(35) NOT NULL,
+	Transaction_Date DATE NOT NULL,
+	Card_Txn_Status VARCHAR(50) NULL,
+	Txn_Amount DECIMAL(15,2) NULL,
+    Transaction_Party_Type VARCHAR(10) NOT NULL,
+	Contrib_Submission_Ref UUID NULL,
+	Transaction_Party_Id VARCHAR(30) NOT NULL,
+	Record_Start_Date DATE NULL,
+	Created_By VARCHAR(50) NULL,
+	Updated_By VARCHAR(50) NULL,
+	Last_Updated_Timestamp TIMESTAMP NULL,
+    CONSTRAINT Debit_Card_Txns_PK PRIMARY KEY (Debit_Card_Txn_Id),
+    CONSTRAINT Relation_46 FOREIGN KEY (Contrib_Submission_Ref) REFERENCES contribution_index_schema."Contribution_Header_Submission"(Contrib_Submission_Ref) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS contribution_index_schema."Contribution_Correction_Summary"
+ ( 
+	Correction_Type VARCHAR(1) NOT NULL,
+	Total_Member_Refund_Amt DECIMAL(15,2) NULL,
+	Contribution_Correction_ID UUID NOT NULL,
+	Created_Date DATE NULL,
+	Created_By VARCHAR(50) NULL,
+	Offset_Gains_Loss_Amt DECIMAL(15,2) NULL,
+	Net_Tot_Contrib_Amt DECIMAL(15,2) NULL,
+	Net_Tot_Refund_Amt DECIMAL(15,2) NULL,
+	Contrib_Submission_Ref UUID NOT NULL,
+    CONSTRAINT XPKContribution_Correction_Summary PRIMARY KEY (Contribution_Correction_ID),
+    CONSTRAINT R_28 FOREIGN KEY (Contrib_Submission_Ref) REFERENCES contribution_index_schema."Contribution_Header_Submission"(Contrib_Submission_Ref) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS contribution_index_schema."Stg_File_Member_Details"
+  ( 
+	Upload_File_Id UUID NOT NULL,
+	Forename VARCHAR(30) NULL,
+	Surname VARCHAR(30) NULL,
+	NINO VARCHAR(9) NULL,
+	Alternate_Unique_Id VARCHAR(30) NULL,
+	Pensionable_Earnings DECIMAL(15,2) NOT NULL,
+	Member_Earnings DECIMAL(15,2) NULL,
+	Employer_Contribution DECIMAL(15,2) NULL,
+	Member_Contribution DECIMAL(15,2) NULL,
+	Reason_Part_Non_Payment VARCHAR(50) NULL,
+	Effective_Part_Non_Payment_Date DATE NULL,
+	New_Group_Name VARCHAR(40) NULL,
+	Effective_Group_Change_Date DATE NULL,
+	New_Payment_Source_Name VARCHAR(40) NULL,
+	New_Group_Pensionable_Earnings DECIMAL(15,2) NULL,
+	New_Group_Employer_Contribution DECIMAL(15,2) NULL,
+	New_Group_Member_Contribution DECIMAL(15,2) NULL,
+	Optout_Reference_Number VARCHAR(50) NULL,
+	Optout_Declaration_Flag VARCHAR(1) NULL,
+	Sec_Enrol_Pens_Earnings DECIMAL(15,2) NULL,
+	Sec_Enrol_Empl_Contri_Amt DECIMAL(15,2) NULL,
+	Sec_Enrol_Memb_Contri_Amt DECIMAL(15,2) NULL,
+	File_Schedule_Member_Id BIGINT NOT NULL,
+	Record_Start_Date DATE NULL,
+	Record_End_Date DATE NULL,
+	Created_By VARCHAR(50) NULL,
+    CONSTRAINT XPKStg_File_Member_Details PRIMARY KEY (File_Schedule_Member_Id),
+    CONSTRAINT R_32 FOREIGN KEY (Upload_File_Id) REFERENCES contribution_index_schema."File"(File_Id) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+ALTER TABLE contribution_index_schema."File"
+ADD CONSTRAINT R_30 FOREIGN KEY (Contrib_Header_Id) REFERENCES contribution_index_schema."Contribution_Header"(Contrib_Header_Id) ON UPDATE CASCADE ON DELETE CASCADE;
