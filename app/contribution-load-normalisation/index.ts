@@ -34,9 +34,7 @@ const eventGridTrigger: AzureFunction = async function (context: Context, eventG
             fileReceivedDate: new Date().toISOString(),
             fileProcessedDate: new Date().toISOString(),
             fileUploadedOn: new Date().toISOString(),
-            fileSentDate: new Date().toISOString(),
-            noOfRecs: 0,
-            noOfErrors: 0
+            fileSentDate: new Date().toISOString()
         })
 
         //Step 3: move data to contribution header, using sequelize bluk insert.

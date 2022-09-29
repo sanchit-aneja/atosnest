@@ -154,6 +154,7 @@ export interface ContributionHeaderResponse {
   earningPeriodEndDate: Date;
   paymentPlanNo?: string;
   paymentRef?: string;
+  nestPaymentRef: string;
   paymentSourceName: string;
   paymentMethod: string;
   paymentMethodDesc: string;

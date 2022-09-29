@@ -21,6 +21,10 @@ File.init(
                 },
             },
         },
+        contribHeaderId: {
+            type: DataTypes.UUID,
+            field: "contrib_header_id"
+        },
         fileName: {
             type: DataTypes.STRING(150),
             allowNull: false,
@@ -97,14 +101,6 @@ File.init(
             type: DataTypes.DATE,
             field: "file_sent_date"
         },
-        noOfRecs: {
-            type: DataTypes.DECIMAL,
-            field: "no_of_recs"
-        },
-        noOfErrors: {
-            type: DataTypes.DECIMAL,
-            field: "no_of_errors"
-        },
         noOfMembUpd: {
             type: DataTypes.DECIMAL,
             field: "no_of_memb_upd"
@@ -124,10 +120,6 @@ File.init(
         updatedBy: {
             type: DataTypes.STRING(50),
             field: "updated_by"
-        },
-        filePegaCaseRef: {
-            type: DataTypes.STRING(30),
-            field: "file_pega_case_ref"
         }
     },
     {
@@ -149,6 +141,7 @@ File.addHook("beforeValidate", (file, _options) => {
 File.beforeCreate(async (file, _options) => {
     const schema = Joi.object({
         fileId: Joi.string().guid({ version: 'uuidv4' }).required(),
+        contribHeaderId: Joi.string().guid({ version: 'uuidv4' }).optional(),
         fileName: Joi.string().max(150).trim(true).required(),
         fileType: Joi.string().max(3).trim(true).required(),
         fileSize: Joi.number().required(),
@@ -158,9 +151,7 @@ File.beforeCreate(async (file, _options) => {
         fileReceivedDate: Joi.date().iso().required(),
         fileProcessedDate: Joi.date().iso().required(),
         fileUploadedOn: Joi.date().iso().required(),
-        fileSentDate: Joi.date().iso().required(),
-        noOfRecs: Joi.number().required(),
-        noOfErrors: Joi.number().required()
+        fileSentDate: Joi.date().iso().required()
     });
     const { error } = schema.validate(file, joiOption);
     if (error) throw error;
