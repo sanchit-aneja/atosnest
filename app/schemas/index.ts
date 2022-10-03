@@ -3,10 +3,20 @@ export {
     ContributionDetailsRequestDTO
 } from './contributionDetailsUpdateReqDTO';
 
-export { 
-    ContributionDetailsResponseDTO, 
+export {
+    ContributionDetailsResponseDTO,
     ContributionDetailsUpdateError
-} from './contributionDetailsUpdateResDTO'
+} from './contributionDetailsUpdateResDTO';
+
+export {
+    ContributionHeaderDetails,
+    ContributionHeaderRequestDTO
+} from './contributionHeaderUpdateReqDTO';
+
+export {
+    ContributionHeaderResponseDTO,
+    ContributionHeaderUpdateError
+} from './contributionHeaderUpdateResDTO';
 
 export {
     ContributionStgScheduleResponse,

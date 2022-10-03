@@ -48,6 +48,9 @@
 					"paymentRef": {
 						"type": "string"
 					},
+					"nestPaymentRef": {
+						"type": "string"
+					},
 					"paymentSourceName": {
 						"type": "string"
 					},
@@ -104,6 +107,7 @@
 					"employerNestId",
 					"earningPeriodStartDate",
 					"earningPeriodEndDate",
+					"nestPaymentRef",
 					"paymentSourceName",
 					"paymentMethod",
 					"paymentMethodDesc",
@@ -207,6 +211,174 @@
 					"ScheduleSubmissionSeq",
 					"CountSubmitted",
 					"CountRowsSubmitted"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ContributionHeaderUpdateError": {
+				"properties": {
+					"errorCode": {
+						"type": "string"
+					},
+					"errorDetail": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"errorCode",
+					"errorDetail"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ContributionHeaderResponseDTO": {
+				"properties": {
+					"message": {
+						"type": "string"
+					},
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/ContributionHeaderUpdateError"
+						},
+						"type": "array"
+					},
+					"type": {
+						"type": "string"
+					},
+					"instance": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"type",
+					"instance"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ContributionHeaderDetails": {
+				"description": "This is Contribution header interface",
+				"properties": {
+					"contribHeaderId": {
+						"type": "string"
+					},
+					"fileId": {
+						"type": "number",
+						"format": "double"
+					},
+					"nestScheduleRef": {
+						"type": "string"
+					},
+					"externalScheduleRef": {
+						"type": "string"
+					},
+					"scheduleType": {
+						"type": "string"
+					},
+					"scheduleStatusCd": {
+						"type": "string"
+					},
+					"scheduleGenerationDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"employerNestId": {
+						"type": "string"
+					},
+					"subSchemeId": {
+						"type": "string"
+					},
+					"earningPeriodStartDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"earningPeriodEndDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"paymentPlanNo": {
+						"type": "string"
+					},
+					"paymentRef": {
+						"type": "string"
+					},
+					"nestPaymentRef": {
+						"type": "string"
+					},
+					"paymentSourceName": {
+						"type": "string"
+					},
+					"paymentMethod": {
+						"type": "string"
+					},
+					"paymentMethodDesc": {
+						"type": "string"
+					},
+					"paymentFrequency": {
+						"type": "string"
+					},
+					"paymentFrequencyDesc": {
+						"type": "string"
+					},
+					"taxPayFrequencyInd": {
+						"type": "string"
+					},
+					"paymentDueDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"pegaCaseRef": {
+						"type": "string"
+					},
+					"noOfMembs": {
+						"type": "number",
+						"format": "double"
+					},
+					"totScheduleAmt": {
+						"type": "number",
+						"format": "double"
+					},
+					"recordStartDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"recordEndDate": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"contribHeaderId",
+					"nestScheduleRef",
+					"scheduleType",
+					"scheduleStatusCd",
+					"scheduleGenerationDate",
+					"employerNestId",
+					"earningPeriodStartDate",
+					"earningPeriodEndDate",
+					"nestPaymentRef",
+					"paymentSourceName",
+					"paymentMethod",
+					"paymentMethodDesc",
+					"paymentFrequency",
+					"paymentFrequencyDesc",
+					"paymentDueDate"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ContributionHeaderRequestDTO": {
+				"description": "This is Contribution Header update API Request DTO interface",
+				"properties": {
+					"contributionHeader": {
+						"items": {
+							"$ref": "#/components/schemas/ContributionHeaderDetails"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"contributionHeader"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -607,7 +779,7 @@
 	},
 	"info": {
 		"title": "Contribution Index APIs",
-		"version": "1.25.0",
+		"version": "1.28.0",
 		"description": "REST APIs for Contribution Index",
 		"contact": {}
 	},
@@ -755,6 +927,54 @@
 						}
 					}
 				]
+			}
+		},
+		"/contribution/contributionHeader": {
+			"put": {
+				"operationId": "UpdateContributionHeader",
+				"responses": {
+					"200": {
+						"description": "Success Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ContributionHeaderResponseDTO"
+										},
+										{}
+									]
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid Request"
+					},
+					"404": {
+						"description": "Record does not exist"
+					},
+					"500": {
+						"description": "Internal Server Error"
+					}
+				},
+				"description": "5105 API Catalogue Number\r\nUpdate the Contribution Header",
+				"security": [
+					{
+						"api_key": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ContributionHeaderRequestDTO"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/contribution/{nestScheduleRef}": {

@@ -133,6 +133,7 @@ export interface ContributionStgScheduleResponse {
 }
 
 export interface ContributionHeaderResponse {
+  contribHeaderId: string;
   fileId?: number;
   nestScheduleRef: string;
   externalScheduleRef?: string;

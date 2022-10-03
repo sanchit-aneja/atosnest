@@ -101,10 +101,6 @@ File.init(
             type: DataTypes.DATE,
             field: "file_sent_date"
         },
-        noOfMembUpd: {
-            type: DataTypes.DECIMAL,
-            field: "no_of_memb_upd"
-        },
         recordStartDate: {
             type: DataTypes.DATE,
             field: "record_start_date"
