@@ -6,6 +6,12 @@ import sequelize from "../utils/database";
 import ContributionDetails from "./contributionDetails";
 import File from "./file";
 import RDScheduleStatus from "./rdschedulestatus";
+import Status from "../utils/config";
+import { ContributionHeaderDetails } from "../schemas";
+import { Context } from "@azure/functions";
+import app from "../utils/app";
+import { errorDetails } from "../utils/constants";
+
 
 class ContributionHeader extends Model { }
 
@@ -323,7 +329,7 @@ ContributionDetails.belongsTo(ContributionHeader, {
 
 ContributionHeader.addHook("beforeValidate", (contributionheader, _options) => {
   const schema = Joi.object({
-    contribHeaderId: Joi.number().optional().allow(null, ""),
+    contribHeaderId: Joi.string().optional().allow(null, ""),
     fileId: Joi.number().optional().allow(null, ""),
     nestScheduleRef: Joi.string().alphanum().max(14).trim(true).optional().allow(null, ""),
     externalScheduleRef: Joi.string().alphanum().max(32).trim(true).optional().allow(null, ""),
@@ -357,7 +363,7 @@ ContributionHeader.addHook("beforeValidate", (contributionheader, _options) => {
 
 ContributionHeader.beforeCreate(async (contributionheader, _options) => {
   const schema = Joi.object({
-    contribHeaderId: Joi.number().required(),
+    contribHeaderId: Joi.string().required(),
     nestScheduleRef: Joi.string().alphanum().max(32).trim(true).required(),
     scheduleType: Joi.string().alphanum().max(50).trim(true).required(),
     scheduleStatusCd: Joi.string().alphanum().max(5).trim(true).required(),
@@ -376,4 +382,59 @@ ContributionHeader.beforeCreate(async (contributionheader, _options) => {
   if (error) throw error;
 });
 
+/**
+ * This is helper method to update one by one member details
+ * @param contribHeaderId 
+ * @param currentMemberDetails 
+ * @param currentIndex 
+ * @param allErrors 
+ * @param transaction 
+ * @param context 
+ * @returns 
+ */
+export const contributionHeaderUpdateHelper = async function (contribHeaderId: string, currentContributionHeaderDetails: ContributionHeaderDetails, currentIndex: number, allErrors: Array<UpdateError>, transaction, context: Context) {
+  if (app.isNullEmpty(currentContributionHeaderDetails)) {
+    context.log(`currentContributionHeaderDetails is empty object`);
+    allErrors.push({
+      statusCode: Status.BAD_REQUEST,
+      errorCode: errorDetails.CIA0600[0],
+      errorDetail: errorDetails.CIA0600[1]
+    });
+  } else if (!contribHeaderId) {
+    context.log(`contribHeaderId is not present or undefined! value is ${contribHeaderId}`);
+    allErrors.push({
+      statusCode: Status.NOT_FOUND,
+      errorCode: errorDetails.CIA0603[0],
+      errorDetail: errorDetails.CIA0603[1]
+    });
+  } else {
+    currentContributionHeaderDetails["updatedBy"] = "SYSTEM"; // This need be changed once we confirm
+    const effectRows = await ContributionHeader.update({
+      ...currentContributionHeaderDetails
+    }, {
+      where: { 'contribHeaderId': contribHeaderId },
+      transaction,
+      individualHooks: true
+    }) as any;
+
+    // Expecting effect rows may be zero when same value passed, but find row will present
+    // If zero rows effected the not found
+    if (effectRows[1]?.length === 0) {
+      context.log(`Update of contribHeaderId:${contribHeaderId} is failed..! ${effectRows}`)
+      allErrors.push({
+        statusCode: Status.NOT_FOUND,
+        errorCode: errorDetails.CIA0603[0],
+        errorDetail: errorDetails.CIA0603[1]
+      })
+    }
+  }
+  return allErrors;
+}
+
 export default ContributionHeader;
+export interface UpdateError {
+  statusCode: Status,
+  errorDetail: string,
+  errorCode: string,
+  contribHeaderId?: string
+}

@@ -38,13 +38,13 @@ const eventGridTrigger: AzureFunction = async function (context: Context, eventG
         })
 
         //Step 3: move data to contribution header, using sequelize bluk insert.
-        const noOfHeaderRec = await normalisation.createContributionHeader(context, fileId);
+        const contribHeaderId = await normalisation.createContributionHeader(context, fileId);
         //Step 4: move data member contribution details
         await normalisation.createContributionDetails(context);
         //Step 5 : update the file table with no of records
-        await File.update({ noOfRecs: noOfHeaderRec.count }, {
-            where: { 'fileId': fileId },
-        });
+        // await File.update({ contribHeaderId: contribHeaderId }, {
+        //     where: { 'fileId': fileId },
+        // });
         // Ster 6: All success commit
         await transaction.commit();
     } catch (error) {

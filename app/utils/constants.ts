@@ -6,8 +6,9 @@ export const errorDetails = {
   CIA0600: ["CIA-0600", "Validation failed on request data"],
   CIA0601: ["CIA-0601", "One or more membContribDetlId not found"],
   CIA0602: ["CIA-0602", "Something went wrong, update fails"],
-};
+  CIA0603: ["CIA-0601", "One or more contribHeaderId not found"],
 
+};
 export const joiOption = {
   abortEarly: false, // include all errors
   allowUnknown: true, // ignore unknown props
@@ -280,9 +281,13 @@ export const headerFilterParams = {
 };
 
 export const memberFilterParams = {
-  nestScheduleRef: "ContributionDetails.nest_schedule_ref", 
+  nestScheduleRef: "ContributionDetails.nest_schedule_ref",
   employerNestId: "ContributionDetails.employer_nest_id",
 };
 
 export const READONLY_CONTRIBUTION_DETAILS_COLUMNS_FOR_UPDATE = ['membContribDetlId', 'nestScheduleRef', 'membEnrolmentRef', 'membContriDueDate',
   'groupName', 'createdBy', 'updatedBy', 'lastUpdatedTimestamp', 'membPlanRef'];
+
+export const READONLY_CONTRIBUTION_HEADER_COLUMNS_FOR_UPDATE = ['createdBy', 'updatedBy', 'lastUpdatedTimestamp',
+  'fileId', 'nestScheduleRef', 'externalScheduleRef', 'scheduleType', 'employerNestId', 'subSchemeId',
+  'earningPeriodStartDate', 'earningPeriodEndDate', 'paymentDueDate', 'noOfMembs', 'totScheduleAmt'];

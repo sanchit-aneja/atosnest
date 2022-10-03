@@ -147,8 +147,7 @@ CREATE TABLE contribution_index_schema."Contribution_Header"
      CONSTRAINT Contrib_Header_UK UNIQUE (NEST_Schedule_Ref,Employer_NEST_Id),
      CONSTRAINT Contrib_Header_PK PRIMARY KEY (Contrib_Header_Id),
      CONSTRAINT Relation_2 FOREIGN KEY (Schedule_Status_Cd) REFERENCES contribution_index_schema."RD_Schedule_Status"(Schedule_Status_Code) ON DELETE CASCADE ON UPDATE CASCADE,
-     CONSTRAINT Relation_45 FOREIGN KEY (File_Id) REFERENCES contribution_index_schema."File"(File_Id) ON UPDATE CASCADE ON DELETE CASCADE,
-     CONSTRAINT R_33 FOREIGN KEY (Orig_Contrib_Header_Id) REFERENCES contribution_index_schema."Contribution_Header"(Contrib_Header_Id) ON UPDATE CASCADE ON DELETE CASCADE
+     CONSTRAINT Relation_45 FOREIGN KEY (File_Id) REFERENCES contribution_index_schema."File"(File_Id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE contribution_index_schema."RD_Part_Contrib_Reason"
