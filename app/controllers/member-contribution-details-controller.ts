@@ -112,7 +112,6 @@ export class MemberContributionDetailsController {
         memberFilterParams,
         "MCD"
       );
-      console.log("yes coming");
       let whereCdtn = {
         ...element.params,
       };
