@@ -1,36 +1,11 @@
 import { Context } from "@azure/functions"
 import * as csvf from 'fast-csv';
+import { CommonContributionDetails } from ".";
 import { ContributionHeader } from '../models';
+import commonContributionDetails from "./commonContributionDetails";
 
 const Type2BValidations = {
-    /**
-     * Check value is null, undefined or empty
-     * @param value
-     * @returns bool if value is null or empty return true
-     */
-    isNullOrEmpty: function (value) {
-        if (
-            value == undefined ||
-            value == null ||
-            value == ""
-        ) {
-            return true;
-        } else {
-            return false;
-        }
-    },
-    /**
-     * is date valid
-     * @param value
-     */
-    isValidateDate: function (value) {
-        const values = value.split("-");
-        const date = new Date(value);
-        if (date.getDate() === parseInt(values[2])) {
-            return true
-        }
-        return false
-    },
+   
     /**
      * Type 2B rules - Validation
      */
@@ -42,7 +17,7 @@ const Type2BValidations = {
             }
             try {
                 const empRefNo = row[1];
-                if (Type2BValidations.isNullOrEmpty(empRefNo)) {
+                if (CommonContributionDetails.isNullOrEmpty(empRefNo)) {
                     return validationError
                 }
                 const pattern = /^(EMP)(\d{9})$/;
@@ -65,7 +40,7 @@ const Type2BValidations = {
             }
             try {
                 const processType = row[2];
-                if (Type2BValidations.isNullOrEmpty(processType)) {
+                if (CommonContributionDetails.isNullOrEmpty(processType)) {
                     return validationError
                 }
                 if (processType !== "CS") {
@@ -87,11 +62,10 @@ const Type2BValidations = {
             }
             try {
                 const epedDate = row[3];
-                if (Type2BValidations.isNullOrEmpty(epedDate)) {
+                if (CommonContributionDetails.isNullOrEmpty(epedDate)) {
                     return validationError;
                 }
-                const pattern = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
-                if (!pattern.test(epedDate) || !Type2BValidations.isValidateDate(epedDate)) { // Only format checking is done. But for example 9999-10-31 is also valid..
+                if (!commonContributionDetails.isValidateDate(epedDate)) { // Only format checking is done. But for example 9999-10-31 is also valid..
                     return {
                         code: "ID13.2",
                         message: "Please check the details in the header record field as they appear to be in the wrong format: EPED. Please format dates in this field as YYYY-MM-DD."
@@ -110,7 +84,7 @@ const Type2BValidations = {
             }
             try {
                 const paymentSource = row[4];
-                if (Type2BValidations.isNullOrEmpty(paymentSource)) {
+                if (CommonContributionDetails.isNullOrEmpty(paymentSource)) {
                     return validationError;
                 }
                 const pattern = /^(\d|[a-zA-Z])[A-Za-z\d"'#$%&@=?:\.\+\*\-/\\\(\)\[\]\{\}]+$/;
@@ -133,7 +107,7 @@ const Type2BValidations = {
             }
             try {
                 const payPeriod = row[6];
-                if (Type2BValidations.isNullOrEmpty(payPeriod)) {
+                if (CommonContributionDetails.isNullOrEmpty(payPeriod)) {
                     return validationError
                 }
                 const frequencyTypes = ['weekly', 'tax weekly', 'fortnightly', 'tax fortnightly', '4 weekly', 'tax 4 weekly', 'monthly', 'tax monthly'];
@@ -159,8 +133,7 @@ const Type2BValidations = {
                 if (pddDate === "") {
                     return null
                 }
-                const pattern = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
-                if (!pattern.test(pddDate) || !Type2BValidations.isValidateDate(pddDate)) { // Only format checking is done. But for example 9999-10-31 is also valid..
+                if (!commonContributionDetails.isValidateDate(pddDate)) { // Only format checking is done. But for example 9999-10-31 is also valid..
                     return validationError
                 }
                 return null;
@@ -180,8 +153,7 @@ const Type2BValidations = {
                 if (epsdDate === "") {
                     return null
                 }
-                const pattern = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
-                if (!pattern.test(epsdDate) || !Type2BValidations.isValidateDate(epsdDate)) { // Only format checking is done. But for example 9999-10-31 is also valid..
+                if (!commonContributionDetails.isValidateDate(epsdDate)) { // Only format checking is done. But for example 9999-10-31 is also valid..
                     return validationError
                 }
                 // End date most be greater than start date, else error
