@@ -1,7 +1,9 @@
 import { Context } from "@azure/functions"
 import * as csvf from 'fast-csv';
+// import { alternatives } from "joi";
+import { FileUploadHelper } from "../utils";
 
-export const Type2CValidations = {
+ const Type2CValidations = {
      /**
      * Check value is null, undefined or empty
      * @param value
@@ -39,7 +41,7 @@ export const Type2CValidations = {
 
     rules:{
 
-        "isNinoAltValid": (row: Array<any>, context: Context) => {
+        "isNinoAltValid": async (row: Array<any>, context: Context) => {
             // const ninos = [];
             // const alts = [];
             const validationError = {
@@ -101,17 +103,36 @@ export const Type2CValidations = {
                         message: "the members NINO and/or ALT ID matches to > 1 member in the CS the file is being uploaded for"
                     }
                 }
-                
-                
+
+                const members = await FileUploadHelper.checkRecordValid({
+                    nino: nino, 
+                    alt: alt
+                })
+
+
+                if(members.length > 1){
+                    return {
+                        code: "ID20.1",
+                        message: "the members NINO and/or ALT ID matches to > 1 member in the CS the file is being uploaded for"
+                    }
+                }
+                if(ninoValid && altValid ){
+                    if(members[0]["nino"] != nino || members[0]["alternativeId"] != alt){
+                        return {
+                            code: "ID20.1",
+                            message: "the nino and alt does not match the record"
+                        }
+                    }
+                }
+                               
                 if(!isNinoEmpty){
                     Type2CValidations.ninos.push(nino);
                 }
                 if(!isAltEmpty){
                     Type2CValidations.alts.push(alt);
                 }
-                
                 return null;
-                    
+
             } catch (error) {
                 context.log(`Nino and Alt id failed :  error message ${error.message}`);
                 return validationError;
@@ -119,7 +140,7 @@ export const Type2CValidations = {
             
         },
 
-        "isFirstNameValid": (row: Array<any>, context:Context )=>{
+        "isFirstNameValid": async (row: Array<any>, context:Context )=>{
             const firstName = row[1];
             const regex = /([A-Za-z])\w+/;
 
@@ -132,7 +153,7 @@ export const Type2CValidations = {
 
         },
 
-        "isLastNameValid": (row: Array<any>)=>{
+        "isLastNameValid": async (row: Array<any>)=>{
             const lastName = row[2];
             const regex = /([A-Za-z])\w+/;
             
@@ -146,10 +167,10 @@ export const Type2CValidations = {
         },
     },
 
-    executeRulesOneByOne: (row:Array<any>, context:Context, errors:Array<Object>, rowIndex: Number)=>{
+    executeRulesOneByOne: async (row:Array<any>, context:Context, errors:Array<Object>, rowIndex: Number)=>{
         for (const key in Type2CValidations.rules) {
             const validationFunc = Type2CValidations.rules[key];
-            const validationErrors = validationFunc(row, context);
+            const validationErrors = await validationFunc(row, context);
             if (validationErrors) {
                 validationErrors.row = row;
                 validationErrors.rowIndex = rowIndex;
@@ -171,7 +192,7 @@ export const Type2CValidations = {
                 .pipe(csvf.parse<any, any>({
                     ignoreEmpty: true,
                 }))
-                .validate((row: any, cb) => {
+                .validate(async (row: any, cb) => {
                 
                     currentRowIndex++; 
                     if(currentRowIndex==0){
@@ -179,8 +200,8 @@ export const Type2CValidations = {
                         Type2CValidations.ninos=[];
                     }
                     if(currentRowIndex>0 && row[0].trim()==='D'){
-                        Type2CValidations.executeRulesOneByOne(row, context, errorMessages, currentRowIndex);
-
+                        await Type2CValidations.executeRulesOneByOne(row, context, errorMessages, currentRowIndex);
+                        
                         return cb(null, true, null);
 
                     }           
@@ -206,11 +227,29 @@ export const Type2CValidations = {
                     errorMessages.push(error);
                     reject(errorMessages);
                 })
-                .on('end', (_e,) => {
+                .on('end', async (_e,) => {
                     if (errorMessages.length > 0){
                         reject(errorMessages);
                         return;
                     }
+                    try {
+                        const rows =  await FileUploadHelper.getAllRecordsFromNinoAlt({alts: Type2CValidations.alts, ninos: Type2CValidations.ninos})
+                    
+
+
+                        if(rows.length>0){
+                            return {
+                                code:"ID20.1",
+                                message: "the members NINO and/or ALT ID matches to > 1 member in the CS the file is being uploaded for"
+                            }
+                       }
+                    } catch (error) {
+                        return {
+                            code:"9999",
+                            message: "Something went wrong"
+                        }
+                    }
+
                     let data = {
                         results: results,
                     }
@@ -223,3 +262,4 @@ export const Type2CValidations = {
     }
 }
 
+export default Type2CValidations;
