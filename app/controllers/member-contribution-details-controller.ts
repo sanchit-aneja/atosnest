@@ -9,6 +9,7 @@ import {
   SuccessResponse,
 } from "tsoa";
 import ContributionDetails from "../models/contributionDetails";
+import MemberContributionSubmission from "../models/memberContributionSubmission";
 import {
   DetailsFilterElements,
   MemberContributionDetailsResponse,
@@ -31,6 +32,7 @@ import {
   memberFilterParams,
   errorDetails,
   READONLY_CONTRIBUTION_DETAILS_COLUMNS_FOR_UPDATE,
+  CONTR_MEMBER_DETAILS
 } from "../utils/constants";
 import errorHandler from "../utils/errorHandler";
 
@@ -246,4 +248,88 @@ export class MemberContributionDetailsController {
       return app.errorResponse(allErrors[0].statusCode, data);
     }
   }
+
+
+  /**
+   * 5404 API Catalogue Number
+   * Retrieves returns a list of all Member Contribution Submissions based on contribSubmissionRef passed.
+   * @param contribSubmissionRef contribSubmissionRef of the Member Contribution Submission record to be fetched
+   * @return Member Contribution Submission list with reason code based on contribSubmissionRef
+   */
+  @Security("api_key")
+  @Get("/Submission/MemberContributionSubmissions/{contribSubmissionRef}")
+  @SuccessResponse("200", Status.SUCCESS_MSG)
+  @Response("400", Status.BAD_REQUEST_MSG)
+  @Response("404", Status.NOT_FOUND_MSG)
+  @Response("500", Status.FAILURE_MSG)
+  async getMemberContributionSubmission(
+    contribSubmissionRef: string
+  ): Promise<SearchResultsetResponse<MemberContributionDetailsResponse> | any> {
+    try {
+      let whereCdtn = {
+        contrib_submission_ref: contribSubmissionRef,
+      };
+      return await sequelize.transaction(async (t) => {
+        const { rows, count } = await MemberContributionSubmission.findAndCountAll({
+          distinct: true,
+          include: [
+            {
+              association: "contributiondetails",
+              attributes: CONTR_MEMBER_DETAILS
+            }
+          ],
+          where: whereCdtn,
+          subQuery: false,
+          transaction: t,
+        });
+
+        if (rows?.length > 0) {
+          const mappedItems = await this.mapCreateCompleteObj(rows);
+          return {
+            totalRecordCount: count,
+            results: mappedItems,
+          };
+        } else {
+          return Status.NOT_FOUND;
+        }
+
+      });
+    } catch (err) {
+      if (err) {
+        return app.errorHandler(err);
+      }
+    }
+  }
+
+  /**
+  * This method used to map object to get complete return object for member submission
+  * @param item
+  * @returns
+  */
+  async mapCreateCompleteObj(item) {
+    try {
+      if (app.isJSON(item)) {
+        let results = [];
+        for (let newItem of item) {
+          let contDetails = newItem?.dataValues?.contributiondetails?.dataValues;
+          let subObj = {
+            ...contDetails,
+            contribSubmissionRef: newItem?.dataValues?.contribSubmissionRef,
+            createdBy: newItem?.dataValues?.createdBy,
+            createdDate: newItem?.dataValues?.createdDate,
+            membContribDetlId: newItem?.dataValues?.membContribDetlId,
+            membSubmId: newItem?.dataValues?.membSubmId
+          }
+          results.push(subObj);
+        }
+        return results;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
 }
+
+
