@@ -291,3 +291,5 @@ export const READONLY_CONTRIBUTION_DETAILS_COLUMNS_FOR_UPDATE = ['membContribDet
 export const READONLY_CONTRIBUTION_HEADER_COLUMNS_FOR_UPDATE = ['createdBy', 'updatedBy', 'lastUpdatedTimestamp',
   'fileId', 'nestScheduleRef', 'externalScheduleRef', 'scheduleType', 'employerNestId', 'subSchemeId',
   'earningPeriodStartDate', 'earningPeriodEndDate', 'paymentDueDate', 'noOfMembs', 'totScheduleAmt'];
+
+export const CONTR_MEMBER_DETAILS = ["schdlMembStatusCd", "employerNestId", "membEnrolmentRef", "membContriDueDate", "membPlanRef", "membPartyId", "scmPartyId", "nino", "alternativeId", "autoCalcFlag", "empGroupId", "pensEarnings", "emplContriAmt", "membContriAmt", "membNonPayReason", "membLeaveEarnings", "empGroupId", "newGroupName", "newGroupPensEarnings", "newGroupEmplContriAmt", "newGroupMembContriAmt", "optoutRefNum", "optoutDeclarationFlag", "newPaymentPlanNo", "newPaymentSourceName", "membNonPayEffDate", "secEnrolPensEarnings", "secEnrolEmplContriAmt", "secEnrolMembContriAmt", "channelType", "memberExcludedFlag", "membPaymentDueDate", "recordStartDate", "recordEndDate"];

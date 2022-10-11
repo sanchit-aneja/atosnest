@@ -8,6 +8,9 @@
 		"schemas": {
 			"ContributionHeaderResponse": {
 				"properties": {
+					"contribHeaderId": {
+						"type": "string"
+					},
 					"fileId": {
 						"type": "number",
 						"format": "double"
@@ -100,6 +103,7 @@
 					}
 				},
 				"required": [
+					"contribHeaderId",
 					"nestScheduleRef",
 					"scheduleType",
 					"scheduleStatusCd",
@@ -256,8 +260,7 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"ContributionHeaderDetails": {
-				"description": "This is Contribution header interface",
+			"Pick_ContributionHeaderResponse.Exclude_keyofContributionHeaderResponse.createdBy-or-updatedBy__": {
 				"properties": {
 					"contribHeaderId": {
 						"type": "string"
@@ -280,7 +283,7 @@
 					},
 					"scheduleGenerationDate": {
 						"type": "string",
-						"format": "date-time"
+						"format": "date"
 					},
 					"employerNestId": {
 						"type": "string"
@@ -290,11 +293,11 @@
 					},
 					"earningPeriodStartDate": {
 						"type": "string",
-						"format": "date-time"
+						"format": "date"
 					},
 					"earningPeriodEndDate": {
 						"type": "string",
-						"format": "date-time"
+						"format": "date"
 					},
 					"paymentPlanNo": {
 						"type": "string"
@@ -325,7 +328,7 @@
 					},
 					"paymentDueDate": {
 						"type": "string",
-						"format": "date-time"
+						"format": "date"
 					},
 					"pegaCaseRef": {
 						"type": "string"
@@ -340,11 +343,122 @@
 					},
 					"recordStartDate": {
 						"type": "string",
-						"format": "date-time"
+						"format": "date"
 					},
 					"recordEndDate": {
 						"type": "string",
-						"format": "date-time"
+						"format": "date"
+					}
+				},
+				"required": [
+					"contribHeaderId",
+					"nestScheduleRef",
+					"scheduleType",
+					"scheduleStatusCd",
+					"scheduleGenerationDate",
+					"employerNestId",
+					"earningPeriodStartDate",
+					"earningPeriodEndDate",
+					"nestPaymentRef",
+					"paymentSourceName",
+					"paymentMethod",
+					"paymentMethodDesc",
+					"paymentFrequency",
+					"paymentFrequencyDesc",
+					"paymentDueDate"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"ContributionHeaderDetails": {
+				"description": "This is Contribution header interface",
+				"properties": {
+					"contribHeaderId": {
+						"type": "string"
+					},
+					"fileId": {
+						"type": "number",
+						"format": "double"
+					},
+					"nestScheduleRef": {
+						"type": "string"
+					},
+					"externalScheduleRef": {
+						"type": "string"
+					},
+					"scheduleType": {
+						"type": "string"
+					},
+					"scheduleStatusCd": {
+						"type": "string"
+					},
+					"scheduleGenerationDate": {
+						"type": "string",
+						"format": "date"
+					},
+					"employerNestId": {
+						"type": "string"
+					},
+					"subSchemeId": {
+						"type": "string"
+					},
+					"earningPeriodStartDate": {
+						"type": "string",
+						"format": "date"
+					},
+					"earningPeriodEndDate": {
+						"type": "string",
+						"format": "date"
+					},
+					"paymentPlanNo": {
+						"type": "string"
+					},
+					"paymentRef": {
+						"type": "string"
+					},
+					"nestPaymentRef": {
+						"type": "string"
+					},
+					"paymentSourceName": {
+						"type": "string"
+					},
+					"paymentMethod": {
+						"type": "string"
+					},
+					"paymentMethodDesc": {
+						"type": "string"
+					},
+					"paymentFrequency": {
+						"type": "string"
+					},
+					"paymentFrequencyDesc": {
+						"type": "string"
+					},
+					"taxPayFrequencyInd": {
+						"type": "string"
+					},
+					"paymentDueDate": {
+						"type": "string",
+						"format": "date"
+					},
+					"pegaCaseRef": {
+						"type": "string"
+					},
+					"noOfMembs": {
+						"type": "number",
+						"format": "double"
+					},
+					"totScheduleAmt": {
+						"type": "number",
+						"format": "double"
+					},
+					"recordStartDate": {
+						"type": "string",
+						"format": "date"
+					},
+					"recordEndDate": {
+						"type": "string",
+						"format": "date"
 					}
 				},
 				"required": [
@@ -779,7 +893,7 @@
 	},
 	"info": {
 		"title": "Contribution Index APIs",
-		"version": "1.28.0",
+		"version": "1.32.0",
 		"description": "REST APIs for Contribution Index",
 		"contact": {}
 	},
@@ -1119,6 +1233,54 @@
 						}
 					}
 				}
+			}
+		},
+		"/contribution/Submission/MemberContributionSubmissions/{contribSubmissionRef}": {
+			"get": {
+				"operationId": "GetMemberContributionSubmission",
+				"responses": {
+					"200": {
+						"description": "Success Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/SearchResultsetResponse_MemberContributionDetailsResponse_"
+										},
+										{}
+									]
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid Request"
+					},
+					"404": {
+						"description": "Record does not exist"
+					},
+					"500": {
+						"description": "Internal Server Error"
+					}
+				},
+				"description": "5404 API Catalogue Number\r\nRetrieves returns a list of all Member Contribution Submissions based on contribSubmissionRef passed.",
+				"security": [
+					{
+						"api_key": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "contribSubmissionRef of the Member Contribution Submission record to be fetched",
+						"in": "path",
+						"name": "contribSubmissionRef",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
 			}
 		}
 	},
