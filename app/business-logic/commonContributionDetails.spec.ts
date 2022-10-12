@@ -268,8 +268,8 @@ describe("Test: Business logic common Contribution details functions", () => {
 
     test("Should return membChangeOfGroupDate prop, when addExtraParams is true on calling convertToContributionDetails", async () => {
         //Arrage -- Dummy data
-        const mockRow = ['D','1', '2', '3', '4', '5', '6', '7', '8', '2022-09-09', '10', '2022-11-11', '12',
-                    '13', '14', '15', '16', 'y', '18', '19', '20'];
+        const mockRow = ['D','1', '2', '3', '4', '5', '6', '7', '8', '9', '2022-09-09', '11', '2022-11-11',
+                    '13', '14', '15', '16', '17', 'Y', '19', '20'];
         //Act
         const membDetails = CommonContributionDetails.convertToContributionDetails(mockRow, {}, true);
 
@@ -281,8 +281,8 @@ describe("Test: Business logic common Contribution details functions", () => {
 
     test("Should not return membChangeOfGroupDate prop, when addExtraParams is false on calling convertToContributionDetails", async () => {
         //Arrage -- Dummy data
-        const mockRow = ['D','1', '2', '3', '4', '5', '6', '7', '8', '', '10', '2022-11-11', '12',
-                    '13', '14', '15', '16', '', '18', '19', '20'];
+        const mockRow = ['D','1', '2', '3', '4', '5', '6', '7', '8', '9', '', '11', '2022-11-11',
+                    '13', '14', '15', '16', '17', '', '19', '20'];
         //Act
         const membDetails = CommonContributionDetails.convertToContributionDetails(mockRow, {}, false);
 
@@ -290,6 +290,18 @@ describe("Test: Business logic common Contribution details functions", () => {
         expect(membDetails.optoutDeclarationFlag).toBe(undefined);
         expect(membDetails["membChangeOfGroupDate"]).toBe(undefined);
         expect(membDetails.membNonPayEffDate).toBe('2022-11-11')
+    });
+
+    test("Should return member contribution details object", async () => {
+        //Arrage -- Dummy data
+        const mockRow = ['D','1', '2', '3', '4', '5', '6', '7', '8', '9', '2022-09-09', '11', '2022-11-11',
+                    '13', '14', '15', '16', '17', 'Y', '19', '20'];
+        const dummyExpecetdResultObjStr = '{"pensEarnings":"5","membLeaveEarnings":"6","emplContriAmt":"7","membContriAmt":"8","membNonPayReason":"9","membNonPayEffDate":"2022-09-09","newGroupName":"11","newPaymentSourceName":"13","newGroupPensEarnings":"14","newGroupEmplContriAmt":"15","newGroupMembContriAmt":"16","optoutRefNum":"17","optoutDeclarationFlag":"Y","secEnrolPensEarnings":"19","secEnrolEmplContriAmt":"20"}'
+        //Act
+        const membDetails = CommonContributionDetails.convertToContributionDetails(mockRow, {}, false);
+
+        //Assert
+        expect(JSON.stringify(membDetails)).toBe(dummyExpecetdResultObjStr);
     });
 
 
