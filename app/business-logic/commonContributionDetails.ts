@@ -20,23 +20,23 @@ const commonContributionDetails = {
      convertToContributionDetails: function (row, memDetailsRows, addExtraParams:boolean=false) {
         // Currently this row index may change, this was done bcased on Contribution template - specification v1.9
         let customRow = {
-            pensEarnings: commonContributionDetails.getNonNullValue(row[4], memDetailsRows.pensEarnings),
-            membLeaveEarnings: commonContributionDetails.getNonNullValue(row[5], memDetailsRows.membLeaveEarnings),
-            emplContriAmt: commonContributionDetails.getNonNullValue(row[6], memDetailsRows.emplContriAmt),
-            membContriAmt: commonContributionDetails.getNonNullValue(row[7], memDetailsRows.membContriAmt),
-            membNonPayReason: commonContributionDetails.getNonNullValue(row[8], memDetailsRows.membNonPayReason),
-            membNonPayEffDate: commonContributionDetails.getNonNullValue((row[9]) ? row[9] : row[11], memDetailsRows.membNonPayEffDate),
-            newGroupName: commonContributionDetails.getNonNullValue(row[10], memDetailsRows.newGroupName),
-            newPaymentSourceName: commonContributionDetails.getNonNullValue(row[12], memDetailsRows.newPaymentSourceName),
-            newGroupPensEarnings: commonContributionDetails.getNonNullValue(row[13], memDetailsRows.newGroupPensEarnings),
-            newGroupEmplContriAmt: commonContributionDetails.getNonNullValue(row[14], memDetailsRows.newGroupEmplContriAmt),
-            newGroupMembContriAmt: commonContributionDetails.getNonNullValue(row[15], memDetailsRows.newGroupMembContriAmt),
-            optoutRefNum: commonContributionDetails.getNonNullValue(row[16], memDetailsRows.optoutRefNum),
+            pensEarnings: commonContributionDetails.getNonNullValue(row[5], memDetailsRows.pensEarnings),
+            membLeaveEarnings: commonContributionDetails.getNonNullValue(row[6], memDetailsRows.membLeaveEarnings),
+            emplContriAmt: commonContributionDetails.getNonNullValue(row[7], memDetailsRows.emplContriAmt),
+            membContriAmt: commonContributionDetails.getNonNullValue(row[8], memDetailsRows.membContriAmt),
+            membNonPayReason: commonContributionDetails.getNonNullValue(row[9], memDetailsRows.membNonPayReason),
+            membNonPayEffDate: commonContributionDetails.getNonNullValue((row[10]) ? row[10] : row[12], memDetailsRows.membNonPayEffDate),
+            newGroupName: commonContributionDetails.getNonNullValue(row[11], memDetailsRows.newGroupName),
+            newPaymentSourceName: commonContributionDetails.getNonNullValue(row[13], memDetailsRows.newPaymentSourceName),
+            newGroupPensEarnings: commonContributionDetails.getNonNullValue(row[14], memDetailsRows.newGroupPensEarnings),
+            newGroupEmplContriAmt: commonContributionDetails.getNonNullValue(row[15], memDetailsRows.newGroupEmplContriAmt),
+            newGroupMembContriAmt: commonContributionDetails.getNonNullValue(row[16], memDetailsRows.newGroupMembContriAmt),
+            optoutRefNum: commonContributionDetails.getNonNullValue(row[17], memDetailsRows.optoutRefNum),
             // in spec it was saying  bool and validation we need to check for Y.. not sure what will be true.. considering as Y only
-            optoutDeclarationFlag: commonContributionDetails.getNonNullValue(row[17], memDetailsRows.optoutDeclarationFlag),
-            secEnrolPensEarnings: commonContributionDetails.getNonNullValue(row[18], memDetailsRows.secEnrolPensEarnings),
-            secEnrolEmplContriAmt: commonContributionDetails.getNonNullValue(row[19], memDetailsRows.secEnrolEmplContriAmt),
-            secEnrolMembContriAmt: commonContributionDetails.getNonNullValue(row[20], memDetailsRows.secEnrolMembContriAmt)
+            optoutDeclarationFlag: commonContributionDetails.getNonNullValue(row[18], memDetailsRows.optoutDeclarationFlag),
+            secEnrolPensEarnings: commonContributionDetails.getNonNullValue(row[19], memDetailsRows.secEnrolPensEarnings),
+            secEnrolEmplContriAmt: commonContributionDetails.getNonNullValue(row[20], memDetailsRows.secEnrolEmplContriAmt),
+            secEnrolMembContriAmt: commonContributionDetails.getNonNullValue(row[21], memDetailsRows.secEnrolMembContriAmt)
         }
         // Force to upper case when not null
         if(!commonContributionDetails.isNullOrEmpty(customRow.optoutDeclarationFlag)){
@@ -45,8 +45,8 @@ const commonContributionDetails = {
 
         //Overwrite existing and add new for Type 2D validations only
         if(addExtraParams){
-            customRow["membChangeOfGroupDate"]=row[11];
-            customRow.membNonPayEffDate = row[9];
+            customRow["membChangeOfGroupDate"]=row[12];
+            customRow.membNonPayEffDate = row[10];
         }
         return customRow;
     },
