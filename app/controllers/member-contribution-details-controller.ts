@@ -14,6 +14,8 @@ import {
   DetailsFilterElements,
   MemberContributionDetailsResponse,
   SearchResultsetResponse,
+  SearchMemberContributionResultResponse,
+  RetriveContributionDetailsResponse
 } from "../schemas/response-schema";
 import {
   contributionDetailsUpdateHelper,
@@ -107,7 +109,7 @@ export class MemberContributionDetailsController {
   @Response("500", Status.FAILURE_MSG)
   async getDetailsByFilter(
     @Body() requestObj: DetailsFilterElements
-  ): Promise<SearchResultsetResponse<MemberContributionDetailsResponse> | any> {
+  ): Promise<SearchMemberContributionResultResponse<RetriveContributionDetailsResponse> | any> {
     try {
       const element = app.mapDetailsFilterElements(
         requestObj,
@@ -132,16 +134,25 @@ export class MemberContributionDetailsController {
               association: "rdpartcontribreason",
               attributes: ["reasonDescription"],
             },
+            {
+              association: "errorDetails",
+              attributes: ["errorLogId", "errorFileId", "errorType", "errorSequenceNum",
+                "sourceRecordId", "errorCode", "errorMessage"],
+            }
           ],
           where: whereCdtn,
           subQuery: false,
           transaction: t,
         });
-        return {
-          totalRecordCount: count,
-          results: rows,
-        };
-      });
+        if (rows?.length > 0) {
+          return {
+            totalRecordCount: count,
+            results: rows,
+          };
+        } else {
+          return Status.BAD_REQUEST;
+        }
+      })
     } catch (err) {
       if (err) {
         return app.errorHandler(err);

@@ -27,7 +27,7 @@ import {
 import { Op } from "sequelize";
 import * as moment from "moment";
 import { Context } from "@azure/functions";
-import { ContributionHeaderRequestDTO, ContributionHeaderResponseDTO, ContributionHeaderDetails } from "../schemas";
+import { ContributionHeaderRequestDTO, ContributionHeaderResponseDTO } from "../schemas";
 import {
   contributionHeaderUpdateHelper,
   ContributionHeaderUpdateError
