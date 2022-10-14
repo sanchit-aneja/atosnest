@@ -31,7 +31,7 @@ const normalisation = {
     try {
       return await sequelize.transaction(async (t) => {
         const rows = await ContributionHeader.findAll({
-          attributes: ["nestScheduleRef", "earningPeriodEndDate", "employerNestId"],
+          attributes: ["nestScheduleRef", "earningPeriodEndDate", "employerNestId", "contribHeaderId"],
           include: [
             {
               association: "stgcontrmember", attributes: ["membershipId", "planReference", "category", "crmPartyId", "cmPartyId", "nino", "schemePayrollReference", "pensionableSalary", "reasonCode", "newSalary", "currentEmployerContribution", "currentMemberContribution",
@@ -171,6 +171,9 @@ const normalisation = {
           let params = {};
           params = {
             nestScheduleRef: value._previousDataValues.nestScheduleRef.trim(), //this.addLeadingZeros(parseInt(key) + 1, 2), //
+            contribHeaderId: value._previousDataValues.contribHeaderId.trim(),
+            firstName: 'NA',//value._previousDataValues.firstName.trim(),
+            lastName: 'NA', //value._previousDataValues.lastName.trim(),
             membEnrolmentRef: value._previousDataValues?.stgcontrmember?._previousDataValues?.membershipId.trim(),
             membContriDueDate: value._previousDataValues?.earningPeriodEndDate,
             membPlanRef: (value._previousDataValues?.stgcontrmember?._previousDataValues?.planReference).trim(),

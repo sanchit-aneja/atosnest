@@ -42,6 +42,7 @@ const eventGridTrigger: AzureFunction = async function (context: Context, eventG
         //Step 4: move data member contribution details
         await normalisation.createContributionDetails(context);
         //Step 5 : update the file table with no of records
+        console.log(contribHeaderId);
         // await File.update({ contribHeaderId: contribHeaderId }, {
         //     where: { 'fileId': fileId },
         // });

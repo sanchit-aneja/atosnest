@@ -182,10 +182,7 @@ export interface ContributionHeaderResponse {
 }
 
 export interface MemberContributionDetailsResponse {
-  /**
-  * @isInt
-  */
-  membContribDetlId: number;
+  membContribDetlId: string;
   nestScheduleRef: string;
   membEnrolmentRef: string;
   /**
@@ -203,19 +200,6 @@ export interface MemberContributionDetailsResponse {
   scmPartyId?: string;
   nino?: string;
   alternativeId?: string;
-  /**
-  * @isFloat
-  */
-  lastPaidPensEarnings?: number;
-  lastPaidReasonCode?: string;
-  /**
-  * @isFloat
-  */
-  lastPaidEmplContriAmt?: number;
-  /**
-  * @isFloat
-  */
-  lastPaidMembContriAmt?: number;
   autoCalcFlag?: string;
   /**
   * @isFloat
@@ -225,15 +209,18 @@ export interface MemberContributionDetailsResponse {
   * @isFloat
   */
   emplContriAmt?: number;
+  /**
+  * @isFloat
+  */
+  membContriAmt?: number;
+  /**
+  * @isFloat
+  */
   membNonPayReason: string;
   /**
   * @isFloat
   */
   membLeaveEarnings?: number;
-  /**
-  * @isInt
-  */
-  newEmpGroupId?: number;
   newGroupName?: string;
   /**
   * @isFloat
@@ -274,6 +261,10 @@ export interface MemberContributionDetailsResponse {
   */
   membPaymentDueDate?: Date;
   /**
+  * @isInt
+  */
+  newEmpGroupId?: number;
+  /**
   * @isDate
   */
   recordStartDate?: Date;
@@ -283,9 +274,24 @@ export interface MemberContributionDetailsResponse {
   recordEndDate?: Date;
   createdBy?: string;
   updatedBy?: string;
-  employerNestId?: string,
-  origScheduleRef?: string
+  employerNestId?: string;
+  origScheduleRef?: string;
+  contribHeaderId?: string;
+}
 
+export interface FileErrorDetailsResponse {
+  /**
+  * @isInt
+  */
+  errorLogId: number;
+  errorFileId: string;
+  errorType: string;
+  /**
+  * @isFloat
+  */
+  errorSequenceNum: number;
+  errorCode: string;
+  errorMessage: string;
 }
 
 interface FilterOptions {
@@ -313,6 +319,8 @@ export interface HeaderFilterElements {
 
 interface DetailsFilterParams {
   nestScheduleRef: string;
+  fitstName: string;
+  lastName: string;
 }
 
 export interface DetailsFilterElements {
@@ -326,8 +334,145 @@ export interface SearchResultsetResponse<T> {
 }
 
 export interface CreateContributionResponse {
-  ContributionSubmissionRef: string;
-  ScheduleSubmissionSeq: number;
-  CountSubmitted: number;
-  CountRowsSubmitted: number;
+  contributionSubmissionRef: string;
+  scheduleSubmissionSeq: number;
+  countSubmitted: number;
+  countRowsSubmitted: number;
+}
+
+export interface RetriveContributionDetailsResponse {
+  contribHeaderId?: string;
+  origScheduleRef?: string;
+
+  employerNestId?: string;
+  updatedBy?: string;
+  /**
+  * @isDate
+  */
+  membPaymentDueDate?: Date;
+
+  /**
+  * @isDate
+  */
+
+  recordEndDate?: Date;
+  
+  createdBy?: string;
+  /**
+  * @isInt
+  */
+  newEmpGroupId?: number;
+
+  recordStartDate?: Date;
+  /**
+  * @isDate
+  */
+
+  memberExcludedFlag?: string;
+  nestScheduleRef: string;
+  membEnrolmentRef: string;
+
+  membContribDetlId: string;
+
+  membPlanRef?: string;
+  /**
+  * @isDate
+  */
+
+  membContriDueDate: Date;
+  /**
+  * @isInt
+  */
+  empGroupId: number;
+
+  groupName: string;
+
+  schdlMembStatusCd: string;
+
+  membPartyId: string;
+
+  scmPartyId?: string;
+
+  nino?: string;
+  alternativeId?: string;
+  autoCalcFlag?: string;
+  /**
+  * @isFloat
+  */
+  emplContriAmt?: number;
+  /**
+  * @isFloat
+  */
+  pensEarnings?: number;
+
+  /**
+  * @isFloat
+  */
+  membContriAmt?: number;
+  /**
+  * @isFloat
+  */
+  membLeaveEarnings?: number;
+
+  membNonPayReason: string;
+  /**
+  * @isFloat
+  */
+  newGroupPensEarnings?: number;
+  /**
+  * @isFloat
+  */
+  newGroupName?: string;
+  /**
+  * @isFloat
+  */
+
+  optoutDeclarationFlag?: string;
+
+  newGroupEmplContriAmt?: number;
+  optoutRefNum?: string;
+
+  /**
+  * @isFloat
+  */
+  newGroupMembContriAmt?: number;
+
+  newPaymentPlanNo?: string;
+  /**
+  * @isFloat
+  */
+  secEnrolMembContriAmt?: number;
+
+  newPaymentSourceName?: string;
+  /**
+  * @isDate
+  */
+  membNonPayEffDate?: Date;
+  /**
+  * @isFloat
+  */
+  secEnrolPensEarnings?: number;
+  /**
+  * @isFloat
+  */
+  channelType?: string;
+
+  secEnrolEmplContriAmt?: number;
+  firstName: string;
+  lastName: string;
+  errorDetails: FileErrorDetailsResponse;
+  rdschedulememberstatus: RDScheduleMemberStatusResponse;
+  rdpartcontribreason: RDPartContribReasonResponse;
+}
+
+export interface RDScheduleMemberStatusResponse {
+  schdlMembStatusDesc: string;
+}
+
+export interface RDPartContribReasonResponse {
+  reasonDescription: string;
+}
+export interface SearchMemberContributionResultResponse<T> {
+  totalRecordCount: number;
+  results: T[];
 }

@@ -4,7 +4,6 @@ import app from "../utils/app";
 import Status from "../utils/config";
 import { errorDetails, memberFilterParams } from "../utils/constants";
 import errorHandler from "../utils/errorHandler";
-import logger from "../utils/logger";
 
 /**
  * 5205 API Catalogue Number
@@ -28,39 +27,17 @@ const httpTrigger: AzureFunction = async function (
         errorDetails.CIA0502[1] + " params",
         ""
       );
-      context.res = {
-        status: 400,
-        body: data,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
+      const resp = await app.errorResponse(400, data);
+      context.res = resp;
       return;
     }
-
     queryReq.params = filterParams;
     const ctrl = new MemberContributionDetailsController();
     const item = await ctrl.getDetailsByFilter(queryReq);
     if (item.results) {
-      context.res = {
-        status: 200,
-        body: item,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-      logger.generateLogger.info(
-        Status.GET_MSG,
-        { url: req.url },
-        { method: "[5205] contribution-details-search" }
-      );
-      logger.generateLogger.debug(
-        Status.GET_MSG,
-        { data: item },
-        { url: req.url },
-        { method: "[5205] contribution-details-search" }
-      );
-    } else {
+      const resp = await app.successResponse(item);
+      context.res = resp;
+    } else if (item.name == 'SequelizeConnectionError') {
       const data = errorHandler.mapHandleErrorResponse(
         "",
         "",
@@ -68,24 +45,20 @@ const httpTrigger: AzureFunction = async function (
         item.message,
         ""
       );
-      context.res = {
-        status: 500,
-        body: data,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-      logger.generateLogger.error(
-        Status.FAILURE_MSG,
-        { url: req.url },
-        { request: req.body },
-        { data: item.message },
-        { method: "[5205] contribution-details-search" }
+      const resp = await app.errorResponse(500, data);
+      context.res = resp;
+    } else {
+      const data = errorHandler.mapHandleErrorResponse(
+        "",
+        "",
+        errorDetails.CIA0503[0],
+        errorDetails.CIA0503[1] + " No Records Found for Nest Schedule Ref & Employer Nest Id",
+        "get"
       );
+      const resp = await app.errorResponse(404, data);
+      context.res = resp;
     }
-
   } catch (err) {
-    context.log("Error found ", context.invocationId, err.message);
     const data = errorHandler.mapHandleErrorResponse(
       "",
       "",
@@ -93,20 +66,8 @@ const httpTrigger: AzureFunction = async function (
       Status.FAILURE_MSG,
       "get"
     );
-    context.res = {
-      status: 500,
-      body: data,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    logger.generateLogger.error(
-      Status.FAILURE_MSG,
-      { data: err.message },
-      { url: req.url },
-      { request: req.body },
-      { method: "[5205] contribution-details-search" }
-    );
+    const resp = await app.errorResponse(500, data);
+    context.res = resp;
   }
 };
 

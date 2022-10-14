@@ -283,6 +283,9 @@ export const headerFilterParams = {
 export const memberFilterParams = {
   nestScheduleRef: "ContributionDetails.nest_schedule_ref",
   employerNestId: "ContributionDetails.employer_nest_id",
+  contribHeaderId: "ContributionDetails.contrib_header_id",
+  firstName: "ContributionDetails.first_name",
+  lastName: "ContributionDetails.last_name"
 };
 
 export const READONLY_CONTRIBUTION_DETAILS_COLUMNS_FOR_UPDATE = ['membContribDetlId', 'nestScheduleRef', 'membEnrolmentRef', 'membContriDueDate',

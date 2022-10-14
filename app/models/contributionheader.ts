@@ -1,7 +1,7 @@
 import * as Joi from "joi";
 import { DataTypes, Model, Sequelize } from "sequelize";
 import StgContrMember from "./stgcontrmember";
-import { joiOption } from "../utils/constants";
+import { joiOption,errorDetails } from "../utils/constants";
 import sequelize from "../utils/database";
 import ContributionDetails from "./contributionDetails";
 import File from "./file";
@@ -10,7 +10,6 @@ import Status from "../utils/config";
 import { ContributionHeaderDetails } from "../schemas";
 import { Context } from "@azure/functions";
 import app from "../utils/app";
-import { errorDetails } from "../utils/constants";
 
 
 class ContributionHeader extends Model { }

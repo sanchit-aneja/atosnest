@@ -194,27 +194,27 @@
 			},
 			"CreateContributionResponse": {
 				"properties": {
-					"ContributionSubmissionRef": {
+					"contributionSubmissionRef": {
 						"type": "string"
 					},
-					"ScheduleSubmissionSeq": {
+					"scheduleSubmissionSeq": {
 						"type": "number",
 						"format": "double"
 					},
-					"CountSubmitted": {
+					"countSubmitted": {
 						"type": "number",
 						"format": "double"
 					},
-					"CountRowsSubmitted": {
+					"countRowsSubmitted": {
 						"type": "number",
 						"format": "double"
 					}
 				},
 				"required": [
-					"ContributionSubmissionRef",
-					"ScheduleSubmissionSeq",
-					"CountSubmitted",
-					"CountRowsSubmitted"
+					"contributionSubmissionRef",
+					"scheduleSubmissionSeq",
+					"countSubmitted",
+					"countRowsSubmitted"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -500,8 +500,7 @@
 			"MemberContributionDetailsResponse": {
 				"properties": {
 					"membContribDetlId": {
-						"type": "integer",
-						"format": "int32"
+						"type": "string"
 					},
 					"nestScheduleRef": {
 						"type": "string"
@@ -538,21 +537,6 @@
 					"alternativeId": {
 						"type": "string"
 					},
-					"lastPaidPensEarnings": {
-						"type": "number",
-						"format": "float"
-					},
-					"lastPaidReasonCode": {
-						"type": "string"
-					},
-					"lastPaidEmplContriAmt": {
-						"type": "number",
-						"format": "float"
-					},
-					"lastPaidMembContriAmt": {
-						"type": "number",
-						"format": "float"
-					},
 					"autoCalcFlag": {
 						"type": "string"
 					},
@@ -564,16 +548,16 @@
 						"type": "number",
 						"format": "float"
 					},
+					"membContriAmt": {
+						"type": "number",
+						"format": "float"
+					},
 					"membNonPayReason": {
 						"type": "string"
 					},
 					"membLeaveEarnings": {
 						"type": "number",
 						"format": "float"
-					},
-					"newEmpGroupId": {
-						"type": "integer",
-						"format": "int32"
 					},
 					"newGroupName": {
 						"type": "string"
@@ -628,6 +612,10 @@
 						"type": "string",
 						"format": "date"
 					},
+					"newEmpGroupId": {
+						"type": "integer",
+						"format": "int32"
+					},
 					"recordStartDate": {
 						"type": "string",
 						"format": "date"
@@ -647,6 +635,9 @@
 					},
 					"origScheduleRef": {
 						"type": "string"
+					},
+					"contribHeaderId": {
+						"type": "string"
 					}
 				},
 				"required": [
@@ -663,7 +654,242 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"SearchResultsetResponse_MemberContributionDetailsResponse_": {
+			"FileErrorDetailsResponse": {
+				"properties": {
+					"errorLogId": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"errorFileId": {
+						"type": "string"
+					},
+					"errorType": {
+						"type": "string"
+					},
+					"errorSequenceNum": {
+						"type": "number",
+						"format": "float"
+					},
+					"errorCode": {
+						"type": "string"
+					},
+					"errorMessage": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"errorLogId",
+					"errorFileId",
+					"errorType",
+					"errorSequenceNum",
+					"errorCode",
+					"errorMessage"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RDScheduleMemberStatusResponse": {
+				"properties": {
+					"schdlMembStatusDesc": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"schdlMembStatusDesc"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RDPartContribReasonResponse": {
+				"properties": {
+					"reasonDescription": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"reasonDescription"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RetriveContributionDetailsResponse": {
+				"properties": {
+					"contribHeaderId": {
+						"type": "string"
+					},
+					"origScheduleRef": {
+						"type": "string"
+					},
+					"employerNestId": {
+						"type": "string"
+					},
+					"updatedBy": {
+						"type": "string"
+					},
+					"membPaymentDueDate": {
+						"type": "string",
+						"format": "date"
+					},
+					"recordEndDate": {
+						"type": "string",
+						"format": "date"
+					},
+					"createdBy": {
+						"type": "string"
+					},
+					"newEmpGroupId": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"recordStartDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"memberExcludedFlag": {
+						"type": "string"
+					},
+					"nestScheduleRef": {
+						"type": "string"
+					},
+					"membEnrolmentRef": {
+						"type": "string"
+					},
+					"membContribDetlId": {
+						"type": "string"
+					},
+					"membPlanRef": {
+						"type": "string"
+					},
+					"membContriDueDate": {
+						"type": "string",
+						"format": "date"
+					},
+					"empGroupId": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"groupName": {
+						"type": "string"
+					},
+					"schdlMembStatusCd": {
+						"type": "string"
+					},
+					"membPartyId": {
+						"type": "string"
+					},
+					"scmPartyId": {
+						"type": "string"
+					},
+					"nino": {
+						"type": "string"
+					},
+					"alternativeId": {
+						"type": "string"
+					},
+					"autoCalcFlag": {
+						"type": "string"
+					},
+					"emplContriAmt": {
+						"type": "number",
+						"format": "float"
+					},
+					"pensEarnings": {
+						"type": "number",
+						"format": "float"
+					},
+					"membContriAmt": {
+						"type": "number",
+						"format": "float"
+					},
+					"membLeaveEarnings": {
+						"type": "number",
+						"format": "float"
+					},
+					"membNonPayReason": {
+						"type": "string"
+					},
+					"newGroupPensEarnings": {
+						"type": "number",
+						"format": "float"
+					},
+					"newGroupName": {
+						"type": "string"
+					},
+					"optoutDeclarationFlag": {
+						"type": "string"
+					},
+					"newGroupEmplContriAmt": {
+						"type": "number",
+						"format": "double"
+					},
+					"optoutRefNum": {
+						"type": "string"
+					},
+					"newGroupMembContriAmt": {
+						"type": "number",
+						"format": "float"
+					},
+					"newPaymentPlanNo": {
+						"type": "string"
+					},
+					"secEnrolMembContriAmt": {
+						"type": "number",
+						"format": "float"
+					},
+					"newPaymentSourceName": {
+						"type": "string"
+					},
+					"membNonPayEffDate": {
+						"type": "string",
+						"format": "date"
+					},
+					"secEnrolPensEarnings": {
+						"type": "number",
+						"format": "float"
+					},
+					"channelType": {
+						"type": "string"
+					},
+					"secEnrolEmplContriAmt": {
+						"type": "number",
+						"format": "double"
+					},
+					"firstName": {
+						"type": "string"
+					},
+					"lastName": {
+						"type": "string"
+					},
+					"errorDetails": {
+						"$ref": "#/components/schemas/FileErrorDetailsResponse"
+					},
+					"rdschedulememberstatus": {
+						"$ref": "#/components/schemas/RDScheduleMemberStatusResponse"
+					},
+					"rdpartcontribreason": {
+						"$ref": "#/components/schemas/RDPartContribReasonResponse"
+					}
+				},
+				"required": [
+					"nestScheduleRef",
+					"membEnrolmentRef",
+					"membContribDetlId",
+					"membContriDueDate",
+					"empGroupId",
+					"groupName",
+					"schdlMembStatusCd",
+					"membPartyId",
+					"membNonPayReason",
+					"firstName",
+					"lastName",
+					"errorDetails",
+					"rdschedulememberstatus",
+					"rdpartcontribreason"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"SearchMemberContributionResultResponse_RetriveContributionDetailsResponse_": {
 				"properties": {
 					"totalRecordCount": {
 						"type": "number",
@@ -671,7 +897,7 @@
 					},
 					"results": {
 						"items": {
-							"$ref": "#/components/schemas/MemberContributionDetailsResponse"
+							"$ref": "#/components/schemas/RetriveContributionDetailsResponse"
 						},
 						"type": "array"
 					}
@@ -687,10 +913,18 @@
 				"properties": {
 					"nestScheduleRef": {
 						"type": "string"
+					},
+					"fitstName": {
+						"type": "string"
+					},
+					"lastName": {
+						"type": "string"
 					}
 				},
 				"required": [
-					"nestScheduleRef"
+					"nestScheduleRef",
+					"fitstName",
+					"lastName"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -881,6 +1115,26 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"SearchResultsetResponse_MemberContributionDetailsResponse_": {
+				"properties": {
+					"totalRecordCount": {
+						"type": "number",
+						"format": "double"
+					},
+					"results": {
+						"items": {
+							"$ref": "#/components/schemas/MemberContributionDetailsResponse"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"totalRecordCount",
+					"results"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {
@@ -893,7 +1147,7 @@
 	},
 	"info": {
 		"title": "Contribution Index APIs",
-		"version": "1.32.0",
+		"version": "1.34.0",
 		"description": "REST APIs for Contribution Index",
 		"contact": {}
 	},
@@ -1150,7 +1404,7 @@
 								"schema": {
 									"anyOf": [
 										{
-											"$ref": "#/components/schemas/SearchResultsetResponse_MemberContributionDetailsResponse_"
+											"$ref": "#/components/schemas/SearchMemberContributionResultResponse_RetriveContributionDetailsResponse_"
 										},
 										{}
 									]

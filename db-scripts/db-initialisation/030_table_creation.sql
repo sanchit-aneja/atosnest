@@ -217,11 +217,14 @@ CREATE TABLE contribution_index_schema."Member_Contribution_Details"
      Orig_Schedule_Ref VARCHAR(4),
      Emp_Group_Id BIGINT NOT NULL,
      New_Emp_Group_Id BIGINT,
+     Contrib_Header_Id UUID NOT NULL,
+     First_Name VARCHAR (50) NOT NULL,
+     Last_Name VARCHAR (50) NOT NULL,
      CONSTRAINT Contrib_Detls_PK PRIMARY KEY (Memb_Contrib_Detl_Id),
      CONSTRAINT Contrib_Detls_UK UNIQUE (NEST_Schedule_Ref,Memb_Contri_Due_Date,Memb_Enrolment_Ref,Employer_NEST_Id),
      CONSTRAINT Relation_10 FOREIGN KEY (Memb_Non_Pay_Reason) REFERENCES contribution_index_schema."RD_Part_Contrib_Reason"(Reason_Code) ON UPDATE CASCADE ON DELETE CASCADE,
      CONSTRAINT Relation_11 FOREIGN KEY (Schdl_Memb_Status_Cd) REFERENCES contribution_index_schema."RD_Schedule_Memb_Status"(Schdl_Memb_Status_Code) ON UPDATE CASCADE ON DELETE CASCADE,
-     CONSTRAINT Relation_1 FOREIGN KEY (NEST_Schedule_Ref,Employer_NEST_Id) REFERENCES contribution_index_schema."Contribution_Header"(NEST_Schedule_Ref,Employer_NEST_Id) ON UPDATE CASCADE ON DELETE CASCADE
+     CONSTRAINT Relation_1 FOREIGN KEY (Contrib_Header_Id) REFERENCES contribution_index_schema."Contribution_Header"(Contrib_Header_Id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS contribution_index_schema."File_Error_Details"

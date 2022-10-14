@@ -10,6 +10,7 @@ import Status from "../utils/config";
 import { CustomError } from "../Errors";
 import RDScheduleMemberStatus from "./rdschedulememberstatus";
 import RDPartContribReason from "./rdpartcontribreason";
+import FileErrorDetails from "./fileErrorDetails";
 class ContributionDetails extends Model { }
 
 ContributionDetails.init(
@@ -270,8 +271,37 @@ ContributionDetails.init(
     origScheduleRef: {
       type: DataTypes.STRING(14),
       field: "orig_schedule_ref"
-    }
-
+    },
+    contribHeaderId: {
+      type: DataTypes.UUID,
+      field: "contrib_header_id"
+    },
+    firstName: {
+      type: DataTypes.STRING(50),
+      field: "first_name",
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "firstName field cannot be empty",
+        },
+        notNull: {
+          msg: "firstName field cannot be null",
+        },
+      },
+    },
+    lastName: {
+      type: DataTypes.STRING(50),
+      field: "last_name",
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "lastName field cannot be empty",
+        },
+        notNull: {
+          msg: "lastName field cannot be null",
+        },
+      },
+    },
   },
   {
     sequelize,
@@ -303,6 +333,19 @@ RDPartContribReason.belongsTo(ContributionDetails, {
   as: "contributiondetails",
   targetKey: "membNonPayReason",
   foreignKey: { name: "reasonCode", allowNull: false },
+  constraints: true,
+  onDelete: "CASCADE",
+});
+
+ContributionDetails.hasMany(FileErrorDetails, {
+  sourceKey: "membContribDetlId",
+  foreignKey: "membContribDetlId",
+  as: "errorDetails"
+});
+FileErrorDetails.belongsTo(ContributionDetails, {
+  as: "contributiondetails",
+  targetKey: "membContribDetlId",
+  foreignKey: { name: "membContribDetlId", allowNull: false },
   constraints: true,
   onDelete: "CASCADE",
 });
