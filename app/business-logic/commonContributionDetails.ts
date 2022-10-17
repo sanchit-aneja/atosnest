@@ -20,13 +20,18 @@ const commonContributionDetails = {
      convertToContributionDetails: function (row, memDetailsRows, addExtraParams:boolean=false) {
         // Currently this row index may change, this was done bcased on Contribution template - specification v1.9
         let customRow = {
-            pensEarnings: commonContributionDetails.getNonNullValue(row[5], memDetailsRows.pensEarnings),
+            firstName: commonContributionDetails.getNonNullValue(row[1], memDetailsRows.firstName),
+            lastName: commonContributionDetails.getNonNullValue(row[2], memDetailsRows.LastName),
+            nino: commonContributionDetails.getNonNullValue(row[3], memDetailsRows.nino),
+            alternativeId: commonContributionDetails.getNonNullValue(row[4], memDetailsRows.alternativeId),
+            pensEarnings: commonContributionDetails.getNonNullValue(row[5], memDetailsRows.EmployerReferenceNumber),
             membLeaveEarnings: commonContributionDetails.getNonNullValue(row[6], memDetailsRows.membLeaveEarnings),
             emplContriAmt: commonContributionDetails.getNonNullValue(row[7], memDetailsRows.emplContriAmt),
             membContriAmt: commonContributionDetails.getNonNullValue(row[8], memDetailsRows.membContriAmt),
             membNonPayReason: commonContributionDetails.getNonNullValue(row[9], memDetailsRows.membNonPayReason),
             membNonPayEffDate: commonContributionDetails.getNonNullValue((row[10]) ? row[10] : row[12], memDetailsRows.membNonPayEffDate),
             newGroupName: commonContributionDetails.getNonNullValue(row[11], memDetailsRows.newGroupName),
+            newGroupEffDate: commonContributionDetails.getNonNullValue(row[12], memDetailsRows.newGroupEffDate),
             newPaymentSourceName: commonContributionDetails.getNonNullValue(row[13], memDetailsRows.newPaymentSourceName),
             newGroupPensEarnings: commonContributionDetails.getNonNullValue(row[14], memDetailsRows.newGroupPensEarnings),
             newGroupEmplContriAmt: commonContributionDetails.getNonNullValue(row[15], memDetailsRows.newGroupEmplContriAmt),
@@ -38,6 +43,7 @@ const commonContributionDetails = {
             secEnrolEmplContriAmt: commonContributionDetails.getNonNullValue(row[20], memDetailsRows.secEnrolEmplContriAmt),
             secEnrolMembContriAmt: commonContributionDetails.getNonNullValue(row[21], memDetailsRows.secEnrolMembContriAmt)
         }
+        
         // Force to upper case when not null
         if(!commonContributionDetails.isNullOrEmpty(customRow.optoutDeclarationFlag)){
             customRow.optoutDeclarationFlag = customRow.optoutDeclarationFlag.toUpperCase();
@@ -50,6 +56,38 @@ const commonContributionDetails = {
         }
         return customRow;
     },
+
+    getHeaderObject: function (row: any){
+        return {
+            employerReferenceNumber: row[1],
+            processType: row[2],
+            earningPeriodEndDate: row[3],
+            paymentSource: row[4],
+            payPeriodFrequency: row[6],
+            paymentDueDate: row[5],
+            earningPeriodStartDate: row[7],
+            bulkUpdateToNoContributionsDue: row[8],
+
+        }
+    },
+
+    convertToContributionHeader: function (row, headerRow, addExtraParams:boolean=false) {
+        // Currently this row index may change, this was done bcased on Contribution template - specification v1.9
+            let customRow = {
+            employerReferenceNumber: commonContributionDetails.getNonNullValue(row[1], headerRow.employerReferenceNumber),
+            processType: commonContributionDetails.getNonNullValue(row[2], headerRow.processType),
+            earningPeriodEndDate: commonContributionDetails.getNonNullValue(row[3], headerRow.earningPeriodEndDate),
+            paymentSource: commonContributionDetails.getNonNullValue(row[4], headerRow.paymentSource),
+            payPeriodFrequency: commonContributionDetails.getNonNullValue(row[5], headerRow.payPeriodFrequency),
+            paymentDueDate: commonContributionDetails.getNonNullValue(row[6], headerRow.paymentDueDate),
+            earningPeriodStartDate: commonContributionDetails.getNonNullValue(row[7], headerRow.earningPeriodStartDate),
+            bulkUpdateToNoContributionsDue: commonContributionDetails.getNonNullValue(row[8], headerRow.bulkUpdateToNoContributionsDue)
+
+        }
+        
+        return customRow;
+    },
+
     /**
      * is only Allowed Chars
      * @param value
