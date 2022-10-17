@@ -9,7 +9,7 @@ const normalisation = {
   createContributionHeader: async function (context, fileId): Promise<any> {
     try {
       return await sequelize.transaction(async (t) => {
-        const { rows, count } = await StgContrSchedule.findAndCountAll();
+        const { rows } = await StgContrSchedule.findAndCountAll();
         const finalData = this.mappingContributionHeader(rows, fileId);
         if (finalData) {
           const item = await ContributionHeader.bulkCreate(finalData, {

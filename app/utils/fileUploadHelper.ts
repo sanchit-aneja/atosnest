@@ -1,8 +1,6 @@
 import sequelize from "sequelize";
 import { Op } from "sequelize";
-import { Sequelize } from "sequelize/types";
 import { ContributionDetails } from "../models";
-// import {} from Sequelize;
 
 const FileUploadHelper = {
 
@@ -13,12 +11,12 @@ const FileUploadHelper = {
                 where:{
                     [Op.or]:[{
                         nino:{
-                            [sequelize.Op.in]: obj.ninos.join() 
+                            [sequelize.Op.in]: obj.ninos 
                         }
                     },
                     {
                         alternativeId:{
-                            [sequelize.Op.in]: obj.alts.join()
+                            [sequelize.Op.in]: obj.alts
                         }
                     }] 
                     }

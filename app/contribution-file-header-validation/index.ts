@@ -1,10 +1,11 @@
 import { AzureFunction, Context } from "@azure/functions";
 import blobHelper from "../utils/blobHelper";
 import { LOADING_DATA_ERROR_CODES } from "../utils/constants";
-import { SaveContributionDetails, Type2AValidations, Type2BValidations, Type2DValidations } from "../business-logic";
+import { SaveContributionDetails, Type2CValidations, Type2DValidations } from "../business-logic";
 import { FQSHelper } from "../utils";
 import { fqsStage, fqsStatus } from "../utils/fqsBody";
-import { Type2CValidations } from "../business-logic";
+import Validations from "../business-logic/type2Validations";
+import { Json } from "sequelize/types/utils";
 
 const eventGridTrigger: AzureFunction = async function (
   context: Context,
@@ -36,17 +37,16 @@ const eventGridTrigger: AzureFunction = async function (
     );
     const fileData = await blobHelper.streamToString(readStream);
 
-    // Step 2: vaildation Type 2A
-    await Type2AValidations.start(blobHelper.stringToStream(fileData), context);
-    // Step 3: vaildation Type 2B
-    await Type2BValidations.start(blobHelper.stringToStream(fileData), context);
+    await Validations.start(blobHelper.stringToStream(fileData), context);
+    
+
     // Step 4: vaildation Type 2C
     await Type2CValidations.start(blobHelper.stringToStream(fileData), context );
     // Step 5: vaildation Type 2D
     await Type2DValidations.start(blobHelper.stringToStream(fileData), context );
-
-    // Update contribution member details
-    await SaveContributionDetails.updateMemberDetails(blobHelper.stringToStream(fileData), context)
+    
+    // // Update contribution member details
+    const results2D = await SaveContributionDetails.updateMemberDetails(blobHelper.stringToStream(fileData), context);
 
     context.log(`Validation done for correlation Id ${correlationId}`);
   } catch (error) {

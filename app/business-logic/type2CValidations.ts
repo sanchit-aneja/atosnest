@@ -1,7 +1,7 @@
 import { Context } from "@azure/functions"
 import * as csvf from 'fast-csv';
-// import { alternatives } from "joi";
 import { FileUploadHelper } from "../utils";
+import commonContributionDetails from "./commonContributionDetails";
 
  const Type2CValidations = {
      /**
@@ -22,7 +22,7 @@ import { FileUploadHelper } from "../utils";
     },
     ninos:[],
     alts:[],
-    isNinoFormatted: function(value: String){
+    isNinoFormatted: function(value: string){
        if(!(/[^DFIQUV]/.test(value.charAt(0)))){
             return false; 
        }
@@ -32,7 +32,6 @@ import { FileUploadHelper } from "../utils";
        if(!(/[ABCD]/.test(value.charAt(value.length-1)))){
         return false;
        }
-
        if(!(/[^(GB)(BG)(NK)(KN)(TN)(NT)(ZZ)]+/.test(value.slice(0,2)))){
         return false;
        }
@@ -41,17 +40,14 @@ import { FileUploadHelper } from "../utils";
 
     rules:{
 
-        "isNinoAltValid": async (row: Array<any>, context: Context) => {
-            // const ninos = [];
-            // const alts = [];
+        "isNinoAltValid": async (row: any, context: Context) => {
             const validationError = {
                 code: "ID17",
                 message: "Please ensure your record has valid nino."
             }
             try {
-                
-                let nino= row[3];
-                let alt = row[4];
+                let nino= row.nino;
+                let alt = row.alternativeId;
                 const ninoRegex = /[(A-Za-z0-9)]\w+/;
                 const altRegex = /[A-Za-z0-9"‘#$%&\(\)\[\]{}\-\*\+.:\\/=?@!_\s]+/; 
                 let isNinoEmpty = Type2CValidations.isNullOrEmpty(nino);
@@ -75,7 +71,7 @@ import { FileUploadHelper } from "../utils";
                 if((!ninoValid && !altValid) ){ 
 
                     return {
-                        code: "ID17",
+                        code: "ID18",
                         message: "The NINO or ALT ID or both have invalid characters"
                     }
                     
@@ -140,8 +136,8 @@ import { FileUploadHelper } from "../utils";
             
         },
 
-        "isFirstNameValid": async (row: Array<any>, context:Context )=>{
-            const firstName = row[1];
+        "isFirstNameValid": async (row: any, context:Context )=>{
+            const firstName = row.firstName;
             const regex = /([A-Za-z])\w+/;
 
             if(!Type2CValidations.isNullOrEmpty(firstName) && !regex.test(firstName)){
@@ -153,8 +149,8 @@ import { FileUploadHelper } from "../utils";
 
         },
 
-        "isLastNameValid": async (row: Array<any>)=>{
-            const lastName = row[2];
+        "isLastNameValid": async (row: any)=>{
+            const lastName = row.lastName;
             const regex = /([A-Za-z])\w+/;
             
             if(!Type2CValidations.isNullOrEmpty(lastName) && !regex.test(lastName)){
@@ -167,7 +163,7 @@ import { FileUploadHelper } from "../utils";
         },
     },
 
-    executeRulesOneByOne: async (row:Array<any>, context:Context, errors:Array<Object>, rowIndex: Number)=>{
+    executeRulesOneByOne: async (row:any, context:Context, errors:Array<Object>, rowIndex: Number)=>{
         for (const key in Type2CValidations.rules) {
             const validationFunc = Type2CValidations.rules[key];
             const validationErrors = await validationFunc(row, context);
@@ -200,7 +196,8 @@ import { FileUploadHelper } from "../utils";
                         Type2CValidations.ninos=[];
                     }
                     if(currentRowIndex>0 && row[0].trim()==='D'){
-                        await Type2CValidations.executeRulesOneByOne(row, context, errorMessages, currentRowIndex);
+                        const memberDetails= commonContributionDetails.convertToContributionDetails(row, {}, false);
+                        await Type2CValidations.executeRulesOneByOne(memberDetails, context, errorMessages, currentRowIndex);
                         
                         return cb(null, true, null);
 
@@ -235,8 +232,6 @@ import { FileUploadHelper } from "../utils";
                     try {
                         const rows =  await FileUploadHelper.getAllRecordsFromNinoAlt({alts: Type2CValidations.alts, ninos: Type2CValidations.ninos})
                     
-
-
                         if(rows.length>0){
                             return {
                                 code:"ID20.1",
