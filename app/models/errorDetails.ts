@@ -1,9 +1,9 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../utils/database";
 
-class FileErrorDetails extends Model { }
+class ErrorDetails extends Model { }
 
-FileErrorDetails.init(
+ErrorDetails.init(
   {
     errorLogId: {
       type: DataTypes.BIGINT,
@@ -27,20 +27,7 @@ FileErrorDetails.init(
     },
     errorFileId: {
       type: DataTypes.UUID,
-      field: "error_file_id",
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: "Error_File_Id field cannot be empty",
-        },
-        notNull: {
-          msg: "Error_File_id field cannot be null",
-        },
-      },
-    },
-    origFileId: {
-      type: DataTypes.UUID,
-      field: "orig_file_id"
+      field: "error_file_id"
     },
     errorType: {
       type: DataTypes.STRING(2),
@@ -91,9 +78,9 @@ FileErrorDetails.init(
   },
   {
     sequelize,
-    tableName: "File_Error_Details",
+    tableName: "Error_Details",
     timestamps: false
   })
 
 
-export default FileErrorDetails;
+export default ErrorDetails;

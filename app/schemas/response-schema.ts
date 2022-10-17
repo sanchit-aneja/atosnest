@@ -134,7 +134,6 @@ export interface ContributionStgScheduleResponse {
 
 export interface ContributionHeaderResponse {
   contribHeaderId: string;
-  fileId?: number;
   nestScheduleRef: string;
   externalScheduleRef?: string;
   scheduleType: string;
@@ -277,9 +276,31 @@ export interface MemberContributionDetailsResponse {
   employerNestId?: string;
   origScheduleRef?: string;
   contribHeaderId?: string;
+  firstName: string;
+  lastName: string;
+  enrolmentType: string;
+  secEnrolmentType?: string;
+  /**
+  * @isFloat
+  */
+  emplContriPct: number;
+  /**
+  * @isFloat
+  */
+  membContriPct: number;
+  /**
+  * @isFloat
+  */
+  newGroupEmplContriPct?: number;
+  /**
+  * @isFloat
+  */
+  newGroupMembContriPct?: number;
+  recordChangedFlag?: string;
+  memTaxReliefEligibility?: string;
 }
 
-export interface FileErrorDetailsResponse {
+export interface ErrorDetailsResponse {
   /**
   * @isInt
   */
@@ -356,7 +377,6 @@ export interface RetriveContributionDetailsResponse {
   */
 
   recordEndDate?: Date;
-  
   createdBy?: string;
   /**
   * @isInt
@@ -456,11 +476,30 @@ export interface RetriveContributionDetailsResponse {
   * @isFloat
   */
   channelType?: string;
-
+  enrolmentType: string;
+  /**
+  * @isFloat
+  */
+  emplContriPct: number;
+  /**
+  * @isFloat
+  */
+  membContriPct: number;
+  /**
+  * @isFloat
+  */
+  newGroupEmplContriPct?: number;
   secEnrolEmplContriAmt?: number;
   firstName: string;
+  secEnrolmentType?: string;
   lastName: string;
-  errorDetails: FileErrorDetailsResponse;
+  /**
+  * @isFloat
+  */
+  newGroupMembContriPct?: number;
+  recordChangedFlag?: string;
+  memTaxReliefEligibility?: string;
+  errorDetails: ErrorDetailsResponse;
   rdschedulememberstatus: RDScheduleMemberStatusResponse;
   rdpartcontribreason: RDPartContribReasonResponse;
 }

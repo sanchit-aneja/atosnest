@@ -1,11 +1,10 @@
 import { AzureFunction, Context } from "@azure/functions"
 import normalisation from "../utils/normalisation";
 import sequelize from "../utils/database";
-import { LOADING_DATA_ERROR_CODES, CSV_FILES } from "../utils/constants"
-import { File } from "../models"
-import { v4 as uuidv4 } from 'uuid';
+import { LOADING_DATA_ERROR_CODES, CSV_FILES } from "../utils/constants";
 import blobHelper from '../utils/blobHelper';
 import { KafkaHelper } from "../utils";
+import * as moment from "moment";
 
 const eventGridTrigger: AzureFunction = async function (context: Context, eventGridEvent: any): Promise<void> {
     const startedTime = new Date();
@@ -18,35 +17,33 @@ const eventGridTrigger: AzureFunction = async function (context: Context, eventG
         //Step1: Start transaction
         transaction = await sequelize.transaction();
 
-        // Step2: Save File Log
-        const fileId = uuidv4();
+        // Step2: Save File Log & File Header Map
         const blobServiceClient = blobHelper.getBlobServiceClient();
         const blobName = `Contribution_Header_File_${eventGridEvent?.data?.fileTimeStamp}`;
         const properties = await blobHelper.getBlobProperties(blobName, blobServiceClient);
-        await File.create({
-            fileId: fileId,
-            fileName: blobName,
-            fileType: "CSE",
-            fileSize: properties.contentLength,
-            fileSizeType: "B",
-            fileStatus: "V",
-            fileFormat: "CSV",
-            fileReceivedDate: new Date().toISOString(),
-            fileProcessedDate: new Date().toISOString(),
-            fileUploadedOn: new Date().toISOString(),
-            fileSentDate: new Date().toISOString()
-        })
-
+        let fileObj = {
+            createdDate: moment().format("YYYY-MM-DD HH:mm:ss"),
+            createdBy: 'System',
+            file: {
+                fileName: blobName,
+                fileType: "CSE",
+                fileSize: properties.contentLength,
+                fileSizeType: "B",
+                fileStatus: "V",
+                fileFormat: "CSV",
+                fileReceivedDate: new Date().toISOString(),
+                fileProcessedDate: new Date().toISOString(),
+                fileUploadedOn: new Date().toISOString(),
+                fileSentDate: new Date().toISOString(),
+            }
+        }
+        
+        await normalisation.createFileHeaderMapping(context, fileObj);
         //Step 3: move data to contribution header, using sequelize bluk insert.
-        const contribHeaderId = await normalisation.createContributionHeader(context, fileId);
+        await normalisation.createContributionHeader(context);
         //Step 4: move data member contribution details
         await normalisation.createContributionDetails(context);
-        //Step 5 : update the file table with no of records
-        console.log(contribHeaderId);
-        // await File.update({ contribHeaderId: contribHeaderId }, {
-        //     where: { 'fileId': fileId },
-        // });
-        // Ster 6: All success commit
+        //Step 5: All success commit
         await transaction.commit();
     } catch (error) {
         context.log("normalisation failed : ", error);

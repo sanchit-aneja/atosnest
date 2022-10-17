@@ -33,6 +33,7 @@ import {
   ContributionHeaderUpdateError
 } from "../models";
 import errorHandler from "../utils/errorHandler";
+import FileHeaderMap from "../models/fileheadermap";
 
 @Route("/contribution")
 export class ContributionHeaderController {
@@ -159,9 +160,9 @@ export class ContributionHeaderController {
           attributes: ['membContribDetlId', 'employerNestId', 'nestScheduleRef', "emplContriAmt", "membContriAmt"],
           include: {
             model: ContributionHeader,
-            attributes: ["nestScheduleRef", "employerNestId", 'paymentMethod', 'fileId', "contribHeaderId"],
+            attributes: ["nestScheduleRef", "employerNestId", 'paymentMethod', "contribHeaderId"],
             as: "contributionheader",
-            where: { contrib_header_id: contribHeaderId },
+            where: { contrib_header_id: contribHeaderId }
           },
           transaction: t,
         });
@@ -308,7 +309,6 @@ export class ContributionHeaderController {
           contrDetailAttr.push(newObj);
           finalObj = {
             membercontributionsubmission: contrDetailAttr,
-            contribFileId: newItem?.dataValues?.contributionheader?.dataValues?.fileId,
             nestScheduleRef: newItem?.dataValues?.contributionheader?.dataValues?.nestScheduleRef,
             employerNestId: newItem?.dataValues?.contributionheader?.dataValues?.employerNestId,
             contribHeaderId: newItem?.dataValues?.contributionheader?.dataValues?.contribHeaderId,

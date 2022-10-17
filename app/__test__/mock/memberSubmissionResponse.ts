@@ -1,4 +1,5 @@
-export const memberSubmissionGetSuccessResponse = {
+export const memberSubmissionGetSuccessResponse =
+{
   totalRecordCount: 1,
   results: [
     {
@@ -33,13 +34,23 @@ export const memberSubmissionGetSuccessResponse = {
       channelType: "WEB",
       memberExcludedFlag: null,
       membPaymentDueDate: null,
-      recordStartDate: "2022-10-06",
+      recordStartDate: "2022-10-17",
       recordEndDate: null,
-      contribSubmissionRef: "b8b0a5bc-bfec-478f-8fb0-97f0d1dac717",
+      firstName: "NA",
+      lastName: "NA",
+      enrolmentType: "Y",
+      secEnrolmentType: null,
+      emplContriPct: "0.00",
+      membContriPct: "0.00",
+      newGroupEmplContriPct: null,
+      newGroupMembContriPct: null,
+      recordChangedFlag: null,
+      memTaxReliefEligibility: null,
       createdBy: "System",
-      createdDate: "2022-10-07T01:12:27.000Z",
-      membContribDetlId: "a0414ebe-05c5-42be-bb0e-456b301eb7ec",
-      membSubmId: "3"
+      createdDate: "2022-10-17T07:08:09.000Z",
+      contribSubmissionRef: "2de64d14-d384-48d5-a903-3981306fd765",
+      membContribDetlId: "0b42de19-1cf0-4993-9fcf-d734b13dd2af",
+      membSubmId: "5"
     }
   ]
 }

@@ -27,7 +27,7 @@ let contxt: Context;
 
 const goodReq = {
   query: {},
-  params: { contribSubmissionRef: "b8b0a5bc-bfec-478f-8fb0-97f0d1dac717" },
+  params: { contribSubmissionRef: "2de64d14-d384-48d5-a903-3981306fd765" },
 };
 
 const invalidReq = {
