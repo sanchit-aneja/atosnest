@@ -5,36 +5,24 @@ import { joiOption } from "../utils/constants";
 import ContributionHeader from "./contributionheader";
 import MemberContributionSubmission from "./memberContributionSubmission";
 import File from "./file";
+import FileHeaderMap from "./fileheadermap";
 
 class ContributionHeaderSubmission extends Model { }
 
 ContributionHeaderSubmission.init(
   {
-    contribSubmissionRef: {
+    submissionHeaderId: {
       type: DataTypes.UUID,
-      field: "contrib_submission_ref",
+      field: "submission_header_id",
       allowNull: false,
       defaultValue: Sequelize.literal("uuid_generate_v4()"),
       primaryKey: true,
       validate: {
         notEmpty: {
-          msg: "Contrib_Submission_Ref field cannot be empty",
+          msg: "submissionHeaderId field cannot be empty",
         },
         notNull: {
-          msg: "Contrib_Submission_Ref field cannot be null",
-        },
-      }
-    },
-    contribFileId: {
-      type: DataTypes.UUID,
-      field: "contrib_file_id",
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: "Contrib_File_Id field cannot be empty",
-        },
-        notNull: {
-          msg: "Contrib_File_Id field cannot be null",
+          msg: "submissionHeaderId field cannot be null",
         },
       }
     },
@@ -121,27 +109,28 @@ ContributionHeader.belongsTo(ContributionHeaderSubmission, {
   constraints: true,
   onDelete: "CASCADE",
 });
-ContributionHeaderSubmission.hasOne(File, {
-  sourceKey: "contribFileId",
-  foreignKey: "fileId",
-  as: "file",
-});
-File.belongsTo(ContributionHeaderSubmission, {
-  as: "contributionheadersubmission",
-  targetKey: "contribFileId",
-  foreignKey: { name: "fileId", allowNull: false },
-  constraints: true,
-  onDelete: "CASCADE",
-});
+
 ContributionHeaderSubmission.hasMany(MemberContributionSubmission, {
-  sourceKey: "contribSubmissionRef",
+  sourceKey: "submissionHeaderId",
   foreignKey: "contribSubmissionRef",
   as: "membercontributionsubmission",
 });
 MemberContributionSubmission.belongsTo(ContributionHeaderSubmission, {
   as: "contributionheadersubmission",
-  targetKey: "contribSubmissionRef",
+  targetKey: "submissionHeaderId",
   foreignKey: { name: "contribSubmissionRef", allowNull: false },
+  constraints: true,
+  onDelete: "CASCADE",
+});
+ContributionHeaderSubmission.hasOne(FileHeaderMap, {
+  sourceKey: "submissionHeaderId",
+  foreignKey: "submissionHeaderId",
+  as: "fileheadermap",
+});
+FileHeaderMap.belongsTo(ContributionHeaderSubmission, {
+  as: "contributionheadersubmission",
+  targetKey: "submissionHeaderId",
+  foreignKey: { name: "submissionHeaderId", allowNull: false },
   constraints: true,
   onDelete: "CASCADE",
 });

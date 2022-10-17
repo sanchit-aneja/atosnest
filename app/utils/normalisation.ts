@@ -3,21 +3,40 @@ import { CustomError } from "../Errors";
 import { ContributionDetails, ContributionHeader, StgContrSchedule } from "../models";
 import * as moment from "moment";
 import app from "./app";
+import FileHeaderMap from "../models/fileheadermap";
 
 const normalisation = {
 
-  createContributionHeader: async function (context, fileId): Promise<any> {
+  createFileHeaderMapping: async function name(context, filedata: any) {
     try {
       return await sequelize.transaction(async (t) => {
-        const { rows } = await StgContrSchedule.findAndCountAll();
-        const finalData = this.mappingContributionHeader(rows, fileId);
+        if (filedata) {
+          await FileHeaderMap.create(filedata, {
+            include: [
+              { association: "file", as: "file" }
+            ],
+            transaction: t,
+          });
+        }
+      })
+    } catch (error) {
+      context.log("normalisation::createFileHeaderMapping::", error)
+      throw new CustomError("createFileHeaderMapping", `${error?.name - error?.message - error?.moreDetails}`);
+    }
+  },
+
+  createContributionHeader: async function (context): Promise<any> {
+    try {
+      return await sequelize.transaction(async (t) => {
+        const { rows, count } = await StgContrSchedule.findAndCountAll();
+        const finalData = this.mappingContributionHeader(rows);
         if (finalData) {
           const item = await ContributionHeader.bulkCreate(finalData, {
             validate: true,
             transaction: t
           });
           if (item && item.length) {
-            return { contribHeaderId: item[0]["dataValues"]["contribHeaderId"] };
+            return { rows: item };
           }
         }
       })
@@ -53,7 +72,7 @@ const normalisation = {
     }
   },
 
-  mappingContributionHeader(request, fileId): any {
+  mappingContributionHeader(request, fileObj): any {
     try {
       let results = [];
       let currentCount = 0;
@@ -76,7 +95,6 @@ const normalisation = {
         }
         let params = {};
         params = {
-          fileId: fileId,
           nestScheduleRef: nestScheduleRef,
           externalScheduleRef: value._previousDataValues.scheduleReference,
           scheduleType: value._previousDataValues?.scheduleType?.trim(),
@@ -102,7 +120,8 @@ const normalisation = {
           recordStartDate: value._previousDataValues.recordStartDate,
           recordEndDate: value._previousDataValues.recordEndDate,
           createdBy: value._previousDataValues.createdBy,
-          updatedBy: ''
+          updatedBy: '',
+          ...fileObj
         }
         results.push(params);
 
@@ -189,6 +208,9 @@ const normalisation = {
             channelType: 'WEB',
             createdBy: 'SYSTEM',
             updatedBy: '',
+            enrolmentType: 'Y',
+            emplContriPct: 0.00,
+            membContriPct: 0.00,
             pensEarnings: parseFloat(paramsObj.pensEarnings),
             membLeaveEarnings: parseFloat(paramsObj.memberLeaveEarnings),
             membNonPayReason: paramsObj.membNonPayReason,
@@ -202,7 +224,8 @@ const normalisation = {
     } catch (e) {
       throw new CustomError("MAPPING_MEMBER_CONTRIBUTION_DETAILS_FAILED", e)
     }
-  },
+  }
+
 };
 
 export default normalisation;

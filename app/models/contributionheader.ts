@@ -1,16 +1,15 @@
 import * as Joi from "joi";
 import { DataTypes, Model, Sequelize } from "sequelize";
 import StgContrMember from "./stgcontrmember";
-import { joiOption,errorDetails } from "../utils/constants";
+import { joiOption, errorDetails } from "../utils/constants";
 import sequelize from "../utils/database";
 import ContributionDetails from "./contributionDetails";
-import File from "./file";
 import RDScheduleStatus from "./rdschedulestatus";
 import Status from "../utils/config";
 import { ContributionHeaderDetails } from "../schemas";
 import { Context } from "@azure/functions";
 import app from "../utils/app";
-
+import FileHeaderMap from "./fileheadermap";
 
 class ContributionHeader extends Model { }
 
@@ -31,10 +30,6 @@ ContributionHeader.init(
         },
       },
     },
-    fileId: {
-      type: DataTypes.UUID,
-      field: "file_id"
-    },
     nestScheduleRef: {
       type: DataTypes.STRING(14),
       allowNull: false,
@@ -53,7 +48,7 @@ ContributionHeader.init(
       field: "external_schedule_ref"
     },
     scheduleType: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(2),
       allowNull: false,
       field: "schedule_type",
       validate: {
@@ -275,19 +270,6 @@ ContributionHeader.init(
   }
 );
 
-ContributionHeader.hasOne(File, {
-  sourceKey: "fileId",
-  foreignKey: "fileId",
-  as: "file",
-});
-File.belongsTo(ContributionHeader, {
-  as: "contributionheader",
-  targetKey: "fileId",
-  foreignKey: { name: "fileId", allowNull: false },
-  constraints: true,
-  onDelete: "CASCADE",
-});
-
 ContributionHeader.hasOne(RDScheduleStatus, {
   sourceKey: "scheduleStatusCd",
   foreignKey: "scheduleStatusCode",
@@ -326,13 +308,25 @@ ContributionDetails.belongsTo(ContributionHeader, {
   onDelete: "CASCADE",
 });
 
+ContributionHeader.hasOne(FileHeaderMap, {
+  sourceKey: "contribHeaderId",
+  foreignKey: "contribHeaderId",
+  as: "fileheadermap",
+});
+FileHeaderMap.belongsTo(ContributionHeader, {
+  as: "contributionheader",
+  targetKey: "contribHeaderId",
+  foreignKey: { name: "contribHeaderId", allowNull: false },
+  constraints: true,
+  onDelete: "CASCADE",
+});
+
 ContributionHeader.addHook("beforeValidate", (contributionheader, _options) => {
   const schema = Joi.object({
     contribHeaderId: Joi.string().optional().allow(null, ""),
-    fileId: Joi.number().optional().allow(null, ""),
     nestScheduleRef: Joi.string().alphanum().max(14).trim(true).optional().allow(null, ""),
     externalScheduleRef: Joi.string().alphanum().max(32).trim(true).optional().allow(null, ""),
-    scheduleType: Joi.string().alphanum().max(50).trim(true).optional().allow(null, ""),
+    scheduleType: Joi.string().alphanum().max(2).trim(true).optional().allow(null, ""),
     scheduleStatusCd: Joi.string().alphanum().max(5).trim(true).optional().allow(null, ""),
     scheduleGenerationDate: Joi.date().iso().optional().allow(null),
     employerNestId: Joi.string().alphanum().max(30).trim(true).optional().allow(null, ""),
@@ -364,7 +358,7 @@ ContributionHeader.beforeCreate(async (contributionheader, _options) => {
   const schema = Joi.object({
     contribHeaderId: Joi.string().required(),
     nestScheduleRef: Joi.string().alphanum().max(32).trim(true).required(),
-    scheduleType: Joi.string().alphanum().max(50).trim(true).required(),
+    scheduleType: Joi.string().alphanum().max(2).trim(true).required(),
     scheduleStatusCd: Joi.string().alphanum().max(5).trim(true).required(),
     scheduleGenerationDate: Joi.date().iso().required(),
     employerNestId: Joi.string().alphanum().max(30).trim(true).required(),

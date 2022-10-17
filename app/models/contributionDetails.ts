@@ -10,7 +10,7 @@ import Status from "../utils/config";
 import { CustomError } from "../Errors";
 import RDScheduleMemberStatus from "./rdschedulememberstatus";
 import RDPartContribReason from "./rdpartcontribreason";
-import FileErrorDetails from "./fileErrorDetails";
+import ErrorDetails from "./errorDetails";
 class ContributionDetails extends Model { }
 
 ContributionDetails.init(
@@ -302,6 +302,65 @@ ContributionDetails.init(
         },
       },
     },
+    enrolmentType: {
+      type: DataTypes.STRING(1),
+      field: "enrolment_type",
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "enrolmentType field cannot be empty",
+        },
+        notNull: {
+          msg: "enrolmentType field cannot be null",
+        },
+      },
+    },
+    secEnrolmentType: {
+      type: DataTypes.STRING(1),
+      field: "sec_enrolment_type"
+    },
+    emplContriPct: {
+      type: DataTypes.DECIMAL,
+      field: "empl_contri_pct",
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "emplContriPct field cannot be empty",
+        },
+        notNull: {
+          msg: "emplContriPct field cannot be null",
+        },
+      },
+    },
+    membContriPct: {
+      type: DataTypes.DECIMAL,
+      field: "memb_contri_pct",
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "membContriPct field cannot be empty",
+        },
+        notNull: {
+          msg: "membContriPct field cannot be null",
+        },
+      },
+    },
+    newGroupEmplContriPct: {
+      type: DataTypes.DECIMAL,
+      field: "new_group_empl_contri_pct"
+    },
+    newGroupMembContriPct: {
+      type: DataTypes.DECIMAL,
+      field: "new_group_memb_contri_pct"
+    },
+    recordChangedFlag: {
+      type: DataTypes.STRING(1),
+      field: "record_changed_flag"
+    },
+    memTaxReliefEligibility: {
+      type: DataTypes.STRING(1),
+      field: "mem_tax_relief_eligibility"
+    },
   },
   {
     sequelize,
@@ -337,12 +396,12 @@ RDPartContribReason.belongsTo(ContributionDetails, {
   onDelete: "CASCADE",
 });
 
-ContributionDetails.hasMany(FileErrorDetails, {
+ContributionDetails.hasMany(ErrorDetails, {
   sourceKey: "membContribDetlId",
   foreignKey: "membContribDetlId",
   as: "errorDetails"
 });
-FileErrorDetails.belongsTo(ContributionDetails, {
+ErrorDetails.belongsTo(ContributionDetails, {
   as: "contributiondetails",
   targetKey: "membContribDetlId",
   foreignKey: { name: "membContribDetlId", allowNull: false },

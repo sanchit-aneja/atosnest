@@ -19,7 +19,7 @@ const httpTrigger: AzureFunction = async function (
       const item = await ctrl.createContributionSubmission(contribHeaderId);
       if (item && item.finalCount) {
         const response = {
-          ContributionSubmissionRef: item["items"]["dataValues"]["contribSubmissionRef"],
+          ContributionSubmissionRef: item["items"]["dataValues"]["submissionHeaderId"],
           ScheduleSubmissionSeq: item["items"]["dataValues"]["scheduleSubmissionSeq"],
           CountSubmitted: item["items"]["dataValues"]["membercontributionsubmission"].length,
           CountRowsSubmitted: item.finalCount

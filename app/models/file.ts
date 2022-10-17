@@ -1,7 +1,8 @@
 import * as Joi from "joi";
-import { DataTypes, Model } from "sequelize";
+import { DataTypes, Model, Sequelize } from "sequelize";
 import { joiOption } from "../utils/constants";
 import sequelize from "../utils/database";
+import FileHeaderMap from "./fileheadermap";
 
 class File extends Model { }
 
@@ -12,6 +13,7 @@ File.init(
             allowNull: false,
             primaryKey: true,
             field: "file_id",
+            defaultValue: Sequelize.literal("uuid_generate_v4()"),
             validate: {
                 notEmpty: {
                     msg: "file_id field cannot be empty",
@@ -126,7 +128,18 @@ File.init(
         timestamps: true,
     }
 )
-
+File.hasOne(FileHeaderMap, {
+    sourceKey: "fileId",
+    foreignKey: "fileId",
+    as: "fileheadermap",
+});
+FileHeaderMap.belongsTo(File, {
+    as: "file",
+    targetKey: "fileId",
+    foreignKey: { name: "fileId", allowNull: false },
+    constraints: true,
+    onDelete: "CASCADE",
+});
 
 // validation hocks
 File.addHook("beforeValidate", (file, _options) => {
@@ -136,7 +149,6 @@ File.addHook("beforeValidate", (file, _options) => {
 })
 File.beforeCreate(async (file, _options) => {
     const schema = Joi.object({
-        fileId: Joi.string().guid({ version: 'uuidv4' }).required(),
         contribHeaderId: Joi.string().guid({ version: 'uuidv4' }).optional(),
         fileName: Joi.string().max(150).trim(true).required(),
         fileType: Joi.string().max(3).trim(true).required(),
