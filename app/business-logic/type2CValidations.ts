@@ -163,7 +163,7 @@ import commonContributionDetails from "./commonContributionDetails";
         },
     },
 
-    executeRulesOneByOne: async (row:any, context:Context, errors:Array<Object>, rowIndex: Number)=>{
+    executeRulesOneByOne: async (row:any, context:Context, errors:Array<Object>, rowIndex: number)=>{
         for (const key in Type2CValidations.rules) {
             const validationFunc = Type2CValidations.rules[key];
             const validationErrors = await validationFunc(row, context);
@@ -196,7 +196,7 @@ import commonContributionDetails from "./commonContributionDetails";
                         Type2CValidations.ninos=[];
                     }
                     if(currentRowIndex>0 && row[0].trim()==='D'){
-                        const memberDetails= commonContributionDetails.convertToContributionDetails(row, {}, false);
+                        const memberDetails= commonContributionDetails.getDetailObject(row);
                         await Type2CValidations.executeRulesOneByOne(memberDetails, context, errorMessages, currentRowIndex);
                         
                         return cb(null, true, null);

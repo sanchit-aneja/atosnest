@@ -20,10 +20,6 @@ const commonContributionDetails = {
      convertToContributionDetails: function (row, memDetailsRows, addExtraParams:boolean=false) {
         // Currently this row index may change, this was done bcased on Contribution template - specification v1.9
         let customRow = {
-            firstName: commonContributionDetails.getNonNullValue(row[1], memDetailsRows.firstName),
-            lastName: commonContributionDetails.getNonNullValue(row[2], memDetailsRows.LastName),
-            nino: commonContributionDetails.getNonNullValue(row[3], memDetailsRows.nino),
-            alternativeId: commonContributionDetails.getNonNullValue(row[4], memDetailsRows.alternativeId),
             pensEarnings: commonContributionDetails.getNonNullValue(row[5], memDetailsRows.EmployerReferenceNumber),
             membLeaveEarnings: commonContributionDetails.getNonNullValue(row[6], memDetailsRows.membLeaveEarnings),
             emplContriAmt: commonContributionDetails.getNonNullValue(row[7], memDetailsRows.emplContriAmt),
@@ -71,7 +67,17 @@ const commonContributionDetails = {
         }
     },
 
-    convertToContributionHeader: function (row, headerRow, addExtraParams:boolean=false) {
+    getDetailObject: function(row:any){
+        let detailObj = commonContributionDetails.convertToContributionDetails(row, {}, true);
+         Object.assign(detailObj,{
+            firstName: commonContributionDetails.getNonNullValue(row[1],null),
+            lastName: commonContributionDetails.getNonNullValue(row[2], null),
+            nino: commonContributionDetails.getNonNullValue(row[3], null),
+            alternativeId: commonContributionDetails.getNonNullValue(row[4], null)
+         })
+    },
+    
+    convertToContributionHeader: function (row, headerRow, addExtraParams:boolean=false){
         // Currently this row index may change, this was done bcased on Contribution template - specification v1.9
             let customRow = {
             employerReferenceNumber: commonContributionDetails.getNonNullValue(row[1], headerRow.employerReferenceNumber),
