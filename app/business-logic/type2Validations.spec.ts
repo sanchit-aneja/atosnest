@@ -1,10 +1,12 @@
 import { Context } from "@azure/functions";
-import { Validations } from ".";
-const { Readable } = require("stream")
+import _ from "lodash";
+import { Type2Validations } from ".";
+const { Readable } = require("stream");
+import { headerGetSuccessResponse } from "../__test__/mock/headerSearchResponse";
 
 describe("Test: Business logic for validation of type 2A and 2b", () => {
     let context: Context;
-    const executeRulesOneByOne = Validations.executeRulesOneByOne;
+    const executeRulesOneByOne = Type2Validations.executeRulesOneByOne;
 
     beforeEach(() => {
         context = { log: jest.fn() } as unknown as Context;
@@ -24,11 +26,12 @@ describe("Test: Business logic for validation of type 2A and 2b", () => {
         const input4 = {employerReferenceNumber: "EMP000073100"}
 
         // Act
-        const output1 = await Validations.rulesType2B.EmployerReferenceNumber(input1)
-        const output2 = await Validations.rulesType2B.EmployerReferenceNumber(input2)
-        const output3 = await Validations.rulesType2B.EmployerReferenceNumber(input3)
-        const output4 = await Validations.rulesType2B.EmployerReferenceNumber(input4)
+        const output1 = await Type2Validations.rulesType2B.EmployerReferenceNumber(input1)
+        const output2 = await Type2Validations.rulesType2B.EmployerReferenceNumber(input2)
+        const output3 = await Type2Validations.rulesType2B.EmployerReferenceNumber(input3)
+        const output4 = await Type2Validations.rulesType2B.EmployerReferenceNumber(input4)
         // Assert
+        
         expect(output1.code).toBe("ID10.0")
         expect(output2.code).toBe("ID13.0")
         expect(output3.code).toBe("ID13.0")
@@ -44,10 +47,10 @@ describe("Test: Business logic for validation of type 2A and 2b", () => {
         const input4 = {processType: "CS"}
 
         // Act
-        const output1 = await Validations.rulesType2B.ProcessType(input1)
-        const output2 = await Validations.rulesType2B.ProcessType(input2)
-        const output3 = await Validations.rulesType2B.ProcessType(input3)
-        const output4 = await Validations.rulesType2B.ProcessType(input4)
+        const output1 = await Type2Validations.rulesType2B.ProcessType(input1)
+        const output2 = await Type2Validations.rulesType2B.ProcessType(input2)
+        const output3 = await Type2Validations.rulesType2B.ProcessType(input3)
+        const output4 = await Type2Validations.rulesType2B.ProcessType(input4)
         // Assert
         expect(output1.code).toBe("ID10.1")
         expect(output2.code).toBe("ID13.1")
@@ -63,10 +66,10 @@ describe("Test: Business logic for validation of type 2A and 2b", () => {
         const input4 = {earningPeriodEndDate: "2022-05-21"}
 
         // Act
-        const output1 = await Validations.rulesType2B.EarningsPeriodEndDate(input1)
-        const output2 = await Validations.rulesType2B.EarningsPeriodEndDate(input2)
-        const output3 = await Validations.rulesType2B.EarningsPeriodEndDate(input3)
-        const output4 = await Validations.rulesType2B.EarningsPeriodEndDate(input4)
+        const output1 = await Type2Validations.rulesType2B.EarningsPeriodEndDate(input1)
+        const output2 = await Type2Validations.rulesType2B.EarningsPeriodEndDate(input2)
+        const output3 = await Type2Validations.rulesType2B.EarningsPeriodEndDate(input3)
+        const output4 = await Type2Validations.rulesType2B.EarningsPeriodEndDate(input4)
         // Assert
         expect(output1.code).toBe("ID10.2")
         expect(output2.code).toBe("ID13.2")
@@ -83,10 +86,10 @@ describe("Test: Business logic for validation of type 2A and 2b", () => {
         const input4 = {paymentSource: "Test"}
 
         // Act
-        const output1 = await Validations.rulesType2B.PaymentSource(input1)
-        const output2 = await Validations.rulesType2B.PaymentSource(input2)
-        const output3 = await Validations.rulesType2B.PaymentSource(input3)
-        const output4 = await Validations.rulesType2B.PaymentSource(input4)
+        const output1 = await Type2Validations.rulesType2B.PaymentSource(input1)
+        const output2 = await Type2Validations.rulesType2B.PaymentSource(input2)
+        const output3 = await Type2Validations.rulesType2B.PaymentSource(input3)
+        const output4 = await Type2Validations.rulesType2B.PaymentSource(input4)
         // Assert
         expect(output1.code).toBe("ID10.3")
         expect(output2).toBe(null)
@@ -102,10 +105,10 @@ describe("Test: Business logic for validation of type 2A and 2b", () => {
         const input4 = {payPeriodFrequency: "weekly"}
 
         // Act
-        const output1 = await Validations.rulesType2B.PayPeriodFrequency(input1)
-        const output2 = await Validations.rulesType2B.PayPeriodFrequency(input2)
-        const output3 = await Validations.rulesType2B.PayPeriodFrequency(input3)
-        const output4 = await Validations.rulesType2B.PayPeriodFrequency(input4)
+        const output1 = await Type2Validations.rulesType2B.PayPeriodFrequency(input1)
+        const output2 = await Type2Validations.rulesType2B.PayPeriodFrequency(input2)
+        const output3 = await Type2Validations.rulesType2B.PayPeriodFrequency(input3)
+        const output4 = await Type2Validations.rulesType2B.PayPeriodFrequency(input4)
         // Assert
         expect(output1.code).toBe("ID10.4")
         expect(output2.code).toBe("ID13.4")
@@ -121,10 +124,10 @@ describe("Test: Business logic for validation of type 2A and 2b", () => {
         const input4 = {paymentDueDate: "2022-09-25"}
 
         // Act
-        const output1 = await Validations.rulesType2B.PaymentDueDate(input1)
-        const output2 = await Validations.rulesType2B.PaymentDueDate(input2)
-        const output3 = await Validations.rulesType2B.PaymentDueDate(input3)
-        const output4 = await Validations.rulesType2B.PaymentDueDate(input4)
+        const output1 = await Type2Validations.rulesType2B.PaymentDueDate(input1)
+        const output2 = await Type2Validations.rulesType2B.PaymentDueDate(input2)
+        const output3 = await Type2Validations.rulesType2B.PaymentDueDate(input3)
+        const output4 = await Type2Validations.rulesType2B.PaymentDueDate(input4)
         // Assert
         expect(output1).toBe(null)
         expect(output2.code).toBe("ID14.3")
@@ -140,10 +143,10 @@ describe("Test: Business logic for validation of type 2A and 2b", () => {
         const input4 = {earningPeriodEndDate: "2022-05-05", earningPeriodStartDate: "2022-04-08"}
 
         // Act
-        const output1 = await Validations.rulesType2B.EarningsPeriodStartDate(input1)
-        const output2 = await Validations.rulesType2B.EarningsPeriodStartDate(input2)
-        const output3 = await Validations.rulesType2B.EarningsPeriodStartDate(input3)
-        const output4 = await Validations.rulesType2B.EarningsPeriodStartDate(input4)
+        const output1 = await Type2Validations.rulesType2B.EarningsPeriodStartDate(input1)
+        const output2 = await Type2Validations.rulesType2B.EarningsPeriodStartDate(input2)
+        const output3 = await Type2Validations.rulesType2B.EarningsPeriodStartDate(input3)
+        const output4 = await Type2Validations.rulesType2B.EarningsPeriodStartDate(input4)
 
         // Assert
         expect(output1).toBe(null)
@@ -160,10 +163,10 @@ describe("Test: Business logic for validation of type 2A and 2b", () => {
         const input4 = {bulkUpdateToNoContributionsDue: "Y"}
 
         // Act
-        const output1 = await Validations.rulesType2B.BulkUpdateToNoContributionsDue(input1)
-        const output2 = await Validations.rulesType2B.BulkUpdateToNoContributionsDue(input2)
-        const output3 = await Validations.rulesType2B.BulkUpdateToNoContributionsDue(input3)
-        const output4 = await Validations.rulesType2B.BulkUpdateToNoContributionsDue(input4)
+        const output1 = await Type2Validations.rulesType2B.BulkUpdateToNoContributionsDue(input1)
+        const output2 = await Type2Validations.rulesType2B.BulkUpdateToNoContributionsDue(input2)
+        const output3 = await Type2Validations.rulesType2B.BulkUpdateToNoContributionsDue(input3)
+        const output4 = await Type2Validations.rulesType2B.BulkUpdateToNoContributionsDue(input4)
 
         // Assert
         expect(output1).toBe(null)
@@ -172,15 +175,46 @@ describe("Test: Business logic for validation of type 2A and 2b", () => {
         expect(output4).toBe(null)
     })
 
+    test("Should pass all the validation for get Header records", async()=>{
+        const input1 = {
+            employerReferenceNumber: "A123",
+            processType: "CS",
+            earningPeriodEndDate: "2022-02-19",
+            paymentSource: "paymentSourceName",
+            payPeriodFrequency: "Monthly",
+            paymentDueDate: "2022-02-28",
+            earningPeriodStartDate: "2022-01-20",
+            bulkUpdateToNoContributionsDue: "N",
+          };
+          const input2 = {
+            employerReferenceNumber: "A1234",
+            processType: "CS",
+            earningPeriodEndDate: "2022-02-19",
+            paymentSource: "paymentSourceName",
+            payPeriodFrequency: "Monthly",
+            paymentDueDate: "2022-02-28",
+            earningPeriodStartDate: "2022-01-20",
+            bulkUpdateToNoContributionsDue: "N",
+          };
+
+        
+        const output1 = await Type2Validations.getHeaderRecords(input1);
+        const isEquals1 = _.isEqual(output1[0]['dataValues'], headerGetSuccessResponse )
+        const output2 = await Type2Validations.getHeaderRecords(input2);
+        
+        expect(isEquals1).toBe(true)
+        expect(output2.length).toBe(0)
+    })
+
 
     test("Should throw error, when you call start", async () => {
         // Arrage
         const stream = Readable.from(`H,column1\nD,column_row1\nD,column_row2\nT,2,3`);
-        Validations.executeRulesOneByOne = jest.fn().mockImplementation(()=> {throw new Error("Something went wrong!");})
+        Type2Validations.executeRulesOneByOne = jest.fn().mockImplementation(()=> {throw new Error("Something went wrong!");})
         //Act
 
         //Assert
-        await expect(Validations.start(stream, context)).rejects.toThrow(Error);
+        await expect(Type2Validations.start(stream, context)).rejects.toThrow(Error);
     })
 
     test("Should return dummy errors, when you call start", async () => {
@@ -194,26 +228,26 @@ describe("Test: Business logic for validation of type 2A and 2b", () => {
             message: "Error 2"
         }]
         const stream = Readable.from(`H,column1\nD,column_row1\nD,column_row2\nT,2,3`);
-        Validations.executeRulesOneByOne = jest.fn().mockImplementation(()=> Promise.resolve(mockErrors))
+        Type2Validations.executeRulesOneByOne = jest.fn().mockImplementation(()=> Promise.resolve(mockErrors))
         //Act
 
         //Assert
-        await expect(Validations.start(stream, context)).rejects.toBe(mockErrors);
+        await expect(Type2Validations.start(stream, context)).rejects.toBe(mockErrors);
         
-        Validations.executeRulesOneByOne = executeRulesOneByOne;
+        Type2Validations.executeRulesOneByOne = executeRulesOneByOne;
     })
 
     test("Should return true, when you call start with no errors of executerulesType2BOneByOne", async () => {
         // Arrage
         const stream = Readable.from(`H,column1\nD,column_row1\nD,column_row2\nT,2,3`);
-        Validations.executeRulesOneByOne = jest.fn().mockImplementation(()=> Promise.resolve([]))
+        Type2Validations.executeRulesOneByOne = jest.fn().mockImplementation(()=> Promise.resolve([]))
         //Act
 
         //Assert
-        await expect(Validations.start(stream, context)).resolves.toBe(true);
+        await expect(Type2Validations.start(stream, context)).resolves.toBe(true);
 
         
-        Validations.executeRulesOneByOne = executeRulesOneByOne;
+        Type2Validations.executeRulesOneByOne = executeRulesOneByOne;
     })
 
 });

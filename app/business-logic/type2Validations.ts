@@ -2,16 +2,17 @@ import { Context } from "@azure/functions"
 import * as csvf from 'fast-csv';
 import { ContributionHeader } from '../models';
 import {CommonContributionDetails} from ".";
+import moment from "moment";
 
 
-const Validations = {
+const Type2Validations = {
     /**
  * This is validate H row (first row of the file)
  * @param row
  * @param callback
  * @returns
  */
-    rowHValidation: function (row, callback, index) {
+    rowHValidation: function (row, index) {
         if(index !== 0){
             return null
         }
@@ -401,6 +402,34 @@ const Validations = {
         
     },
 
+
+    getHeaderRecords: async function(row) {
+        try {
+            const whereCondition = { 
+                employerNestId: row.employerReferenceNumber,  
+                earningPeriodEndDate: new Date(row.earningPeriodEndDate),
+                paymentSourceName: row.paymentSource,
+                paymentFrequencyDesc: row.payPeriodFrequency, 
+
+            }
+            if(row.paymentDueDate){
+                whereCondition['paymentDueDate'] = new Date(row.paymentDueDate);
+            }
+            if(row.earningPeriodStartDate){
+                whereCondition['earningPeriodStartDate'] = new Date(row.earningPeriodStartDate);
+            }
+
+            // Get Actual data based employer refer
+            const actualRows: ContributionHeader[] = await ContributionHeader.findAll({
+                where: whereCondition
+            });
+            return actualRows;
+        } catch (error) {
+            throw new Error("Getting records failed");
+        }
+        
+    },
+
         /**
      * Actual data verifications
      * @param row
@@ -408,20 +437,15 @@ const Validations = {
      * @param callback
      * @returns 
      */
-    actualDataVerifications: async function (row, context: Context, callback: Function, errors: Array<any>) {
+    actualDataVerifications: async function (row, actualRows, context: Context, errors: Array<any>) {
         // errors present already, no need DB verification
         if(errors.length > 0){
             return errors
         }
-        
-        // Get Actual data based employer refer
-        const actualRows: ContributionHeader[] = await ContributionHeader.findAll({
-            where: { employerNestId: row.employerReferenceNumber,  }
-        });
 
         // Run Data verification checks
-        for (const key in Validations.actualDataChecks) {
-            const validationFunc = Validations.actualDataChecks[key];
+        for (const key in Type2Validations.actualDataChecks) {
+            const validationFunc = Type2Validations.actualDataChecks[key];
             const validationErrors = await validationFunc(row, context, actualRows);
             if (validationErrors) {
                 errors.push(validationErrors)
@@ -440,14 +464,16 @@ const Validations = {
         let errorMessage = { code: '', message: ''};
         let errorMessages = [];
         let totalRecordsInTRow = 0;
+        let header_id;
+        let headerObject;
 
-        return new Promise(async function (resolve, reject) {
+        return new Promise(function (resolve, reject) {
             try {   
             readStream
                 .pipe(csvf.parse<any, any>({
                     ignoreEmpty: true,
                 }))
-                .validate(async (row: any, cb) => {
+                .validate((row: any, cb) => {
                     try {
                         
                     let errMsg;
@@ -461,25 +487,23 @@ const Validations = {
                         errorMessages.push(errorMessage);
                         return cb(null, true, null);
                     }
-                    
-                    
+                      
                     if(currentRowIndex === 0){
-                        const headerRowError = Validations.rowHValidation(row, cb, currentRowIndex);
+                        const headerRowError = Type2Validations.rowHValidation(row, currentRowIndex);
                         if (headerRowError !== null) {
                             errorMessage = headerRowError;
                             errorMessages.push(errorMessage);
                             return cb(null, true, null);
                         } 
-                        let headerObject = CommonContributionDetails.getHeaderObject(row);
+                        headerObject = CommonContributionDetails.getHeaderObject(row);
                         // Type 2B
-                        await Validations.executeRulesOneByOne(Validations.rulesType2B, headerObject, cb, errorMessages);
-                        await Validations.actualDataVerifications(headerObject, context, cb, errorMessages);
-                        return cb(null, true, null);
+                        Type2Validations.executeRulesOneByOne(Type2Validations.rulesType2B, headerObject, cb, errorMessages);
+                        return;
                     }
-                    trailerFound = Validations.isRowTValidation(row)
+                    trailerFound = Type2Validations.isRowTValidation(row)
                     if(!trailerFound) { // Checking from T Row
                         const previousCount = countDRows;
-                        countDRows = Validations.isRowDValidation(row, countDRows)
+                        countDRows = Type2Validations.isRowDValidation(row, countDRows)
                         if(previousCount === countDRows){
                             errMsg = "Unknown record types found. Please ensure that all records, between the header and trailer, are marked with the letter 'D'. This tells us they contain member details."
                             errorMessage = {
@@ -504,7 +528,7 @@ const Validations = {
                         }
                         
                         // Type 2B 
-                        totalRecordsInTRow = Validations.getRowTTotalRecordCount(row)
+                        totalRecordsInTRow = Type2Validations.getRowTTotalRecordCount(row)
                         if(totalRecordsInTRow != -1){
                             const pattern = /^((-)?[\d]+)$/;
                             if (!pattern.test(totalRecordsInTRow.toString())) {
@@ -523,7 +547,7 @@ const Validations = {
                                 message: "The number of detail records in your file is different to the number specified in the trailer record. Please check the trailer record matches the number of detail records contained in your file."
                             }
                             errorMessages.push(error);
-                           
+                           return cb(null, true, null)
                         }
                     }
                     
@@ -545,9 +569,8 @@ const Validations = {
                 })
                 .on('error', (e) => {
                     context.log('error', e);
-                    reject(e);
                 })
-                .on('end', (_e,) => {
+                .on('end', async (_e,) => {
                     if (!trailerFound) {
                         let errMsg = "Please ensure that the last record in your file is marked 'T', to show that it's the trailer."
                         const errorMessage = {
@@ -557,6 +580,15 @@ const Validations = {
                         errorMessages.push(errorMessage);
                         
                     }
+                    if(headerObject){
+                        let records = await Type2Validations.getHeaderRecords(headerObject);    
+                        if(records.length){
+                            header_id = records[0]['contribHeaderId'];
+                        }
+                        await Type2Validations.actualDataVerifications(headerObject,records, context, errorMessages);
+    
+                    }
+
 
                     if(errorMessages.length){
                         reject(errorMessages)
@@ -566,7 +598,8 @@ const Validations = {
                     let data = {
                         invalidResults: invalidResults,
                         results: results,
-                        headers: headers
+                        headers: headers,
+                        header_id: header_id
                     }
                     resolve(data);
                 })
@@ -578,4 +611,4 @@ const Validations = {
 }
 
 
-export default Validations;
+export default Type2Validations;
