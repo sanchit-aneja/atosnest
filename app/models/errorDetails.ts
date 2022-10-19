@@ -69,7 +69,8 @@ ErrorDetails.init(
     },
     createdOn: {
       type: DataTypes.DATE,
-      field: "created_on"
+      field: "created_on",
+      defaultValue: new Date()
     },
     createdBy: {
       type: DataTypes.STRING(50),
