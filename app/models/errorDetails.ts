@@ -29,10 +29,6 @@ ErrorDetails.init(
       type: DataTypes.UUID,
       field: "error_file_id"
     },
-    errorType: {
-      type: DataTypes.STRING(2),
-      field: "error_type"
-    },
     errorSequenceNum: {
       type: DataTypes.DECIMAL,
       field: "error_sequence_num",
@@ -56,16 +52,11 @@ ErrorDetails.init(
     },
     errorMessage: {
       type: DataTypes.STRING(2500),
-      field: "error_message",
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: "Error_Message field cannot be empty",
-        },
-        notNull: {
-          msg: "Error_Message field cannot be null",
-        },
-      },
+      field: "error_message"
+    },
+    errorTypeId: {
+      type: DataTypes.BIGINT,
+      field: "error_type_id"
     },
     createdOn: {
       type: DataTypes.DATE,

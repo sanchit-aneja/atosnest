@@ -23,10 +23,6 @@ File.init(
                 },
             },
         },
-        contribHeaderId: {
-            type: DataTypes.UUID,
-            field: "contrib_header_id"
-        },
         fileName: {
             type: DataTypes.STRING(150),
             allowNull: false,
@@ -149,7 +145,6 @@ File.addHook("beforeValidate", (file, _options) => {
 })
 File.beforeCreate(async (file, _options) => {
     const schema = Joi.object({
-        contribHeaderId: Joi.string().guid({ version: 'uuidv4' }).optional(),
         fileName: Joi.string().max(150).trim(true).required(),
         fileType: Joi.string().max(3).trim(true).required(),
         fileSize: Joi.number().required(),
