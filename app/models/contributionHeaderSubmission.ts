@@ -84,6 +84,10 @@ ContributionHeaderSubmission.init(
       type: DataTypes.DECIMAL(15, 2),
       field: "tot_contr_submission_amt"
     },
+    interimPaymentMethod: {
+      type: DataTypes.STRING(2),
+      field: "interim_payment_method"
+    },
     createdDate: {
       type: DataTypes.DATE,
       field: "created_date"

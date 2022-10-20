@@ -304,16 +304,7 @@ ContributionDetails.init(
     },
     enrolmentType: {
       type: DataTypes.STRING(1),
-      field: "enrolment_type",
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: "enrolmentType field cannot be empty",
-        },
-        notNull: {
-          msg: "enrolmentType field cannot be null",
-        },
-      },
+      field: "enrolment_type"
     },
     secEnrolmentType: {
       type: DataTypes.STRING(1),

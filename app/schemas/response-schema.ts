@@ -278,7 +278,7 @@ export interface MemberContributionDetailsResponse {
   contribHeaderId?: string;
   firstName: string;
   lastName: string;
-  enrolmentType: string;
+  enrolmentType?: string;
   secEnrolmentType?: string;
   /**
   * @isFloat
@@ -306,13 +306,16 @@ export interface ErrorDetailsResponse {
   */
   errorLogId: number;
   errorFileId: string;
-  errorType: string;
   /**
   * @isFloat
   */
   errorSequenceNum: number;
   errorCode: string;
-  errorMessage: string;
+  errorMessage?: string;
+  /**
+  * @isInt
+  */
+  errorTypeId?: number;
 }
 
 interface FilterOptions {
@@ -476,7 +479,7 @@ export interface RetriveContributionDetailsResponse {
   * @isFloat
   */
   channelType?: string;
-  enrolmentType: string;
+  enrolmentType?: string;
   /**
   * @isFloat
   */
