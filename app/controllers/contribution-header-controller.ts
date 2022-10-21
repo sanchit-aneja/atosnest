@@ -21,26 +21,31 @@ import Status from "../utils/config";
 import app from "../utils/app";
 import sequelize from "../utils/database";
 import {
-  headerFilterParams, errorDetails,
-  READONLY_CONTRIBUTION_HEADER_COLUMNS_FOR_UPDATE
+  headerFilterParams,
+  errorDetails,
+  READONLY_CONTRIBUTION_HEADER_COLUMNS_FOR_UPDATE,
 } from "../utils/constants";
 import { Op } from "sequelize";
 import * as moment from "moment";
 import { Context } from "@azure/functions";
-import { ContributionHeaderRequestDTO, ContributionHeaderResponseDTO } from "../schemas";
+import {
+  ContributionHeaderRequestDTO,
+  ContributionHeaderResponseDTO,
+} from "../schemas";
 import {
   contributionHeaderUpdateHelper,
-  ContributionHeaderUpdateError
+  ContributionHeaderUpdateError,
 } from "../models";
 import errorHandler from "../utils/errorHandler";
-import FileHeaderMap from "../models/fileheadermap";
 
 @Route("/contribution")
 export class ContributionHeaderController {
   private _context: Context;
 
   constructor(context?: Context) {
-    if (context) { this._context = context; }
+    if (context) {
+      this._context = context;
+    }
   }
 
   /**
@@ -48,7 +53,9 @@ export class ContributionHeaderController {
    * @param args
    */
   private log(...args: any[]) {
-    if (this._context) { this._context.log("ContributionHeaderController::", ...args); }
+    if (this._context) {
+      this._context.log("ContributionHeaderController::", ...args);
+    }
   }
   /**
    * 5102 API Catalogue Number
@@ -157,32 +164,53 @@ export class ContributionHeaderController {
       return await sequelize.transaction(async (t) => {
         const contrDetails = await ContributionDetails.findAndCountAll({
           where: { schdl_memb_status_cd: "MS2" },
-          attributes: ['membContribDetlId', 'employerNestId', 'nestScheduleRef', "emplContriAmt", "membContriAmt"],
+          attributes: [
+            "membContribDetlId",
+            "employerNestId",
+            "nestScheduleRef",
+            "emplContriAmt",
+            "membContriAmt",
+          ],
           include: {
             model: ContributionHeader,
-            attributes: ["nestScheduleRef", "employerNestId", 'paymentMethod', "contribHeaderId"],
+            attributes: [
+              "nestScheduleRef",
+              "employerNestId",
+              "paymentMethod",
+              "contribHeaderId",
+            ],
             as: "contributionheader",
-            where: { contrib_header_id: contribHeaderId }
+            where: { contrib_header_id: contribHeaderId },
           },
           transaction: t,
         });
 
         if (contrDetails) {
           let allMappedItems = await this.mapCompleteObj(contrDetails);
-          const isSubmissionPresent = await this.checkSubmissionEntry(allMappedItems);
+          const isSubmissionPresent = await this.checkSubmissionEntry(
+            allMappedItems
+          );
           if (isSubmissionPresent) {
-            allMappedItems.submissionType = 'P';
+            allMappedItems.submissionType = "P";
           } else {
-            allMappedItems.submissionType = 'A';
+            allMappedItems.submissionType = "A";
           }
-          const items = await ContributionHeaderSubmission.create(allMappedItems, {
-            include: [
-              { association: "membercontributionsubmission", as: "membercontributionsubmission" }
-            ],
-            transaction: t,
-          })
+          const items = await ContributionHeaderSubmission.create(
+            allMappedItems,
+            {
+              include: [
+                {
+                  association: "membercontributionsubmission",
+                  as: "membercontributionsubmission",
+                },
+              ],
+              transaction: t,
+            }
+          );
 
-          const updateCountDetails = await this.updateContributionDetails(allMappedItems);
+          const updateCountDetails = await this.updateContributionDetails(
+            allMappedItems
+          );
           if (updateCountDetails && items.hasOwnProperty("dataValues")) {
             let finalCount = 0;
             if (isSubmissionPresent) {
@@ -217,13 +245,13 @@ export class ContributionHeaderController {
         const items = await ContributionHeaderSubmission.findOne({
           where: { contrib_header_id: data?.contribHeaderId },
           transaction: t,
-        })
+        });
         if (items) {
           return items;
         } else {
           return false;
         }
-      })
+      });
     } catch (err) {
       if (err) {
         return app.errorHandler(err);
@@ -240,37 +268,34 @@ export class ContributionHeaderController {
     try {
       return await sequelize.transaction(async (t) => {
         const objParams = {
-          schdlMembStatusCd: 'MS4',
-          updatedBy: 'System',
+          schdlMembStatusCd: "MS4",
+          updatedBy: "System",
         };
         const items = await ContributionDetails.update(objParams, {
           where: {
-            [Op.and]: [{
-              nest_schedule_ref: reqObj
-                ? reqObj.nestScheduleRef
-                : null,
-              employer_nest_id: reqObj
-                ? reqObj.employerNestId
-                : null,
-              schdl_memb_status_cd: "MS2"
-            }]
+            [Op.and]: [
+              {
+                nest_schedule_ref: reqObj ? reqObj.nestScheduleRef : null,
+                employer_nest_id: reqObj ? reqObj.employerNestId : null,
+                schdl_memb_status_cd: "MS2",
+              },
+            ],
           },
-          transaction: t
-        })
+          transaction: t,
+        });
         const allCount = await ContributionDetails.count({
           where: {
-            [Op.and]: [{
-              nest_schedule_ref: reqObj
-                ? reqObj.nestScheduleRef
-                : null,
-            }, {
-              employer_nest_id: reqObj
-                ? reqObj.employerNestId
-                : null,
-            }]
+            [Op.and]: [
+              {
+                nest_schedule_ref: reqObj ? reqObj.nestScheduleRef : null,
+              },
+              {
+                employer_nest_id: reqObj ? reqObj.employerNestId : null,
+              },
+            ],
           },
-          transaction: t
-        })
+          transaction: t,
+        });
 
         if (items && allCount) {
           return allCount;
@@ -286,38 +311,46 @@ export class ContributionHeaderController {
   }
 
   /**
-  * This method used to map object to pass create submission
-  * @param item
-  * @returns
-  */
+   * This method used to map object to pass create submission
+   * @param item
+   * @returns
+   */
   async mapCompleteObj(item): Promise<any> {
     try {
       if (app.isJSON(item)) {
         const objParams = {
           createdDate: moment().format("YYYY-MM-DD HH:mm:ss"),
-          createdBy: 'System'
+          createdBy: "System",
         };
         const contrDetailAttr = [];
         let finalObj = {};
         let totalAmt = 0;
         for (let newItem of item?.rows) {
-          totalAmt += parseFloat(newItem?.dataValues?.emplContriAmt) + parseFloat(newItem?.dataValues?.membContriAmt);
+          totalAmt +=
+            parseFloat(newItem?.dataValues?.emplContriAmt) +
+            parseFloat(newItem?.dataValues?.membContriAmt);
           let newObj = {
             membContribDetlId: newItem?.dataValues?.membContribDetlId,
-            ...objParams
-          }
+            ...objParams,
+          };
           contrDetailAttr.push(newObj);
           finalObj = {
             membercontributionsubmission: contrDetailAttr,
-            nestScheduleRef: newItem?.dataValues?.contributionheader?.dataValues?.nestScheduleRef,
-            employerNestId: newItem?.dataValues?.contributionheader?.dataValues?.employerNestId,
-            contribHeaderId: newItem?.dataValues?.contributionheader?.dataValues?.contribHeaderId,
-            submissionType: 'A',
+            nestScheduleRef:
+              newItem?.dataValues?.contributionheader?.dataValues
+                ?.nestScheduleRef,
+            employerNestId:
+              newItem?.dataValues?.contributionheader?.dataValues
+                ?.employerNestId,
+            contribHeaderId:
+              newItem?.dataValues?.contributionheader?.dataValues
+                ?.contribHeaderId,
+            submissionType: "A",
             submissionDate: moment().format("YYYY-MM-DD HH:mm:ss"),
             noOfMembsSubmitted: contrDetailAttr?.length,
             totContrSubmissionAmt: totalAmt,
-            ...objParams
-          }
+            ...objParams,
+          };
         }
         return finalObj;
       } else {

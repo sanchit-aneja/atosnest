@@ -15,7 +15,7 @@ import {
   MemberContributionDetailsResponse,
   SearchResultsetResponse,
   SearchMemberContributionResultResponse,
-  RetriveContributionDetailsResponse
+  RetriveContributionDetailsResponse,
 } from "../schemas/response-schema";
 import {
   contributionDetailsUpdateHelper,
@@ -34,7 +34,7 @@ import {
   memberFilterParams,
   errorDetails,
   READONLY_CONTRIBUTION_DETAILS_COLUMNS_FOR_UPDATE,
-  CONTR_MEMBER_DETAILS
+  CONTR_MEMBER_DETAILS,
 } from "../utils/constants";
 import errorHandler from "../utils/errorHandler";
 
@@ -109,7 +109,10 @@ export class MemberContributionDetailsController {
   @Response("500", Status.FAILURE_MSG)
   async getDetailsByFilter(
     @Body() requestObj: DetailsFilterElements
-  ): Promise<SearchMemberContributionResultResponse<RetriveContributionDetailsResponse> | any> {
+  ): Promise<
+    | SearchMemberContributionResultResponse<RetriveContributionDetailsResponse>
+    | any
+  > {
     try {
       const element = app.mapDetailsFilterElements(
         requestObj,
@@ -136,9 +139,16 @@ export class MemberContributionDetailsController {
             },
             {
               association: "errorDetails",
-              attributes: ["errorLogId", "errorFileId", "errorType", "errorSequenceNum",
-                "sourceRecordId", "errorCode", "errorMessage"],
-            }
+              attributes: [
+                "errorLogId",
+                "errorFileId",
+                "errorType",
+                "errorSequenceNum",
+                "sourceRecordId",
+                "errorCode",
+                "errorMessage",
+              ],
+            },
           ],
           where: whereCdtn,
           subQuery: false,
@@ -152,7 +162,7 @@ export class MemberContributionDetailsController {
         } else {
           return Status.BAD_REQUEST;
         }
-      })
+      });
     } catch (err) {
       if (err) {
         return app.errorHandler(err);
@@ -189,15 +199,12 @@ export class MemberContributionDetailsController {
           errorDetail: errorDetails.CIA0600[1],
         });
       } else {
-        const allMemberDetailsAry =
-          requestObj.contributionDetail as ContributionMemberDetails[];
+        const allMemberDetailsAry = requestObj.contributionDetail;
         const length = allMemberDetailsAry.length;
 
         // Update member details one by one
         for (let index = 0; index < length; index++) {
-          const currentMemberDetails = allMemberDetailsAry[
-            index
-          ] as ContributionMemberDetails;
+          const currentMemberDetails = allMemberDetailsAry[index];
           const membContribDetlId = currentMemberDetails.membContribDetlId;
 
           // Delete other readonly properties
@@ -260,7 +267,6 @@ export class MemberContributionDetailsController {
     }
   }
 
-
   /**
    * 5404 API Catalogue Number
    * Retrieves returns a list of all Member Contribution Submissions based on contribSubmissionRef passed.
@@ -281,18 +287,19 @@ export class MemberContributionDetailsController {
         contrib_submission_ref: contribSubmissionRef,
       };
       return await sequelize.transaction(async (t) => {
-        const { rows, count } = await MemberContributionSubmission.findAndCountAll({
-          distinct: true,
-          include: [
-            {
-              association: "contributiondetails",
-              attributes: CONTR_MEMBER_DETAILS
-            }
-          ],
-          where: whereCdtn,
-          subQuery: false,
-          transaction: t,
-        });
+        const { rows, count } =
+          await MemberContributionSubmission.findAndCountAll({
+            distinct: true,
+            include: [
+              {
+                association: "contributiondetails",
+                attributes: CONTR_MEMBER_DETAILS,
+              },
+            ],
+            where: whereCdtn,
+            subQuery: false,
+            transaction: t,
+          });
 
         if (rows?.length > 0) {
           const mappedItems = await this.mapCreateCompleteObj(rows);
@@ -303,7 +310,6 @@ export class MemberContributionDetailsController {
         } else {
           return Status.NOT_FOUND;
         }
-
       });
     } catch (err) {
       if (err) {
@@ -313,24 +319,25 @@ export class MemberContributionDetailsController {
   }
 
   /**
-  * This method used to map object to get complete return object for member submission
-  * @param item
-  * @returns
-  */
+   * This method used to map object to get complete return object for member submission
+   * @param item
+   * @returns
+   */
   async mapCreateCompleteObj(item) {
     try {
       if (app.isJSON(item)) {
         let results = [];
         for (let newItem of item) {
-          let contDetails = newItem?.dataValues?.contributiondetails?.dataValues;
+          let contDetails =
+            newItem?.dataValues?.contributiondetails?.dataValues;
           let subObj = {
             ...contDetails,
             contribSubmissionRef: newItem?.dataValues?.contribSubmissionRef,
             createdBy: newItem?.dataValues?.createdBy,
             createdDate: newItem?.dataValues?.createdDate,
             membContribDetlId: newItem?.dataValues?.membContribDetlId,
-            membSubmId: newItem?.dataValues?.membSubmId
-          }
+            membSubmId: newItem?.dataValues?.membSubmId,
+          };
           results.push(subObj);
         }
         return results;
@@ -342,5 +349,3 @@ export class MemberContributionDetailsController {
     }
   }
 }
-
-

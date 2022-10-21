@@ -8,6 +8,7 @@
     "prestart": "npm run build",
     "start": "func start",
     "test": "jest --detectOpenHandles",
+    "testwithCoverage": "jest   --coverage --no-cache ",
     "generate-swagger": "tsoa spec -c ./tsoa.json",
     "build:compile": "tsc"
   },

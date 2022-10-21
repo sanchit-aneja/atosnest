@@ -1,4 +1,4 @@
-import httpTrigger from "../contribution-header-get/index";
+import httpTrigger from "./index";
 import { Context } from "@azure/functions";
 
 import {

@@ -1,7 +1,12 @@
 import { AzureFunction, Context } from "@azure/functions";
 import blobHelper from "../utils/blobHelper";
 import { LOADING_DATA_ERROR_CODES } from "../utils/constants";
-import { SaveContributionDetails, Type2CValidations, Type2DValidations, Type2Validations } from "../business-logic";
+import {
+  SaveContributionDetails,
+  Type2CValidations,
+  Type2DValidations,
+  Type2Validations,
+} from "../business-logic";
 import { FQSHelper } from "../utils";
 import { fqsStage, fqsStatus } from "../utils/fqsBody";
 
@@ -35,24 +40,31 @@ const eventGridTrigger: AzureFunction = async function (
     );
     const fileData = await blobHelper.streamToString(readStream);
 
-    const result = await Type2Validations.start(blobHelper.stringToStream(fileData), context);
-    
+    await Type2Validations.start(blobHelper.stringToStream(fileData), context);
+
     // Step 4: vaildation Type 2C
     await Type2CValidations.start(blobHelper.stringToStream(fileData), context);
     // Step 5: vaildation Type 2D
-    await Type2DValidations.start(blobHelper.stringToStream(fileData), context );
-    
+    await Type2DValidations.start(blobHelper.stringToStream(fileData), context);
+
     // // Update contribution member details
-    const results2D = await SaveContributionDetails.updateMemberDetails(blobHelper.stringToStream(fileData), context);
+    await SaveContributionDetails.updateMemberDetails(
+      blobHelper.stringToStream(fileData),
+      context
+    );
 
     context.log(`Validation done for correlation Id ${correlationId}`);
   } catch (error) {
-    if (!Array.isArray(error)){
-      context.log(`Something went wrong, error ${JSON.stringify(error.message)}`)
-      error = [{
+    if (!Array.isArray(error)) {
+      context.log(
+        `Something went wrong, error ${JSON.stringify(error.message)}`
+      );
+      error = [
+        {
           code: "ID9999",
-          message: "Something went wrong"
-      }]
+          message: "Something went wrong",
+        },
+      ];
     }
     const errorPayload = [
       {
