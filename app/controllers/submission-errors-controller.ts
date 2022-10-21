@@ -1,3 +1,14 @@
+import {
+  Body,
+  Get,
+  Post,
+  Put,
+  Response,
+  Route,
+  Security,
+  SuccessResponse,
+} from "tsoa";
+import Status from "../utils/config";
 import app from "../utils/app";
 import ContributionHeader from '../models/contributionheader';
 import { ContributionHeaderSubmission } from '../models';
@@ -6,6 +17,7 @@ import { File } from "../models";
 import ErrorDetails from "../models/errorDetails";
 import { MemberContributionDetailsController } from './member-contribution-details-controller';
 
+@Route("/contribution")
 export class ContributionSubmissionErrorsController {
 
   async getContributionHeaderSubmission(contributionSubmissionId: any): Promise<any> {
@@ -49,6 +61,18 @@ export class ContributionSubmissionErrorsController {
     }
   }
 
+  /**
+   * 5406 API Catalogue Number
+   * Add external error
+   * @param contribSubmissionId is the Contribution Submission Header id
+   * @return Returns OK status.
+   */
+  @Security("api_key")
+  @Post("submission/create-error/")
+  @SuccessResponse("200", Status.SUCCESS_MSG)
+  @Response("400", Status.BAD_REQUEST_MSG)
+  @Response("404", Status.NOT_FOUND_MSG)
+  @Response("500", Status.FAILURE_MSG)
   async createSubmissionError(params: any): Promise<any> {
     try {
       let errorDetails = [];
@@ -75,7 +99,7 @@ export class ContributionSubmissionErrorsController {
         errorDetail.errorSequenceNum = 0;
 
       });
-      
+
       // Create error records
       // await ErrorDetails.bulkCreate(errorDetails);
       await ErrorDetails.create(errorDetails[0]);
@@ -83,7 +107,7 @@ export class ContributionSubmissionErrorsController {
 
       // Return
       return errorDetails;
-      
+
     } catch (err) {
       if (err) {
         return app.errorHandler(err);

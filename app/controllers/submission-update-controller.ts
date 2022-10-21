@@ -1,3 +1,14 @@
+import {
+    Body,
+    Get,
+    Post,
+    Put,
+    Response,
+    Route,
+    Security,
+    SuccessResponse,
+} from "tsoa";
+import Status from "../utils/config";
 import app from "../utils/app";
 import { ContributionDetails, ContributionHeaderSubmission } from '../models';
 import { MemberContributionDetailsController } from './member-contribution-details-controller';
@@ -19,6 +30,7 @@ enum ScheduleMemberStatusCode {
     NoContributionsDue = "MCS9"
 };
 
+@Route("/contribution")
 export class ContributionSubmissionUpdatesController {
 
 
@@ -133,6 +145,18 @@ export class ContributionSubmissionUpdatesController {
 
     }
 
+    /**
+    * 5405 API Catalogue Number
+    * Update submission members
+    * @param submissionHeaderId is the Contribution Submission Header id
+    * @return Returns count of submitted, members in schedule and unsubmitted.
+    */
+    @Security("api_key")
+    @Put("submission/update-submission/{submissionHeaderId}")
+    @SuccessResponse("200", Status.SUCCESS_MSG)
+    @Response("400", Status.BAD_REQUEST_MSG)
+    @Response("404", Status.NOT_FOUND_MSG)
+    @Response("500", Status.FAILURE_MSG)
     async updateSubmissionMembers(submissionHeaderId: any): Promise<any> {
         try {
             // get the submission

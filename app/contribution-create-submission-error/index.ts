@@ -1,6 +1,10 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions";
 import { ContributionSubmissionErrorsController } from "../controllers/submission-errors-controller";
 
+/**
+* 5406 API Catalogue Number
+* Add external error
+*/
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
     context.log('HTTP trigger function processed a request.');
 
