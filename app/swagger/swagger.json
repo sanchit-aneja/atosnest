@@ -1,1604 +1,1633 @@
 {
-	"components": {
-		"examples": {},
-		"headers": {},
-		"parameters": {},
-		"requestBodies": {},
-		"responses": {},
-		"schemas": {
-			"ContributionHeaderResponse": {
-				"properties": {
-					"contribHeaderId": {
-						"type": "string"
-					},
-					"nestScheduleRef": {
-						"type": "string"
-					},
-					"externalScheduleRef": {
-						"type": "string"
-					},
-					"scheduleType": {
-						"type": "string"
-					},
-					"scheduleStatusCd": {
-						"type": "string"
-					},
-					"scheduleGenerationDate": {
-						"type": "string",
-						"format": "date"
-					},
-					"employerNestId": {
-						"type": "string"
-					},
-					"subSchemeId": {
-						"type": "string"
-					},
-					"earningPeriodStartDate": {
-						"type": "string",
-						"format": "date"
-					},
-					"earningPeriodEndDate": {
-						"type": "string",
-						"format": "date"
-					},
-					"paymentPlanNo": {
-						"type": "string"
-					},
-					"paymentRef": {
-						"type": "string"
-					},
-					"nestPaymentRef": {
-						"type": "string"
-					},
-					"paymentSourceName": {
-						"type": "string"
-					},
-					"paymentMethod": {
-						"type": "string"
-					},
-					"paymentMethodDesc": {
-						"type": "string"
-					},
-					"paymentFrequency": {
-						"type": "string"
-					},
-					"paymentFrequencyDesc": {
-						"type": "string"
-					},
-					"taxPayFrequencyInd": {
-						"type": "string"
-					},
-					"paymentDueDate": {
-						"type": "string",
-						"format": "date"
-					},
-					"pegaCaseRef": {
-						"type": "string"
-					},
-					"noOfMembs": {
-						"type": "number",
-						"format": "double"
-					},
-					"totScheduleAmt": {
-						"type": "number",
-						"format": "double"
-					},
-					"recordStartDate": {
-						"type": "string",
-						"format": "date"
-					},
-					"recordEndDate": {
-						"type": "string",
-						"format": "date"
-					},
-					"createdBy": {
-						"type": "string"
-					},
-					"updatedBy": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"contribHeaderId",
-					"nestScheduleRef",
-					"scheduleType",
-					"scheduleStatusCd",
-					"scheduleGenerationDate",
-					"employerNestId",
-					"earningPeriodStartDate",
-					"earningPeriodEndDate",
-					"nestPaymentRef",
-					"paymentSourceName",
-					"paymentMethod",
-					"paymentMethodDesc",
-					"paymentFrequency",
-					"paymentFrequencyDesc",
-					"paymentDueDate"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"SearchResultsetResponse_ContributionHeaderResponse_": {
-				"properties": {
-					"totalRecordCount": {
-						"type": "number",
-						"format": "double"
-					},
-					"results": {
-						"items": {
-							"$ref": "#/components/schemas/ContributionHeaderResponse"
-						},
-						"type": "array"
-					}
-				},
-				"required": [
-					"totalRecordCount",
-					"results"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"FilterOptions": {
-				"properties": {
-					"limit": {
-						"type": "integer",
-						"format": "int32"
-					},
-					"offset": {
-						"type": "integer",
-						"format": "int32"
-					},
-					"sort": {
-						"items": {
-							"type": "string"
-						},
-						"type": "array"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"HeaderFilterParams": {
-				"properties": {
-					"contribHeaderId": {
-						"type": "string"
-					},
-					"nestScheduleRef": {
-						"type": "string"
-					},
-					"employerNestId": {
-						"type": "string"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"HeaderFilterElements": {
-				"properties": {
-					"options": {
-						"$ref": "#/components/schemas/FilterOptions"
-					},
-					"params": {
-						"$ref": "#/components/schemas/HeaderFilterParams"
-					}
-				},
-				"required": [
-					"params"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"CreateContributionResponse": {
-				"properties": {
-					"contributionSubmissionRef": {
-						"type": "string"
-					},
-					"scheduleSubmissionSeq": {
-						"type": "number",
-						"format": "double"
-					},
-					"countSubmitted": {
-						"type": "number",
-						"format": "double"
-					},
-					"countRowsSubmitted": {
-						"type": "number",
-						"format": "double"
-					}
-				},
-				"required": [
-					"contributionSubmissionRef",
-					"scheduleSubmissionSeq",
-					"countSubmitted",
-					"countRowsSubmitted"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ContributionHeaderUpdateError": {
-				"properties": {
-					"errorCode": {
-						"type": "string"
-					},
-					"errorDetail": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"errorCode",
-					"errorDetail"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ContributionHeaderResponseDTO": {
-				"properties": {
-					"message": {
-						"type": "string"
-					},
-					"errors": {
-						"items": {
-							"$ref": "#/components/schemas/ContributionHeaderUpdateError"
-						},
-						"type": "array"
-					},
-					"type": {
-						"type": "string"
-					},
-					"instance": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"type",
-					"instance"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"Pick_ContributionHeaderResponse.Exclude_keyofContributionHeaderResponse.createdBy-or-updatedBy__": {
-				"properties": {
-					"contribHeaderId": {
-						"type": "string"
-					},
-					"nestScheduleRef": {
-						"type": "string"
-					},
-					"externalScheduleRef": {
-						"type": "string"
-					},
-					"scheduleType": {
-						"type": "string"
-					},
-					"scheduleStatusCd": {
-						"type": "string"
-					},
-					"scheduleGenerationDate": {
-						"type": "string",
-						"format": "date"
-					},
-					"employerNestId": {
-						"type": "string"
-					},
-					"subSchemeId": {
-						"type": "string"
-					},
-					"earningPeriodStartDate": {
-						"type": "string",
-						"format": "date"
-					},
-					"earningPeriodEndDate": {
-						"type": "string",
-						"format": "date"
-					},
-					"paymentPlanNo": {
-						"type": "string"
-					},
-					"paymentRef": {
-						"type": "string"
-					},
-					"nestPaymentRef": {
-						"type": "string"
-					},
-					"paymentSourceName": {
-						"type": "string"
-					},
-					"paymentMethod": {
-						"type": "string"
-					},
-					"paymentMethodDesc": {
-						"type": "string"
-					},
-					"paymentFrequency": {
-						"type": "string"
-					},
-					"paymentFrequencyDesc": {
-						"type": "string"
-					},
-					"taxPayFrequencyInd": {
-						"type": "string"
-					},
-					"paymentDueDate": {
-						"type": "string",
-						"format": "date"
-					},
-					"pegaCaseRef": {
-						"type": "string"
-					},
-					"noOfMembs": {
-						"type": "number",
-						"format": "double"
-					},
-					"totScheduleAmt": {
-						"type": "number",
-						"format": "double"
-					},
-					"recordStartDate": {
-						"type": "string",
-						"format": "date"
-					},
-					"recordEndDate": {
-						"type": "string",
-						"format": "date"
-					}
-				},
-				"required": [
-					"contribHeaderId",
-					"nestScheduleRef",
-					"scheduleType",
-					"scheduleStatusCd",
-					"scheduleGenerationDate",
-					"employerNestId",
-					"earningPeriodStartDate",
-					"earningPeriodEndDate",
-					"nestPaymentRef",
-					"paymentSourceName",
-					"paymentMethod",
-					"paymentMethodDesc",
-					"paymentFrequency",
-					"paymentFrequencyDesc",
-					"paymentDueDate"
-				],
-				"type": "object",
-				"description": "From T, pick a set of properties whose keys are in the union K"
-			},
-			"ContributionHeaderDetails": {
-				"description": "This is Contribution header interface",
-				"properties": {
-					"contribHeaderId": {
-						"type": "string"
-					},
-					"nestScheduleRef": {
-						"type": "string"
-					},
-					"externalScheduleRef": {
-						"type": "string"
-					},
-					"scheduleType": {
-						"type": "string"
-					},
-					"scheduleStatusCd": {
-						"type": "string"
-					},
-					"scheduleGenerationDate": {
-						"type": "string",
-						"format": "date"
-					},
-					"employerNestId": {
-						"type": "string"
-					},
-					"subSchemeId": {
-						"type": "string"
-					},
-					"earningPeriodStartDate": {
-						"type": "string",
-						"format": "date"
-					},
-					"earningPeriodEndDate": {
-						"type": "string",
-						"format": "date"
-					},
-					"paymentPlanNo": {
-						"type": "string"
-					},
-					"paymentRef": {
-						"type": "string"
-					},
-					"nestPaymentRef": {
-						"type": "string"
-					},
-					"paymentSourceName": {
-						"type": "string"
-					},
-					"paymentMethod": {
-						"type": "string"
-					},
-					"paymentMethodDesc": {
-						"type": "string"
-					},
-					"paymentFrequency": {
-						"type": "string"
-					},
-					"paymentFrequencyDesc": {
-						"type": "string"
-					},
-					"taxPayFrequencyInd": {
-						"type": "string"
-					},
-					"paymentDueDate": {
-						"type": "string",
-						"format": "date"
-					},
-					"pegaCaseRef": {
-						"type": "string"
-					},
-					"noOfMembs": {
-						"type": "number",
-						"format": "double"
-					},
-					"totScheduleAmt": {
-						"type": "number",
-						"format": "double"
-					},
-					"recordStartDate": {
-						"type": "string",
-						"format": "date"
-					},
-					"recordEndDate": {
-						"type": "string",
-						"format": "date"
-					}
-				},
-				"required": [
-					"contribHeaderId",
-					"nestScheduleRef",
-					"scheduleType",
-					"scheduleStatusCd",
-					"scheduleGenerationDate",
-					"employerNestId",
-					"earningPeriodStartDate",
-					"earningPeriodEndDate",
-					"nestPaymentRef",
-					"paymentSourceName",
-					"paymentMethod",
-					"paymentMethodDesc",
-					"paymentFrequency",
-					"paymentFrequencyDesc",
-					"paymentDueDate"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ContributionHeaderRequestDTO": {
-				"description": "This is Contribution Header update API Request DTO interface",
-				"properties": {
-					"contributionHeader": {
-						"items": {
-							"$ref": "#/components/schemas/ContributionHeaderDetails"
-						},
-						"type": "array"
-					}
-				},
-				"required": [
-					"contributionHeader"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"MemberContributionDetailsResponse": {
-				"properties": {
-					"membContribDetlId": {
-						"type": "string"
-					},
-					"nestScheduleRef": {
-						"type": "string"
-					},
-					"membEnrolmentRef": {
-						"type": "string"
-					},
-					"membContriDueDate": {
-						"type": "string",
-						"format": "date"
-					},
-					"membPlanRef": {
-						"type": "string"
-					},
-					"empGroupId": {
-						"type": "integer",
-						"format": "int32"
-					},
-					"groupName": {
-						"type": "string"
-					},
-					"schdlMembStatusCd": {
-						"type": "string"
-					},
-					"membPartyId": {
-						"type": "string"
-					},
-					"scmPartyId": {
-						"type": "string"
-					},
-					"nino": {
-						"type": "string"
-					},
-					"alternativeId": {
-						"type": "string"
-					},
-					"autoCalcFlag": {
-						"type": "string"
-					},
-					"pensEarnings": {
-						"type": "number",
-						"format": "float"
-					},
-					"emplContriAmt": {
-						"type": "number",
-						"format": "float"
-					},
-					"membContriAmt": {
-						"type": "number",
-						"format": "float"
-					},
-					"membNonPayReason": {
-						"type": "string"
-					},
-					"membLeaveEarnings": {
-						"type": "number",
-						"format": "float"
-					},
-					"newGroupName": {
-						"type": "string"
-					},
-					"newGroupPensEarnings": {
-						"type": "number",
-						"format": "float"
-					},
-					"newGroupEmplContriAmt": {
-						"type": "number",
-						"format": "float"
-					},
-					"newGroupMembContriAmt": {
-						"type": "number",
-						"format": "float"
-					},
-					"optoutRefNum": {
-						"type": "string"
-					},
-					"optoutDeclarationFlag": {
-						"type": "string"
-					},
-					"newPaymentPlanNo": {
-						"type": "string"
-					},
-					"newPaymentSourceName": {
-						"type": "string"
-					},
-					"membNonPayEffDate": {
-						"type": "string",
-						"format": "date"
-					},
-					"secEnrolPensEarnings": {
-						"type": "number",
-						"format": "float"
-					},
-					"secEnrolEmplContriAmt": {
-						"type": "number",
-						"format": "float"
-					},
-					"secEnrolMembContriAmt": {
-						"type": "number",
-						"format": "float"
-					},
-					"channelType": {
-						"type": "string"
-					},
-					"memberExcludedFlag": {
-						"type": "string"
-					},
-					"membPaymentDueDate": {
-						"type": "string",
-						"format": "date"
-					},
-					"newEmpGroupId": {
-						"type": "integer",
-						"format": "int32"
-					},
-					"recordStartDate": {
-						"type": "string",
-						"format": "date"
-					},
-					"recordEndDate": {
-						"type": "string",
-						"format": "date"
-					},
-					"createdBy": {
-						"type": "string"
-					},
-					"updatedBy": {
-						"type": "string"
-					},
-					"employerNestId": {
-						"type": "string"
-					},
-					"origScheduleRef": {
-						"type": "string"
-					},
-					"contribHeaderId": {
-						"type": "string"
-					},
-					"firstName": {
-						"type": "string"
-					},
-					"lastName": {
-						"type": "string"
-					},
-					"enrolmentType": {
-						"type": "string"
-					},
-					"secEnrolmentType": {
-						"type": "string"
-					},
-					"emplContriPct": {
-						"type": "number",
-						"format": "float"
-					},
-					"membContriPct": {
-						"type": "number",
-						"format": "float"
-					},
-					"newGroupEmplContriPct": {
-						"type": "number",
-						"format": "float"
-					},
-					"newGroupMembContriPct": {
-						"type": "number",
-						"format": "float"
-					},
-					"recordChangedFlag": {
-						"type": "string"
-					},
-					"memTaxReliefEligibility": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"membContribDetlId",
-					"nestScheduleRef",
-					"membEnrolmentRef",
-					"membContriDueDate",
-					"empGroupId",
-					"groupName",
-					"schdlMembStatusCd",
-					"membPartyId",
-					"membNonPayReason",
-					"firstName",
-					"lastName",
-					"enrolmentType",
-					"emplContriPct",
-					"membContriPct"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ErrorDetailsResponse": {
-				"properties": {
-					"errorLogId": {
-						"type": "integer",
-						"format": "int32"
-					},
-					"errorFileId": {
-						"type": "string"
-					},
-					"errorType": {
-						"type": "string"
-					},
-					"errorSequenceNum": {
-						"type": "number",
-						"format": "float"
-					},
-					"errorCode": {
-						"type": "string"
-					},
-					"errorMessage": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"errorLogId",
-					"errorFileId",
-					"errorType",
-					"errorSequenceNum",
-					"errorCode",
-					"errorMessage"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"RDScheduleMemberStatusResponse": {
-				"properties": {
-					"schdlMembStatusDesc": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"schdlMembStatusDesc"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"RDPartContribReasonResponse": {
-				"properties": {
-					"reasonDescription": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"reasonDescription"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"RetriveContributionDetailsResponse": {
-				"properties": {
-					"contribHeaderId": {
-						"type": "string"
-					},
-					"origScheduleRef": {
-						"type": "string"
-					},
-					"employerNestId": {
-						"type": "string"
-					},
-					"updatedBy": {
-						"type": "string"
-					},
-					"membPaymentDueDate": {
-						"type": "string",
-						"format": "date"
-					},
-					"recordEndDate": {
-						"type": "string",
-						"format": "date"
-					},
-					"createdBy": {
-						"type": "string"
-					},
-					"newEmpGroupId": {
-						"type": "integer",
-						"format": "int32"
-					},
-					"recordStartDate": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"memberExcludedFlag": {
-						"type": "string"
-					},
-					"nestScheduleRef": {
-						"type": "string"
-					},
-					"membEnrolmentRef": {
-						"type": "string"
-					},
-					"membContribDetlId": {
-						"type": "string"
-					},
-					"membPlanRef": {
-						"type": "string"
-					},
-					"membContriDueDate": {
-						"type": "string",
-						"format": "date"
-					},
-					"empGroupId": {
-						"type": "integer",
-						"format": "int32"
-					},
-					"groupName": {
-						"type": "string"
-					},
-					"schdlMembStatusCd": {
-						"type": "string"
-					},
-					"membPartyId": {
-						"type": "string"
-					},
-					"scmPartyId": {
-						"type": "string"
-					},
-					"nino": {
-						"type": "string"
-					},
-					"alternativeId": {
-						"type": "string"
-					},
-					"autoCalcFlag": {
-						"type": "string"
-					},
-					"emplContriAmt": {
-						"type": "number",
-						"format": "float"
-					},
-					"pensEarnings": {
-						"type": "number",
-						"format": "float"
-					},
-					"membContriAmt": {
-						"type": "number",
-						"format": "float"
-					},
-					"membLeaveEarnings": {
-						"type": "number",
-						"format": "float"
-					},
-					"membNonPayReason": {
-						"type": "string"
-					},
-					"newGroupPensEarnings": {
-						"type": "number",
-						"format": "float"
-					},
-					"newGroupName": {
-						"type": "string"
-					},
-					"optoutDeclarationFlag": {
-						"type": "string"
-					},
-					"newGroupEmplContriAmt": {
-						"type": "number",
-						"format": "double"
-					},
-					"optoutRefNum": {
-						"type": "string"
-					},
-					"newGroupMembContriAmt": {
-						"type": "number",
-						"format": "float"
-					},
-					"newPaymentPlanNo": {
-						"type": "string"
-					},
-					"secEnrolMembContriAmt": {
-						"type": "number",
-						"format": "float"
-					},
-					"newPaymentSourceName": {
-						"type": "string"
-					},
-					"membNonPayEffDate": {
-						"type": "string",
-						"format": "date"
-					},
-					"secEnrolPensEarnings": {
-						"type": "number",
-						"format": "float"
-					},
-					"channelType": {
-						"type": "string"
-					},
-					"enrolmentType": {
-						"type": "string"
-					},
-					"emplContriPct": {
-						"type": "number",
-						"format": "float"
-					},
-					"membContriPct": {
-						"type": "number",
-						"format": "float"
-					},
-					"newGroupEmplContriPct": {
-						"type": "number",
-						"format": "float"
-					},
-					"secEnrolEmplContriAmt": {
-						"type": "number",
-						"format": "double"
-					},
-					"firstName": {
-						"type": "string"
-					},
-					"secEnrolmentType": {
-						"type": "string"
-					},
-					"lastName": {
-						"type": "string"
-					},
-					"newGroupMembContriPct": {
-						"type": "number",
-						"format": "float"
-					},
-					"recordChangedFlag": {
-						"type": "string"
-					},
-					"memTaxReliefEligibility": {
-						"type": "string"
-					},
-					"errorDetails": {
-						"$ref": "#/components/schemas/ErrorDetailsResponse"
-					},
-					"rdschedulememberstatus": {
-						"$ref": "#/components/schemas/RDScheduleMemberStatusResponse"
-					},
-					"rdpartcontribreason": {
-						"$ref": "#/components/schemas/RDPartContribReasonResponse"
-					}
-				},
-				"required": [
-					"nestScheduleRef",
-					"membEnrolmentRef",
-					"membContribDetlId",
-					"membContriDueDate",
-					"empGroupId",
-					"groupName",
-					"schdlMembStatusCd",
-					"membPartyId",
-					"membNonPayReason",
-					"enrolmentType",
-					"emplContriPct",
-					"membContriPct",
-					"firstName",
-					"lastName",
-					"errorDetails",
-					"rdschedulememberstatus",
-					"rdpartcontribreason"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"SearchMemberContributionResultResponse_RetriveContributionDetailsResponse_": {
-				"properties": {
-					"totalRecordCount": {
-						"type": "number",
-						"format": "double"
-					},
-					"results": {
-						"items": {
-							"$ref": "#/components/schemas/RetriveContributionDetailsResponse"
-						},
-						"type": "array"
-					}
-				},
-				"required": [
-					"totalRecordCount",
-					"results"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"DetailsFilterParams": {
-				"properties": {
-					"nestScheduleRef": {
-						"type": "string"
-					},
-					"fitstName": {
-						"type": "string"
-					},
-					"lastName": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"nestScheduleRef",
-					"fitstName",
-					"lastName"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"DetailsFilterElements": {
-				"properties": {
-					"options": {
-						"$ref": "#/components/schemas/FilterOptions"
-					},
-					"params": {
-						"$ref": "#/components/schemas/DetailsFilterParams"
-					}
-				},
-				"required": [
-					"params"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ContributionDetailsUpdateError": {
-				"properties": {
-					"errorCode": {
-						"type": "string"
-					},
-					"errorDetail": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"errorCode",
-					"errorDetail"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ContributionDetailsResponseDTO": {
-				"properties": {
-					"message": {
-						"type": "string"
-					},
-					"errors": {
-						"items": {
-							"$ref": "#/components/schemas/ContributionDetailsUpdateError"
-						},
-						"type": "array"
-					},
-					"type": {
-						"type": "string"
-					},
-					"instance": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"type",
-					"instance"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ContributionMemberDetails": {
-				"description": "This is Contribution member details interface",
-				"properties": {
-					"membContribDetlId": {
-						"type": "string"
-					},
-					"schdlMembStatusCd": {
-						"type": "string"
-					},
-					"membPartyId": {
-						"type": "string"
-					},
-					"scmPartyId": {
-						"type": "string"
-					},
-					"nino": {
-						"type": "string"
-					},
-					"alternativeId": {
-						"type": "string"
-					},
-					"autoCalcFlag": {
-						"type": "string"
-					},
-					"pensEarnings": {
-						"type": "number",
-						"format": "double"
-					},
-					"emplContriAmt": {
-						"type": "number",
-						"format": "double"
-					},
-					"membContriAmt": {
-						"type": "number",
-						"format": "double"
-					},
-					"membNonPayReason": {
-						"type": "string"
-					},
-					"membLeaveEarnings": {
-						"type": "number",
-						"format": "double"
-					},
-					"newEmpGroupId": {
-						"type": "number",
-						"format": "double"
-					},
-					"newGroupName": {
-						"type": "string"
-					},
-					"newGroupPensEarnings": {
-						"type": "number",
-						"format": "double"
-					},
-					"newGroupEmplContriAmt": {
-						"type": "number",
-						"format": "double"
-					},
-					"newGroupMembContriAmt": {
-						"type": "number",
-						"format": "double"
-					},
-					"optoutRefNum": {
-						"type": "string"
-					},
-					"optoutDeclarationFlag": {
-						"type": "string"
-					},
-					"newPaymentPlanNo": {
-						"type": "string"
-					},
-					"newPaymentSourceName": {
-						"type": "string"
-					},
-					"membNonPayEffDate": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"secEnrolPensEarnings": {
-						"type": "number",
-						"format": "double"
-					},
-					"secEnrolEmplContriAmt": {
-						"type": "number",
-						"format": "double"
-					},
-					"secEnrolMembContriAmt": {
-						"type": "number",
-						"format": "double"
-					},
-					"channelType": {
-						"type": "string"
-					},
-					"memberExcludedFlag": {
-						"type": "string"
-					},
-					"membPaymentDueDate": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"recordStartDate": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"recordEndDate": {
-						"type": "string",
-						"format": "date-time"
-					}
-				},
-				"required": [
-					"membContribDetlId"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ContributionDetailsRequestDTO": {
-				"description": "This is Contribution member details update API Request DTO interface",
-				"properties": {
-					"contributionDetail": {
-						"items": {
-							"$ref": "#/components/schemas/ContributionMemberDetails"
-						},
-						"type": "array"
-					}
-				},
-				"required": [
-					"contributionDetail"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"SearchResultsetResponse_MemberContributionDetailsResponse_": {
-				"properties": {
-					"totalRecordCount": {
-						"type": "number",
-						"format": "double"
-					},
-					"results": {
-						"items": {
-							"$ref": "#/components/schemas/MemberContributionDetailsResponse"
-						},
-						"type": "array"
-					}
-				},
-				"required": [
-					"totalRecordCount",
-					"results"
-				],
-				"type": "object",
-				"additionalProperties": false
-			}
-		},
-		"securitySchemes": {
-			"api_key": {
-				"type": "apiKey",
-				"name": "x-functions-key",
-				"in": "header"
-			}
-		}
-	},
-	"info": {
-		"title": "Contribution Index APIs",
-		"version": "1.36.0",
-		"description": "REST APIs for Contribution Index",
-		"contact": {}
-	},
-	"openapi": "3.0.0",
-	"paths": {
-		"/contribution/{externalScheduleRef}": {
-			"get": {
-				"operationId": "GetContributionHeader",
-				"responses": {
-					"200": {
-						"description": "Success Response",
-						"content": {
-							"application/json": {
-								"schema": {
-									"anyOf": [
-										{
-											"$ref": "#/components/schemas/ContributionHeaderResponse"
-										},
-										{}
-									]
-								}
-							}
-						}
-					},
-					"400": {
-						"description": "Invalid Request"
-					},
-					"404": {
-						"description": "Record does not exist"
-					},
-					"500": {
-						"description": "Internal Server Error"
-					}
-				},
-				"description": "5102 API Catalogue Number\r\nRetrieves the Contribution Header list based on scheduleReference passed.",
-				"security": [
-					{
-						"api_key": []
-					}
-				],
-				"parameters": [
-					{
-						"description": "scheduleReference of the Contribution Header record to be fetched",
-						"in": "path",
-						"name": "externalScheduleRef",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					}
-				]
-			}
-		},
-		"/contribution/retrievescheduleheaders": {
-			"post": {
-				"operationId": "GetHeaderByFilter",
-				"responses": {
-					"200": {
-						"description": "Success Response",
-						"content": {
-							"application/json": {
-								"schema": {
-									"anyOf": [
-										{
-											"$ref": "#/components/schemas/SearchResultsetResponse_ContributionHeaderResponse_"
-										},
-										{}
-									]
-								}
-							}
-						}
-					},
-					"400": {
-						"description": "Invalid Request"
-					},
-					"404": {
-						"description": "Record does not exist"
-					},
-					"500": {
-						"description": "Internal Server Error"
-					}
-				},
-				"description": "5104 API Catalogue Number\r\nRetrieves a list of header with filter criterias",
-				"security": [
-					{
-						"api_key": []
-					}
-				],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/HeaderFilterElements"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/contribution/submission/createsubmission/{contribHeaderId}": {
-			"put": {
-				"operationId": "CreateContributionSubmission",
-				"responses": {
-					"200": {
-						"description": "Success Response",
-						"content": {
-							"application/json": {
-								"schema": {
-									"anyOf": [
-										{
-											"$ref": "#/components/schemas/CreateContributionResponse"
-										},
-										{}
-									]
-								}
-							}
-						}
-					},
-					"400": {
-						"description": "Invalid Request"
-					},
-					"404": {
-						"description": "Record does not exist"
-					},
-					"500": {
-						"description": "Internal Server Error"
-					}
-				},
-				"description": "5402 API Catalogue Number\r\nCreate contribution submission using contribHeaderId passed",
-				"security": [
-					{
-						"api_key": []
-					}
-				],
-				"parameters": [
-					{
-						"description": "is the Contribution Header id",
-						"in": "path",
-						"name": "contribHeaderId",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					}
-				]
-			}
-		},
-		"/contribution/contributionHeader": {
-			"put": {
-				"operationId": "UpdateContributionHeader",
-				"responses": {
-					"200": {
-						"description": "Success Response",
-						"content": {
-							"application/json": {
-								"schema": {
-									"anyOf": [
-										{
-											"$ref": "#/components/schemas/ContributionHeaderResponseDTO"
-										},
-										{}
-									]
-								}
-							}
-						}
-					},
-					"400": {
-						"description": "Invalid Request"
-					},
-					"404": {
-						"description": "Record does not exist"
-					},
-					"500": {
-						"description": "Internal Server Error"
-					}
-				},
-				"description": "5105 API Catalogue Number\r\nUpdate the Contribution Header",
-				"security": [
-					{
-						"api_key": []
-					}
-				],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/ContributionHeaderRequestDTO"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/contribution/{nestScheduleRef}": {
-			"get": {
-				"operationId": "GetMemberContributionDetails",
-				"responses": {
-					"200": {
-						"description": "Success Response",
-						"content": {
-							"application/json": {
-								"schema": {
-									"anyOf": [
-										{
-											"$ref": "#/components/schemas/MemberContributionDetailsResponse"
-										},
-										{}
-									]
-								}
-							}
-						}
-					},
-					"400": {
-						"description": "Invalid Request"
-					},
-					"404": {
-						"description": "Record does not exist"
-					},
-					"500": {
-						"description": "Internal Server Error"
-					}
-				},
-				"description": "5202 API Catalogue Number\r\nRetrieves the Member Contribution Details list based on scheduleReference passed.",
-				"security": [
-					{
-						"api_key": []
-					}
-				],
-				"parameters": [
-					{
-						"description": "scheduleReference of the Member Contribution Details record to be fetched",
-						"in": "path",
-						"name": "nestScheduleRef",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					}
-				]
-			}
-		},
-		"/contribution/retrieveContributionDetails": {
-			"post": {
-				"operationId": "GetDetailsByFilter",
-				"responses": {
-					"200": {
-						"description": "Success Response",
-						"content": {
-							"application/json": {
-								"schema": {
-									"anyOf": [
-										{
-											"$ref": "#/components/schemas/SearchMemberContributionResultResponse_RetriveContributionDetailsResponse_"
-										},
-										{}
-									]
-								}
-							}
-						}
-					},
-					"400": {
-						"description": "Invalid Request"
-					},
-					"404": {
-						"description": "Record does not exist"
-					},
-					"500": {
-						"description": "Internal Server Error"
-					}
-				},
-				"description": "5205 API Catalogue Number\r\nRetrieves a list of details with filter criterias",
-				"security": [
-					{
-						"api_key": []
-					}
-				],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/DetailsFilterElements"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/contribution/contributionDetails": {
-			"put": {
-				"operationId": "UpdateMemberContributionDetails",
-				"responses": {
-					"200": {
-						"description": "Success Response",
-						"content": {
-							"application/json": {
-								"schema": {
-									"anyOf": [
-										{
-											"$ref": "#/components/schemas/ContributionDetailsResponseDTO"
-										},
-										{}
-									]
-								}
-							}
-						}
-					},
-					"400": {
-						"description": "Invalid Request"
-					},
-					"404": {
-						"description": "Record does not exist"
-					},
-					"500": {
-						"description": "Internal Server Error"
-					}
-				},
-				"description": "5204 API Catalogue Number\r\nUpdate the Contribution Details",
-				"security": [
-					{
-						"api_key": []
-					}
-				],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/ContributionDetailsRequestDTO"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/contribution/Submission/MemberContributionSubmissions/{contribSubmissionRef}": {
-			"get": {
-				"operationId": "GetMemberContributionSubmission",
-				"responses": {
-					"200": {
-						"description": "Success Response",
-						"content": {
-							"application/json": {
-								"schema": {
-									"anyOf": [
-										{
-											"$ref": "#/components/schemas/SearchResultsetResponse_MemberContributionDetailsResponse_"
-										},
-										{}
-									]
-								}
-							}
-						}
-					},
-					"400": {
-						"description": "Invalid Request"
-					},
-					"404": {
-						"description": "Record does not exist"
-					},
-					"500": {
-						"description": "Internal Server Error"
-					}
-				},
-				"description": "5404 API Catalogue Number\r\nRetrieves returns a list of all Member Contribution Submissions based on contribSubmissionRef passed.",
-				"security": [
-					{
-						"api_key": []
-					}
-				],
-				"parameters": [
-					{
-						"description": "contribSubmissionRef of the Member Contribution Submission record to be fetched",
-						"in": "path",
-						"name": "contribSubmissionRef",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					}
-				]
-			}
-		}
-	},
-	"servers": [
-		{
-			"url": "http://localhost:7071/api"
-		}
-	]
+  "components": {
+    "examples": {},
+    "headers": {},
+    "parameters": {},
+    "requestBodies": {},
+    "responses": {},
+    "schemas": {
+      "ContributionHeaderResponse": {
+        "properties": {
+          "contribHeaderId": {
+            "type": "string"
+          },
+          "nestScheduleRef": {
+            "type": "string"
+          },
+          "externalScheduleRef": {
+            "type": "string"
+          },
+          "scheduleType": {
+            "type": "string"
+          },
+          "scheduleStatusCd": {
+            "type": "string"
+          },
+          "scheduleGenerationDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "employerNestId": {
+            "type": "string"
+          },
+          "subSchemeId": {
+            "type": "string"
+          },
+          "earningPeriodStartDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "earningPeriodEndDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "paymentPlanNo": {
+            "type": "string"
+          },
+          "paymentRef": {
+            "type": "string"
+          },
+          "nestPaymentRef": {
+            "type": "string"
+          },
+          "paymentSourceName": {
+            "type": "string"
+          },
+          "paymentMethod": {
+            "type": "string"
+          },
+          "paymentMethodDesc": {
+            "type": "string"
+          },
+          "paymentFrequency": {
+            "type": "string"
+          },
+          "paymentFrequencyDesc": {
+            "type": "string"
+          },
+          "taxPayFrequencyInd": {
+            "type": "string"
+          },
+          "paymentDueDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "pegaCaseRef": {
+            "type": "string"
+          },
+          "noOfMembs": {
+            "type": "number",
+            "format": "double"
+          },
+          "totScheduleAmt": {
+            "type": "number",
+            "format": "double"
+          },
+          "recordStartDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "recordEndDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "updatedBy": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "contribHeaderId",
+          "nestScheduleRef",
+          "scheduleType",
+          "scheduleStatusCd",
+          "scheduleGenerationDate",
+          "employerNestId",
+          "earningPeriodStartDate",
+          "earningPeriodEndDate",
+          "nestPaymentRef",
+          "paymentSourceName",
+          "paymentMethod",
+          "paymentMethodDesc",
+          "paymentFrequency",
+          "paymentFrequencyDesc",
+          "paymentDueDate"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "SearchResultsetResponse_ContributionHeaderResponse_": {
+        "properties": {
+          "totalRecordCount": {
+            "type": "number",
+            "format": "double"
+          },
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/ContributionHeaderResponse"
+            },
+            "type": "array"
+          }
+        },
+        "required": ["totalRecordCount", "results"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "FilterOptions": {
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "offset": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "HeaderFilterParams": {
+        "properties": {
+          "contribHeaderId": {
+            "type": "string"
+          },
+          "nestScheduleRef": {
+            "type": "string"
+          },
+          "employerNestId": {
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "HeaderFilterElements": {
+        "properties": {
+          "options": {
+            "$ref": "#/components/schemas/FilterOptions"
+          },
+          "params": {
+            "$ref": "#/components/schemas/HeaderFilterParams"
+          }
+        },
+        "required": ["params"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "CreateContributionResponse": {
+        "properties": {
+          "contributionSubmissionRef": {
+            "type": "string"
+          },
+          "scheduleSubmissionSeq": {
+            "type": "number",
+            "format": "double"
+          },
+          "countSubmitted": {
+            "type": "number",
+            "format": "double"
+          },
+          "countRowsSubmitted": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": [
+          "contributionSubmissionRef",
+          "scheduleSubmissionSeq",
+          "countSubmitted",
+          "countRowsSubmitted"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "Type3ValidationResponse": {
+        "properties": {
+          "number_of_rows_in_Requires_Attention": {
+            "type": "number#",
+            "format": "double"
+          },
+          "number_of_rows_ready_to_submit": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": [
+          "contributionSubmissionRef",
+          "scheduleSubmissionSeq",
+          "countSubmitted",
+          "countRowsSubmitted"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "ContributionHeaderUpdateError": {
+        "properties": {
+          "errorCode": {
+            "type": "string"
+          },
+          "errorDetail": {
+            "type": "string"
+          }
+        },
+        "required": ["errorCode", "errorDetail"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "ContributionHeaderResponseDTO": {
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "errors": {
+            "items": {
+              "$ref": "#/components/schemas/ContributionHeaderUpdateError"
+            },
+            "type": "array"
+          },
+          "type": {
+            "type": "string"
+          },
+          "instance": {
+            "type": "string"
+          }
+        },
+        "required": ["type", "instance"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "Pick_ContributionHeaderResponse.Exclude_keyofContributionHeaderResponse.createdBy-or-updatedBy__": {
+        "properties": {
+          "contribHeaderId": {
+            "type": "string"
+          },
+          "nestScheduleRef": {
+            "type": "string"
+          },
+          "externalScheduleRef": {
+            "type": "string"
+          },
+          "scheduleType": {
+            "type": "string"
+          },
+          "scheduleStatusCd": {
+            "type": "string"
+          },
+          "scheduleGenerationDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "employerNestId": {
+            "type": "string"
+          },
+          "subSchemeId": {
+            "type": "string"
+          },
+          "earningPeriodStartDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "earningPeriodEndDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "paymentPlanNo": {
+            "type": "string"
+          },
+          "paymentRef": {
+            "type": "string"
+          },
+          "nestPaymentRef": {
+            "type": "string"
+          },
+          "paymentSourceName": {
+            "type": "string"
+          },
+          "paymentMethod": {
+            "type": "string"
+          },
+          "paymentMethodDesc": {
+            "type": "string"
+          },
+          "paymentFrequency": {
+            "type": "string"
+          },
+          "paymentFrequencyDesc": {
+            "type": "string"
+          },
+          "taxPayFrequencyInd": {
+            "type": "string"
+          },
+          "paymentDueDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "pegaCaseRef": {
+            "type": "string"
+          },
+          "noOfMembs": {
+            "type": "number",
+            "format": "double"
+          },
+          "totScheduleAmt": {
+            "type": "number",
+            "format": "double"
+          },
+          "recordStartDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "recordEndDate": {
+            "type": "string",
+            "format": "date"
+          }
+        },
+        "required": [
+          "contribHeaderId",
+          "nestScheduleRef",
+          "scheduleType",
+          "scheduleStatusCd",
+          "scheduleGenerationDate",
+          "employerNestId",
+          "earningPeriodStartDate",
+          "earningPeriodEndDate",
+          "nestPaymentRef",
+          "paymentSourceName",
+          "paymentMethod",
+          "paymentMethodDesc",
+          "paymentFrequency",
+          "paymentFrequencyDesc",
+          "paymentDueDate"
+        ],
+        "type": "object",
+        "description": "From T, pick a set of properties whose keys are in the union K"
+      },
+      "ContributionHeaderDetails": {
+        "description": "This is Contribution header interface",
+        "properties": {
+          "contribHeaderId": {
+            "type": "string"
+          },
+          "nestScheduleRef": {
+            "type": "string"
+          },
+          "externalScheduleRef": {
+            "type": "string"
+          },
+          "scheduleType": {
+            "type": "string"
+          },
+          "scheduleStatusCd": {
+            "type": "string"
+          },
+          "scheduleGenerationDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "employerNestId": {
+            "type": "string"
+          },
+          "subSchemeId": {
+            "type": "string"
+          },
+          "earningPeriodStartDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "earningPeriodEndDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "paymentPlanNo": {
+            "type": "string"
+          },
+          "paymentRef": {
+            "type": "string"
+          },
+          "nestPaymentRef": {
+            "type": "string"
+          },
+          "paymentSourceName": {
+            "type": "string"
+          },
+          "paymentMethod": {
+            "type": "string"
+          },
+          "paymentMethodDesc": {
+            "type": "string"
+          },
+          "paymentFrequency": {
+            "type": "string"
+          },
+          "paymentFrequencyDesc": {
+            "type": "string"
+          },
+          "taxPayFrequencyInd": {
+            "type": "string"
+          },
+          "paymentDueDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "pegaCaseRef": {
+            "type": "string"
+          },
+          "noOfMembs": {
+            "type": "number",
+            "format": "double"
+          },
+          "totScheduleAmt": {
+            "type": "number",
+            "format": "double"
+          },
+          "recordStartDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "recordEndDate": {
+            "type": "string",
+            "format": "date"
+          }
+        },
+        "required": [
+          "contribHeaderId",
+          "nestScheduleRef",
+          "scheduleType",
+          "scheduleStatusCd",
+          "scheduleGenerationDate",
+          "employerNestId",
+          "earningPeriodStartDate",
+          "earningPeriodEndDate",
+          "nestPaymentRef",
+          "paymentSourceName",
+          "paymentMethod",
+          "paymentMethodDesc",
+          "paymentFrequency",
+          "paymentFrequencyDesc",
+          "paymentDueDate"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "ContributionHeaderRequestDTO": {
+        "description": "This is Contribution Header update API Request DTO interface",
+        "properties": {
+          "contributionHeader": {
+            "items": {
+              "$ref": "#/components/schemas/ContributionHeaderDetails"
+            },
+            "type": "array"
+          }
+        },
+        "required": ["contributionHeader"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "MemberContributionDetailsResponse": {
+        "properties": {
+          "membContribDetlId": {
+            "type": "string"
+          },
+          "nestScheduleRef": {
+            "type": "string"
+          },
+          "membEnrolmentRef": {
+            "type": "string"
+          },
+          "membContriDueDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "membPlanRef": {
+            "type": "string"
+          },
+          "empGroupId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "groupName": {
+            "type": "string"
+          },
+          "schdlMembStatusCd": {
+            "type": "string"
+          },
+          "membPartyId": {
+            "type": "string"
+          },
+          "scmPartyId": {
+            "type": "string"
+          },
+          "nino": {
+            "type": "string"
+          },
+          "alternativeId": {
+            "type": "string"
+          },
+          "autoCalcFlag": {
+            "type": "string"
+          },
+          "pensEarnings": {
+            "type": "number",
+            "format": "float"
+          },
+          "emplContriAmt": {
+            "type": "number",
+            "format": "float"
+          },
+          "membContriAmt": {
+            "type": "number",
+            "format": "float"
+          },
+          "membNonPayReason": {
+            "type": "string"
+          },
+          "membLeaveEarnings": {
+            "type": "number",
+            "format": "float"
+          },
+          "newGroupName": {
+            "type": "string"
+          },
+          "newGroupPensEarnings": {
+            "type": "number",
+            "format": "float"
+          },
+          "newGroupEmplContriAmt": {
+            "type": "number",
+            "format": "float"
+          },
+          "newGroupMembContriAmt": {
+            "type": "number",
+            "format": "float"
+          },
+          "optoutRefNum": {
+            "type": "string"
+          },
+          "optoutDeclarationFlag": {
+            "type": "string"
+          },
+          "newPaymentPlanNo": {
+            "type": "string"
+          },
+          "newPaymentSourceName": {
+            "type": "string"
+          },
+          "membNonPayEffDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "secEnrolPensEarnings": {
+            "type": "number",
+            "format": "float"
+          },
+          "secEnrolEmplContriAmt": {
+            "type": "number",
+            "format": "float"
+          },
+          "secEnrolMembContriAmt": {
+            "type": "number",
+            "format": "float"
+          },
+          "channelType": {
+            "type": "string"
+          },
+          "memberExcludedFlag": {
+            "type": "string"
+          },
+          "membPaymentDueDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "newEmpGroupId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "recordStartDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "recordEndDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "updatedBy": {
+            "type": "string"
+          },
+          "employerNestId": {
+            "type": "string"
+          },
+          "origScheduleRef": {
+            "type": "string"
+          },
+          "contribHeaderId": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "enrolmentType": {
+            "type": "string"
+          },
+          "secEnrolmentType": {
+            "type": "string"
+          },
+          "emplContriPct": {
+            "type": "number",
+            "format": "float"
+          },
+          "membContriPct": {
+            "type": "number",
+            "format": "float"
+          },
+          "newGroupEmplContriPct": {
+            "type": "number",
+            "format": "float"
+          },
+          "newGroupMembContriPct": {
+            "type": "number",
+            "format": "float"
+          },
+          "recordChangedFlag": {
+            "type": "string"
+          },
+          "memTaxReliefEligibility": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "membContribDetlId",
+          "nestScheduleRef",
+          "membEnrolmentRef",
+          "membContriDueDate",
+          "empGroupId",
+          "groupName",
+          "schdlMembStatusCd",
+          "membPartyId",
+          "membNonPayReason",
+          "firstName",
+          "lastName",
+          "enrolmentType",
+          "emplContriPct",
+          "membContriPct"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "ErrorDetailsResponse": {
+        "properties": {
+          "errorLogId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "errorFileId": {
+            "type": "string"
+          },
+          "errorType": {
+            "type": "string"
+          },
+          "errorSequenceNum": {
+            "type": "number",
+            "format": "float"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "errorMessage": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "errorLogId",
+          "errorFileId",
+          "errorType",
+          "errorSequenceNum",
+          "errorCode",
+          "errorMessage"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "RDScheduleMemberStatusResponse": {
+        "properties": {
+          "schdlMembStatusDesc": {
+            "type": "string"
+          }
+        },
+        "required": ["schdlMembStatusDesc"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "RDPartContribReasonResponse": {
+        "properties": {
+          "reasonDescription": {
+            "type": "string"
+          }
+        },
+        "required": ["reasonDescription"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "RetriveContributionDetailsResponse": {
+        "properties": {
+          "contribHeaderId": {
+            "type": "string"
+          },
+          "origScheduleRef": {
+            "type": "string"
+          },
+          "employerNestId": {
+            "type": "string"
+          },
+          "updatedBy": {
+            "type": "string"
+          },
+          "membPaymentDueDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "recordEndDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "newEmpGroupId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "recordStartDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "memberExcludedFlag": {
+            "type": "string"
+          },
+          "nestScheduleRef": {
+            "type": "string"
+          },
+          "membEnrolmentRef": {
+            "type": "string"
+          },
+          "membContribDetlId": {
+            "type": "string"
+          },
+          "membPlanRef": {
+            "type": "string"
+          },
+          "membContriDueDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "empGroupId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "groupName": {
+            "type": "string"
+          },
+          "schdlMembStatusCd": {
+            "type": "string"
+          },
+          "membPartyId": {
+            "type": "string"
+          },
+          "scmPartyId": {
+            "type": "string"
+          },
+          "nino": {
+            "type": "string"
+          },
+          "alternativeId": {
+            "type": "string"
+          },
+          "autoCalcFlag": {
+            "type": "string"
+          },
+          "emplContriAmt": {
+            "type": "number",
+            "format": "float"
+          },
+          "pensEarnings": {
+            "type": "number",
+            "format": "float"
+          },
+          "membContriAmt": {
+            "type": "number",
+            "format": "float"
+          },
+          "membLeaveEarnings": {
+            "type": "number",
+            "format": "float"
+          },
+          "membNonPayReason": {
+            "type": "string"
+          },
+          "newGroupPensEarnings": {
+            "type": "number",
+            "format": "float"
+          },
+          "newGroupName": {
+            "type": "string"
+          },
+          "optoutDeclarationFlag": {
+            "type": "string"
+          },
+          "newGroupEmplContriAmt": {
+            "type": "number",
+            "format": "double"
+          },
+          "optoutRefNum": {
+            "type": "string"
+          },
+          "newGroupMembContriAmt": {
+            "type": "number",
+            "format": "float"
+          },
+          "newPaymentPlanNo": {
+            "type": "string"
+          },
+          "secEnrolMembContriAmt": {
+            "type": "number",
+            "format": "float"
+          },
+          "newPaymentSourceName": {
+            "type": "string"
+          },
+          "membNonPayEffDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "secEnrolPensEarnings": {
+            "type": "number",
+            "format": "float"
+          },
+          "channelType": {
+            "type": "string"
+          },
+          "enrolmentType": {
+            "type": "string"
+          },
+          "emplContriPct": {
+            "type": "number",
+            "format": "float"
+          },
+          "membContriPct": {
+            "type": "number",
+            "format": "float"
+          },
+          "newGroupEmplContriPct": {
+            "type": "number",
+            "format": "float"
+          },
+          "secEnrolEmplContriAmt": {
+            "type": "number",
+            "format": "double"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "secEnrolmentType": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "newGroupMembContriPct": {
+            "type": "number",
+            "format": "float"
+          },
+          "recordChangedFlag": {
+            "type": "string"
+          },
+          "memTaxReliefEligibility": {
+            "type": "string"
+          },
+          "errorDetails": {
+            "$ref": "#/components/schemas/ErrorDetailsResponse"
+          },
+          "rdschedulememberstatus": {
+            "$ref": "#/components/schemas/RDScheduleMemberStatusResponse"
+          },
+          "rdpartcontribreason": {
+            "$ref": "#/components/schemas/RDPartContribReasonResponse"
+          }
+        },
+        "required": [
+          "nestScheduleRef",
+          "membEnrolmentRef",
+          "membContribDetlId",
+          "membContriDueDate",
+          "empGroupId",
+          "groupName",
+          "schdlMembStatusCd",
+          "membPartyId",
+          "membNonPayReason",
+          "enrolmentType",
+          "emplContriPct",
+          "membContriPct",
+          "firstName",
+          "lastName",
+          "errorDetails",
+          "rdschedulememberstatus",
+          "rdpartcontribreason"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "SearchMemberContributionResultResponse_RetriveContributionDetailsResponse_": {
+        "properties": {
+          "totalRecordCount": {
+            "type": "number",
+            "format": "double"
+          },
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/RetriveContributionDetailsResponse"
+            },
+            "type": "array"
+          }
+        },
+        "required": ["totalRecordCount", "results"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "DetailsFilterParams": {
+        "properties": {
+          "nestScheduleRef": {
+            "type": "string"
+          },
+          "fitstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          }
+        },
+        "required": ["nestScheduleRef", "fitstName", "lastName"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "DetailsFilterElements": {
+        "properties": {
+          "options": {
+            "$ref": "#/components/schemas/FilterOptions"
+          },
+          "params": {
+            "$ref": "#/components/schemas/DetailsFilterParams"
+          }
+        },
+        "required": ["params"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "ContributionDetailsUpdateError": {
+        "properties": {
+          "errorCode": {
+            "type": "string"
+          },
+          "errorDetail": {
+            "type": "string"
+          }
+        },
+        "required": ["errorCode", "errorDetail"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "ContributionDetailsResponseDTO": {
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "errors": {
+            "items": {
+              "$ref": "#/components/schemas/ContributionDetailsUpdateError"
+            },
+            "type": "array"
+          },
+          "type": {
+            "type": "string"
+          },
+          "instance": {
+            "type": "string"
+          }
+        },
+        "required": ["type", "instance"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "ContributionMemberDetails": {
+        "description": "This is Contribution member details interface",
+        "properties": {
+          "membContribDetlId": {
+            "type": "string"
+          },
+          "schdlMembStatusCd": {
+            "type": "string"
+          },
+          "membPartyId": {
+            "type": "string"
+          },
+          "scmPartyId": {
+            "type": "string"
+          },
+          "nino": {
+            "type": "string"
+          },
+          "alternativeId": {
+            "type": "string"
+          },
+          "autoCalcFlag": {
+            "type": "string"
+          },
+          "pensEarnings": {
+            "type": "number",
+            "format": "double"
+          },
+          "emplContriAmt": {
+            "type": "number",
+            "format": "double"
+          },
+          "membContriAmt": {
+            "type": "number",
+            "format": "double"
+          },
+          "membNonPayReason": {
+            "type": "string"
+          },
+          "membLeaveEarnings": {
+            "type": "number",
+            "format": "double"
+          },
+          "newEmpGroupId": {
+            "type": "number",
+            "format": "double"
+          },
+          "newGroupName": {
+            "type": "string"
+          },
+          "newGroupPensEarnings": {
+            "type": "number",
+            "format": "double"
+          },
+          "newGroupEmplContriAmt": {
+            "type": "number",
+            "format": "double"
+          },
+          "newGroupMembContriAmt": {
+            "type": "number",
+            "format": "double"
+          },
+          "optoutRefNum": {
+            "type": "string"
+          },
+          "optoutDeclarationFlag": {
+            "type": "string"
+          },
+          "newPaymentPlanNo": {
+            "type": "string"
+          },
+          "newPaymentSourceName": {
+            "type": "string"
+          },
+          "membNonPayEffDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "secEnrolPensEarnings": {
+            "type": "number",
+            "format": "double"
+          },
+          "secEnrolEmplContriAmt": {
+            "type": "number",
+            "format": "double"
+          },
+          "secEnrolMembContriAmt": {
+            "type": "number",
+            "format": "double"
+          },
+          "channelType": {
+            "type": "string"
+          },
+          "memberExcludedFlag": {
+            "type": "string"
+          },
+          "membPaymentDueDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "recordStartDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "recordEndDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": ["membContribDetlId"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "ContributionDetailsRequestDTO": {
+        "description": "This is Contribution member details update API Request DTO interface",
+        "properties": {
+          "contributionDetail": {
+            "items": {
+              "$ref": "#/components/schemas/ContributionMemberDetails"
+            },
+            "type": "array"
+          }
+        },
+        "required": ["contributionDetail"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "SearchResultsetResponse_MemberContributionDetailsResponse_": {
+        "properties": {
+          "totalRecordCount": {
+            "type": "number",
+            "format": "double"
+          },
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/MemberContributionDetailsResponse"
+            },
+            "type": "array"
+          }
+        },
+        "required": ["totalRecordCount", "results"],
+        "type": "object",
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "api_key": {
+        "type": "apiKey",
+        "name": "x-functions-key",
+        "in": "header"
+      }
+    }
+  },
+  "info": {
+    "title": "Contribution Index APIs",
+    "version": "1.36.0",
+    "description": "REST APIs for Contribution Index",
+    "contact": {}
+  },
+  "openapi": "3.0.0",
+  "paths": {
+    "/contribution/{externalScheduleRef}": {
+      "get": {
+        "operationId": "GetContributionHeader",
+        "responses": {
+          "200": {
+            "description": "Success Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/ContributionHeaderResponse"
+                    },
+                    {}
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid Request"
+          },
+          "404": {
+            "description": "Record does not exist"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "5102 API Catalogue Number\r\nRetrieves the Contribution Header list based on scheduleReference passed.",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "description": "scheduleReference of the Contribution Header record to be fetched",
+            "in": "path",
+            "name": "externalScheduleRef",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/contribution/retrievescheduleheaders": {
+      "post": {
+        "operationId": "GetHeaderByFilter",
+        "responses": {
+          "200": {
+            "description": "Success Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/SearchResultsetResponse_ContributionHeaderResponse_"
+                    },
+                    {}
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid Request"
+          },
+          "404": {
+            "description": "Record does not exist"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "5104 API Catalogue Number\r\nRetrieves a list of header with filter criterias",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HeaderFilterElements"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contribution/submission/createsubmission/{contribHeaderId}": {
+      "put": {
+        "operationId": "CreateContributionSubmission",
+        "responses": {
+          "200": {
+            "description": "Success Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/CreateContributionResponse"
+                    },
+                    {}
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid Request"
+          },
+          "404": {
+            "description": "Record does not exist"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "5402 API Catalogue Number\r\nCreate contribution submission using contribHeaderId passed",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "description": "is the Contribution Header id",
+            "in": "path",
+            "name": "contribHeaderId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/contribution/submission/contribution-mdp-type3-validation/{contribHeaderId}": {
+      "post": {
+        "operationId": "CreateContributionSubmission",
+        "responses": {
+          "200": {
+            "description": "Success Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/Type3ValidationResponse"
+                    },
+                    {}
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid Request"
+          },
+          "404": {
+            "description": "Record does not exist"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "5402 API Catalogue Number\r\nCreate contribution submission using contribHeaderId passed",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "description": "is the Contribution Header id",
+            "in": "path",
+            "name": "contribHeaderId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/contribution/contributionHeader": {
+      "put": {
+        "operationId": "UpdateContributionHeader",
+        "responses": {
+          "200": {
+            "description": "Success Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/ContributionHeaderResponseDTO"
+                    },
+                    {}
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid Request"
+          },
+          "404": {
+            "description": "Record does not exist"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "5105 API Catalogue Number\r\nUpdate the Contribution Header",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContributionHeaderRequestDTO"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contribution/{nestScheduleRef}": {
+      "get": {
+        "operationId": "GetMemberContributionDetails",
+        "responses": {
+          "200": {
+            "description": "Success Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/MemberContributionDetailsResponse"
+                    },
+                    {}
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid Request"
+          },
+          "404": {
+            "description": "Record does not exist"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "5202 API Catalogue Number\r\nRetrieves the Member Contribution Details list based on scheduleReference passed.",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "description": "scheduleReference of the Member Contribution Details record to be fetched",
+            "in": "path",
+            "name": "nestScheduleRef",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/contribution/retrieveContributionDetails": {
+      "post": {
+        "operationId": "GetDetailsByFilter",
+        "responses": {
+          "200": {
+            "description": "Success Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/SearchMemberContributionResultResponse_RetriveContributionDetailsResponse_"
+                    },
+                    {}
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid Request"
+          },
+          "404": {
+            "description": "Record does not exist"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "5205 API Catalogue Number\r\nRetrieves a list of details with filter criterias",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DetailsFilterElements"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contribution/contributionDetails": {
+      "put": {
+        "operationId": "UpdateMemberContributionDetails",
+        "responses": {
+          "200": {
+            "description": "Success Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/ContributionDetailsResponseDTO"
+                    },
+                    {}
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid Request"
+          },
+          "404": {
+            "description": "Record does not exist"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "5204 API Catalogue Number\r\nUpdate the Contribution Details",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContributionDetailsRequestDTO"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contribution/Submission/MemberContributionSubmissions/{contribSubmissionRef}": {
+      "get": {
+        "operationId": "GetMemberContributionSubmission",
+        "responses": {
+          "200": {
+            "description": "Success Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/SearchResultsetResponse_MemberContributionDetailsResponse_"
+                    },
+                    {}
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid Request"
+          },
+          "404": {
+            "description": "Record does not exist"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "5404 API Catalogue Number\r\nRetrieves returns a list of all Member Contribution Submissions based on contribSubmissionRef passed.",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "description": "contribSubmissionRef of the Member Contribution Submission record to be fetched",
+            "in": "path",
+            "name": "contribSubmissionRef",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:7071/api"
+    }
+  ]
 }

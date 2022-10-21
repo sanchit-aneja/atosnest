@@ -6,9 +6,9 @@ import { errorDetails } from "../utils/constants";
 import errorHandler from "../utils/errorHandler";
 
 /**
-* 5102 API Catalogue Number
-* Get single Contribution Header using externalScheduleReference.
-*/
+ * 5102 API Catalogue Number
+ * Get single Contribution Header using externalScheduleReference.
+ */
 const httpTrigger: AzureFunction = async function (
   context: Context,
   req: HttpRequest
@@ -21,7 +21,7 @@ const httpTrigger: AzureFunction = async function (
       if (item && item.ContributionHeader) {
         const resp = await app.successResponse(item);
         context.res = resp;
-      } else if (item.name == 'SequelizeConnectionError') {
+      } else if (item.name == "SequelizeConnectionError") {
         const data = errorHandler.mapHandleErrorResponse(
           "",
           "",
@@ -36,7 +36,9 @@ const httpTrigger: AzureFunction = async function (
           "",
           "",
           errorDetails.CIA0503[0],
-          errorDetails.CIA0503[1] + " Schedule Reference Number " + externalScheduleRef,
+          errorDetails.CIA0503[1] +
+            " Schedule Reference Number " +
+            externalScheduleRef,
           "get"
         );
         const resp = await app.errorResponse(404, data);

@@ -1,7 +1,7 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../utils/database";
 
-class ErrorDetails extends Model { }
+class ErrorDetails extends Model {}
 
 ErrorDetails.init(
   {
@@ -23,11 +23,11 @@ ErrorDetails.init(
     },
     membContribDetlId: {
       type: DataTypes.UUID,
-      field: "memb_contrib_detl_id"
+      field: "memb_contrib_detl_id",
     },
     errorFileId: {
       type: DataTypes.UUID,
-      field: "error_file_id"
+      field: "error_file_id",
     },
     errorSequenceNum: {
       type: DataTypes.DECIMAL,
@@ -44,35 +44,35 @@ ErrorDetails.init(
     },
     sourceRecordId: {
       type: DataTypes.STRING(30),
-      field: "source_record_id"
+      field: "source_record_id",
     },
     errorCode: {
       type: DataTypes.STRING(20),
-      field: "error_code"
+      field: "error_code",
     },
     errorMessage: {
       type: DataTypes.STRING(2500),
-      field: "error_message"
+      field: "error_message",
     },
     errorTypeId: {
       type: DataTypes.BIGINT,
-      field: "error_type_id"
+      field: "error_type_id",
     },
     createdOn: {
       type: DataTypes.DATE,
       field: "created_on",
-      defaultValue: new Date()
+      defaultValue: new Date(),
     },
     createdBy: {
       type: DataTypes.STRING(50),
-      field: "created_by"
-    }
+      field: "created_by",
+    },
   },
   {
     sequelize,
     tableName: "Error_Details",
-    timestamps: false
-  })
-
+    timestamps: false,
+  }
+);
 
 export default ErrorDetails;
