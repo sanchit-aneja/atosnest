@@ -1,6 +1,10 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions"
 import { ContributionSubmissionUpdatesController } from "../controllers/submission-update-controller";
 
+/**
+* 5405 API Catalogue Number
+* Update submission members
+*/
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
     context.log('HTTP trigger function processed a request.');
     const submissionRef = (req.params.submissionRef);

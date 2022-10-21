@@ -27,6 +27,10 @@ async function uploadBlob(filename: string, buffer: any) {
     return containerClient.url + `/${blobName}`;
 }
 
+/**
+* 5401 API Catalogue Number
+* Get XML of contribution in either return body or file 
+*/
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
 
     const contribHeaderId = req.params.contribHeaderId;
