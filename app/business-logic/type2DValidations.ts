@@ -220,11 +220,13 @@ const Type2DValidations = {
      * @param errors
      * @returns 
      */
-    executeRulesOneByOne: async function (row, context: Context, errors: Array<any>) {
+    executeRulesOneByOne: async function (row, context: Context, errors: Array<any>, currentDRowIndex:number=0) {
         for (const key in Type2DValidations.rules) {
             const validationFunc = Type2DValidations.rules[key];
-            const validationErrors = await validationFunc(row, context);
+            context.log(`executeRulesOneByOne :: Run rule ${key} current D row index ${currentDRowIndex}`)
+            const validationErrors = await validationFunc(row);
             if (validationErrors) {
+                validationErrors.lineNumber = (currentDRowIndex+1)
                 errors.push(validationErrors)
             }
         }
@@ -234,9 +236,11 @@ const Type2DValidations = {
      * This will invoke type 2D rules one by one
      * @param readStream
      * @param context
+     * @param fileId
+     * @param contributionHeaderId
      * @returns
      */
-    start: async function (readStream: NodeJS.ReadableStream, context: Context): Promise<any> {
+    start: async function (readStream: NodeJS.ReadableStream, context: Context, fileId, contributionHeaderId): Promise<any> {
         let currentDRowIndex = 0;
         let errorMessages = [];
         return new Promise(async function (resolve, reject) {
@@ -245,19 +249,20 @@ const Type2DValidations = {
             const dRows = await CommonContributionDetails.getOnlyDRows(readStream, context);
             // Start updating one by one with transcation
             for (const row of dRows) {
-                context.log(`Rows updating for current D row ${currentDRowIndex}`);
+                context.log(`Rows updating for current D row ${currentDRowIndex} contributionHeaderId: ${contributionHeaderId}`);
                 // Pass empty value for actual values here we no need that
                 const customRow = CommonContributionDetails.convertToContributionDetails(row, {}, true);
-                errorMessages= await Type2DValidations.executeRulesOneByOne(customRow, context, errorMessages);
+                errorMessages= await Type2DValidations.executeRulesOneByOne(customRow, context, errorMessages, currentDRowIndex);
                 currentDRowIndex++;
             }
             if(errorMessages.length > 0){
+                await CommonContributionDetails.saveFileErrorDetails(errorMessages, fileId, '2C');
                 reject(errorMessages);  
             } else{
                 resolve(true);
             }
         } catch (e) {
-            context.log(`Something went wrong : ${e.message}`);
+            context.log(`****Something went wrong***** : ${e.message}`);
             reject(e);  
         }
     });

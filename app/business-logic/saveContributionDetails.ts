@@ -1,7 +1,7 @@
 import { Context } from "@azure/functions"
 import { ContributionDetails } from "../models";
 import sequelize from "../utils/database";
-import commonContributionDetails from './commonContributionDetails';
+import { default as CommonContributionDetails, EnumRowDColumns } from './commonContributionDetails';
 
 const saveContributionDetails = {
 
@@ -11,8 +11,8 @@ const saveContributionDetails = {
      * @param transaction
      */
     InsertOrUpdateRow: async function (row, transaction, context: Context) {
-        const nino = row[2];
-        const alternativeId = row[3];
+        const nino = CommonContributionDetails.getRowColumn(row, EnumRowDColumns.NINO);
+        const alternativeId = CommonContributionDetails.getRowColumn(row, EnumRowDColumns.ALT_ID);
 
         // Default condition
         let whereCondition: any = {
@@ -32,7 +32,7 @@ const saveContributionDetails = {
         })
 
         if (memDetailsRows) {
-            const currentMemberDetails = commonContributionDetails.convertToContributionDetails(row, memDetailsRows);
+            const currentMemberDetails = CommonContributionDetails.convertToContributionDetails(row, memDetailsRows);
             const effectRows = await ContributionDetails.update({
                 ...currentMemberDetails
             }, {
@@ -42,7 +42,7 @@ const saveContributionDetails = {
             }) as any;
             context.log(`Rows updated, number of row effected : ${effectRows[1]?.length}`);
         } else {
-            context.log(`Record not found, Insert is pending.. TODO`);
+            context.log(`Record not found, Insert is pending.. TO DO`);
         }
     },
 
@@ -57,7 +57,7 @@ const saveContributionDetails = {
         let currentDRowIndex = 0;
         try {
             // Get D rows first from CSV parse
-            const dRows = await commonContributionDetails.getOnlyDRows(readStream, context);
+            const dRows = await CommonContributionDetails.getOnlyDRows(readStream, context);
             // Start updating one by one with transcation
             for (const row of dRows) {
                 context.log(`Rows updating for current D row ${currentDRowIndex}`);

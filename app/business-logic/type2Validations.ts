@@ -1,50 +1,49 @@
-import { Context } from "@azure/functions";
-import * as csvf from "fast-csv";
-import { ContributionHeader } from "../models";
-import { CommonContributionDetails } from ".";
+import { Context } from "@azure/functions"
+import * as csvf from 'fast-csv';
+import { ContributionHeader } from '../models';
+import {CommonContributionDetails, EnumRowDColumns, EnumRowHColumns, EnumRowTColumns} from ".";
+
 
 const Type2Validations = {
-  /**
-   * This is validate H row (first row of the file)
-   * @param row
-   * @param callback
-   * @returns
-   */
-  rowHValidation: function (row, index) {
-    if (index !== 0) {
-      return null;
-    }
-    if (row[0] !== "H") {
-      return {
-        code: "ID5",
-        message:
-          "Please ensure that the first record in your file is marked 'H', to show that it's the header.",
-      };
-    }
+    /**
+ * This is validate H row (first row of the file)
+ * @param row
+ * @param callback
+ * @returns
+ */
+    rowHValidation: function (row, index) {
+        if(index !== 0){
+            return null
+        }
+        if (CommonContributionDetails.getRowColumn(row, EnumRowHColumns.RECORD_IDENTIFIER) !== 'H') {
+            return  {
+                code: "ID5",
+                message : "Please ensure that the first record in your file is marked 'H', to show that it's the header."
+            }
+        }
 
-    if (row[row.length - 1].toUpperCase() === "Y") {
-      return {
-        code: "ID8",
-        message:
-          "There are no detail records in your file. Please ensure there is at least one detail record identified with a 'D', between the header and trailer",
-      };
-    }
+        if(CommonContributionDetails.getRowColumn(row, EnumRowHColumns.BULK_UPDATE_TO_NO_CONTRIBUTIONS_DUE).toUpperCase() === 'Y'){
+            return  {
+                code: "ID8",
+                message : "There are no detail records in your file. Please ensure there is at least one detail record identified with a 'D', between the header and trailer"
+            }
+        }
 
     return null;
   },
 
-  /**
-   * This will check current row is D row and return count of D rows back
-   * @param row
-   * @param countDRows
-   * @returns return D rows count
-   */
-  isRowDValidation: function (row, countDRows: number) {
-    if (row[0] === "D") {
-      countDRows = countDRows + 1;
-    }
-    return countDRows;
-  },
+    /**
+     * This will check current row is D row and return count of D rows back
+     * @param row
+     * @param countDRows
+     * @returns return D rows count
+     */
+    isRowDValidation: function (row, countDRows:number){
+        if(CommonContributionDetails.getRowColumn(row, EnumRowDColumns.RECORD_IDENTIFIER) === "D"){
+            countDRows = countDRows + 1;
+        }
+        return countDRows;
+    },
 
   /**
    * This will return true or false based on if row is T row
@@ -52,230 +51,202 @@ const Type2Validations = {
    * @returns true or false
    */
 
-  isRowTValidation: function (row) {
-    return row[0] === "T";
-  },
-  /**
-   * Check value is null, undefined or empty
-   * @param value
-   * @returns bool if value is null or empty return true
-   */
-  isNullOrEmpty: function (value) {
-    if (value == undefined || value == null || value == "") {
-      return true;
-    } else {
-      return false;
-    }
-  },
-  /**
-   * Type 2B rules
-   */
-  rulesType2B: {
-    EmployerReferenceNumber: async (row: any) => {
-      const validationError = {
-        code: "ID10.0",
-        message:
-          "Please ensure your file contains the Employer Reference Number in the header record.",
-      };
-      try {
-        const empRefNo = row.employerReferenceNumber;
-        if (CommonContributionDetails.isNullOrEmpty(empRefNo)) {
-          return validationError;
-        }
-        const pattern = /^(EMP)(\d{9})$/;
-        if (!pattern.test(empRefNo)) {
-          return {
-            code: "ID13.0",
-            message:
-              "Please check the Employer Reference Number in the header record is in a valid format. Note, the prefix (before numerical digits) should be EMP.",
-          };
-        }
-        return null;
-      } catch (err) {
-        return validationError;
-      }
-    },
-    ProcessType: async (row) => {
-      const validationError = {
-        code: "ID10.1",
-        message:
-          "Please ensure your file contains the Process type in the header record.",
-      };
-      try {
-        const processType = row.processType;
-        if (CommonContributionDetails.isNullOrEmpty(processType)) {
-          return validationError;
-        }
-        if (processType !== "CS") {
-          return {
-            code: "ID13.1",
-            message:
-              "Please check the details in the header record field Process type is in a valid format and the text is exactly as shown here: CS - Contribution Schedule.",
-          };
-        }
-        return null;
-      } catch (err) {
-        return validationError;
-      }
-    },
-    EarningsPeriodEndDate: async (row) => {
-      const validationError = {
-        code: "ID10.2",
-        message:
-          "Please ensure your file contains the EPED in the header record.",
-      };
-      try {
-        const epedDate = row.earningPeriodEndDate;
-        if (CommonContributionDetails.isNullOrEmpty(epedDate)) {
-          return validationError;
-        }
-        if (!CommonContributionDetails.isValidateDate(epedDate)) {
-          // Only format checking is done. But for example 9999-10-31 is also valid..
-          return {
-            code: "ID13.2",
-            message:
-              "Please check the details in the header record field as they appear to be in the wrong format: EPED. Please format dates in this field as YYYY-MM-DD.",
-          };
-        }
-        return null;
-      } catch (err) {
-        return validationError;
-      }
-    },
-    PaymentSource: async (row) => {
-      const validationError = {
-        code: "ID10.3",
-        message:
-          "Please ensure your file contains the Payment Source in the header record.",
-      };
-      try {
-        const paymentSource = row.paymentSource;
-        if (CommonContributionDetails.isNullOrEmpty(paymentSource)) {
-          return validationError;
-        }
-        const pattern =
-          /^(\d|[a-zA-Z])[A-Za-z\d"'#$%&@=?:\.\+\*\-/\\\(\)\[\]\{\}]+$/;
-        if (!pattern.test(paymentSource)) {
-          return {
-            code: "ID13.3",
-            message:
-              "Please check the details in these header record field as it appears to be in the wrong format: Payment Source. Note, the Payment Source must begin with an alphanumerical character.",
-          };
-        }
-        return null;
-      } catch (err) {
-        return validationError;
-      }
-    },
-    PayPeriodFrequency: async (row) => {
-      const validationError = {
-        code: "ID10.4",
-        message:
-          "Please ensure your file contains the Pay Period Frequency in the header record.",
-      };
-      try {
-        const payPeriod = row.payPeriodFrequency;
-        if (CommonContributionDetails.isNullOrEmpty(payPeriod)) {
-          return validationError;
-        }
-        const frequencyTypes = [
-          "weekly",
-          "tax weekly",
-          "fortnightly",
-          "tax fortnightly",
-          "4 weekly",
-          "tax 4 weekly",
-          "monthly",
-          "tax monthly",
-        ];
-        if (frequencyTypes.indexOf(payPeriod.toLowerCase()) === -1) {
-          return {
-            code: "ID13.4",
-            message:
-              "Please check the details in these header record fields as they appear to be in the wrong format: Pay Period Frequency. Note, the Pay Period Frequency has to exactly match one of the following: weekly, tax weekly, fortnightly, tax fortnightly, 4 weekly, tax 4 weekly, monthly, tax monthly.",
-          };
-        }
-        return null;
-      } catch (err) {
-        return validationError;
-      }
-    },
-    PaymentDueDate: async (row) => {
-      const validationError = {
-        code: "ID14.3",
-        message:
-          "Please check the details in the header record field as they appear to be in the wrong format: PDD. Please format dates in this field as YYYY-MM-DD.",
-      };
-      try {
-        const pddDate = row.paymentDueDate;
-        if (pddDate === "") {
-          return null;
-        }
-        if (!CommonContributionDetails.isValidateDate(pddDate)) {
-          // Only format checking is done. But for example 9999-10-31 is also valid..
-          return validationError;
-        }
-        return null;
-      } catch (err) {
-        return validationError;
-      }
-    },
-    EarningsPeriodStartDate: async (row) => {
-      const validationError = {
-        code: "ID14.4",
-        message:
-          "Please check the details in the header record field as they appear to be in the wrong format: EPSD. Please format dates in this field as YYYY-MM-DD.",
-      };
-      try {
-        const epedDate = row.earningPeriodEndDate;
-        const epsdDate = row.earningPeriodStartDate;
-        if (epsdDate === "") {
-          return null;
-        }
-        if (!CommonContributionDetails.isValidateDate(epsdDate)) {
-          // Only format checking is done. But for example 9999-10-31 is also valid..
-          return validationError;
-        }
-        // End date most be greater than start date, else error
-        if (new Date(epedDate) < new Date(epsdDate)) {
-          return {
-            code: "ID12.4",
-            message:
-              "You cannot provide contributions for this schedule as the Earning Period Start Date is after the date you chose to stop using Nest.",
-          };
-        }
-
-        return null;
-      } catch (err) {
-        return validationError;
-      }
-    },
-    BulkUpdateToNoContributionsDue: async (row) => {
-      const validationError = {
-        code: "ID14.2",
-        message:
-          "Please check the details in these header record fields as they appear to be in the wrong format: Bulk Update to no Contributions Due. Please use either Y, N or blank.",
-      };
-      try {
-        const bulkUpdateToContriDueFlag = row.bulkUpdateToNoContributionsDue;
+    isRowTValidation: function (row){
+            return (CommonContributionDetails.getRowColumn(row, EnumRowTColumns.RECORD_IDENTIFIER) === "T");
+        },
+    /**
+     * Check value is null, undefined or empty
+     * @param value
+     * @returns bool if value is null or empty return true
+     */
+     isNullOrEmpty: function(value){
         if (
-          bulkUpdateToContriDueFlag === null ||
-          bulkUpdateToContriDueFlag === undefined ||
-          bulkUpdateToContriDueFlag === ""
-        ) {
-          return null;
-        }
-        const pattern = /^[YNyn]$/;
-        if (!pattern.test(bulkUpdateToContriDueFlag)) {
-          // Only format checking is done. But for example 9999-10-31 is also valid..
-          return validationError;
-        }
-        return null;
-      } catch (err) {
-        return validationError;
-      }
+            value == undefined ||
+            value == null ||
+            value == ""
+          ) {
+            return true;
+          } else {
+            return false;
+          }
     },
-  },
+    /**
+     * Type 2B rules
+     */
+    rulesType2B: {
+            "EmployerReferenceNumber": async (row:any) => {
+                const validationError = {
+                    code: "ID10.0",
+                    message: "Please ensure your file contains the Employer Reference Number in the header record."
+                }
+                try {
+                    const empRefNo = row.employerReferenceNumber;
+                    if (CommonContributionDetails.isNullOrEmpty(empRefNo)) {
+                        return validationError
+                    }
+                    const pattern = /^(EMP)(\d{9})$/;
+                    if (!pattern.test(empRefNo)) {
+                        return {
+                            code: "ID13.0",
+                            message: "Please check the Employer Reference Number in the header record is in a valid format. Note, the prefix (before numerical digits) should be EMP."
+                        }
+                    }
+                    return null;
+                } catch (err) {
+                    return validationError
+                }
+            },
+            "ProcessType": async (row) => {
+                const validationError = {
+                    code: "ID10.1",
+                    message: "Please ensure your file contains the Process type in the header record."
+                }
+                try {
+                    const processType = row.processType;
+                    if (CommonContributionDetails.isNullOrEmpty(processType)) {
+                        return validationError
+                    }
+                    if (processType !== "CS") {
+                        return {
+                            code: "ID13.1",
+                            message: "Please check the details in the header record field Process type is in a valid format and the text is exactly as shown here: CS - Contribution Schedule."
+                        }
+                    }
+                    return null;
+                } catch (err) {
+                    return validationError
+                }
+            },
+            "EarningsPeriodEndDate": async (row) => {
+                const validationError = {
+                    code: "ID10.2",
+                    message: "Please ensure your file contains the EPED in the header record."
+                }
+                try {
+                    const epedDate = row.earningPeriodEndDate;
+                    if (CommonContributionDetails.isNullOrEmpty(epedDate)) {
+                        return validationError;
+                    }
+                    if (!CommonContributionDetails.isValidateDate(epedDate)) { // Only format checking is done. But for example 9999-10-31 is also valid..
+                        return {
+                            code: "ID13.2",
+                            message: "Please check the details in the header record field as they appear to be in the wrong format: EPED. Please format dates in this field as YYYY-MM-DD."
+                        }
+                    }
+                    return null;
+                } catch (err) {
+                    return validationError
+                }
+            },
+            "PaymentSource": async (row) => {
+                const validationError = {
+                    code: "ID10.3",
+                    message: "Please ensure your file contains the Payment Source in the header record."
+                }
+                try {
+                    const paymentSource = row.paymentSource;
+                    if (CommonContributionDetails.isNullOrEmpty(paymentSource)) {
+                        return validationError;
+                    }
+                    const pattern = /^(\d|[a-zA-Z])[A-Za-z\d"'#$%&@=?:\.\+\*\-/\\\(\)\[\]\{\}]+$/;
+                    if (!pattern.test(paymentSource)) {
+                        return {
+                            code: "ID13.3",
+                            message: "Please check the details in these header record field as it appears to be in the wrong format: Payment Source. Note, the Payment Source must begin with an alphanumerical character."
+                        }
+                    }
+                    return null;
+                } catch (err) {
+                    return validationError
+                }
+            },
+            "PayPeriodFrequency": async (row) => {
+                const validationError = {
+                    code: "ID10.4",
+                    message: "Please ensure your file contains the Pay Period Frequency in the header record."
+                }
+                try {
+                    const payPeriod = row.payPeriodFrequency;
+                    if (CommonContributionDetails.isNullOrEmpty(payPeriod)) {
+                        return validationError
+                    }
+                    const frequencyTypes = ['weekly', 'tax weekly', 'fortnightly', 'tax fortnightly', '4 weekly', 'tax 4 weekly', 'monthly', 'tax monthly'];
+                    if (frequencyTypes.indexOf(payPeriod.toLowerCase()) === -1) {
+                        return {
+                            code: "ID13.4",
+                            message: "Please check the details in these header record fields as they appear to be in the wrong format: Pay Period Frequency. Note, the Pay Period Frequency has to exactly match one of the following: weekly, tax weekly, fortnightly, tax fortnightly, 4 weekly, tax 4 weekly, monthly, tax monthly."
+                        }
+                    }
+                    return null;
+                } catch (err) {
+                    return validationError
+                }
+            },
+            "PaymentDueDate": async (row) => {
+                const validationError = {
+                    code: "ID14.3",
+                    message: "Please check the details in the header record field as they appear to be in the wrong format: PDD. Please format dates in this field as YYYY-MM-DD."
+                }
+                try {
+                    const pddDate = row.paymentDueDate;
+                    if (pddDate === "") {
+                        return null
+                    }
+                    if (!CommonContributionDetails.isValidateDate(pddDate)) { // Only format checking is done. But for example 9999-10-31 is also valid..
+                        return validationError
+                    }
+                    return null;
+                } catch (err) {
+                    return validationError
+                }
+            },
+            "EarningsPeriodStartDate": async (row) => {
+                const validationError = {
+                    code: "ID14.4",
+                    message: "Please check the details in the header record field as they appear to be in the wrong format: EPSD. Please format dates in this field as YYYY-MM-DD."
+                }
+                try {
+                    const epedDate = row.earningPeriodEndDate;
+                    const epsdDate = row.earningPeriodStartDate;
+                    if (epsdDate === "") {
+                        return null
+                    }
+                    if (!CommonContributionDetails.isValidateDate(epsdDate)) { // Only format checking is done. But for example 9999-10-31 is also valid..
+                        return validationError
+                    }
+                    // End date most be greater than start date, else error
+                    if (new Date(epedDate) < new Date(epsdDate)) {
+                        return {
+                            code: "ID12.4",
+                            message: "You cannot provide contributions for this schedule as the Earning Period Start Date is after the date you chose to stop using Nest."
+                        }
+                    }
+    
+                    return null;
+                } catch (err) {
+                    return validationError
+                }
+            },
+            "BulkUpdateToNoContributionsDue": async (row) => {
+                const validationError = {
+                    code: "ID14.2",
+                    message: "Please check the details in these header record fields as they appear to be in the wrong format: Bulk Update to no Contributions Due. Please use either Y, N or blank."
+                }
+                try {
+                    const bulkUpdateToContriDueFlag = row.bulkUpdateToNoContributionsDue;
+                    if (bulkUpdateToContriDueFlag === null || bulkUpdateToContriDueFlag === undefined || bulkUpdateToContriDueFlag === '') {
+                        return null
+                    }
+                    const pattern = /^[YNyn]$/;
+                    if (!pattern.test(bulkUpdateToContriDueFlag)) { // Only format checking is done. But for example 9999-10-31 is also valid..
+                        return validationError
+                    }
+                    return null;
+                } catch (err) {
+                    return validationError
+                }
+            },
+        },
 
   /**
    * Type 2B DB checks - verification
@@ -457,17 +428,17 @@ const Type2Validations = {
     },
   },
 
-  /**
-   * it will check is it T row first and returns column 2. If not T row returns 0
-   * @param row
-   * @returns number or zero for not T rows
-   */
-  getRowTTotalRecordCount: function (row) {
-    if (row[0] === "T") {
-      return Number(row[1]);
-    }
-    return -1;
-  },
+    /**
+     * it will check is it T row first and returns column 2. If not T row returns 0
+     * @param row
+     * @returns number or zero for not T rows
+     */
+     getRowTTotalRecordCount: function (row) {
+        if (CommonContributionDetails.getRowColumn(row, EnumRowTColumns.RECORD_IDENTIFIER) === "T") {
+            return Number(CommonContributionDetails.getRowColumn(row, EnumRowTColumns.TOTAL_RECORDS));
+        }
+        return -1;
+    },
 
   /**
    * Validate row's columns one by one with rules defined

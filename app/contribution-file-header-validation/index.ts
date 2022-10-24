@@ -6,9 +6,12 @@ import {
   Type2CValidations,
   Type2DValidations,
   Type2Validations,
+  CommonContributionDetails
 } from "../business-logic";
 import { FQSHelper } from "../utils";
 import { fqsStage, fqsStatus } from "../utils/fqsBody";
+import { v4 as uuidv4 } from 'uuid';
+
 
 const eventGridTrigger: AzureFunction = async function (
   context: Context,
@@ -22,6 +25,9 @@ const eventGridTrigger: AzureFunction = async function (
   const fqsHelper = new FQSHelper(context);
   try {
     context.log(`Started vaildation for correlation Id ${correlationId}`);
+    
+    // initialization of errors and update FQS
+    const errors = await CommonContributionDetails.getAllErrors();
 
     const fqsBody = fqsHelper.getFQSBody(
       correlationId,
@@ -31,22 +37,24 @@ const eventGridTrigger: AzureFunction = async function (
     );
 
     await fqsHelper.updateFQSProcessingStatus(correlationId, fqsBody);
+    
 
     // Step 1: get data from blob file
+    const fileId = uuidv4();
     const _blobServiceClient = blobHelper.getBlobServiceClient();
-    const readStream = await blobHelper.getBlobStream(
-      fileName,
-      _blobServiceClient
-    );
+    const fileProperties = await blobHelper.getBlobProperties(fileName, _blobServiceClient);
+    const readStream = await blobHelper.getBlobStream(fileName,  _blobServiceClient);
     const fileData = await blobHelper.streamToString(readStream);
 
     await Type2Validations.start(blobHelper.stringToStream(fileData), context);
 
     // Step 4: vaildation Type 2C
-    await Type2CValidations.start(blobHelper.stringToStream(fileData), context);
+    // PN-97531: be0d57c4-0a8c-4d7b-8af5-1cba12a9f16a is hard coded need to change once TO DO once header details ticket is done. PN-97531
+    await CommonContributionDetails.createFileEntry(fileId, fileName, fileProperties, "be0d57c4-0a8c-4d7b-8af5-1cba12a9f16a", "CSU"); // File type is `CSU : Contribution Schedule upload from the employer`
+    await Type2CValidations.start(blobHelper.stringToStream(fileData), context, fileId, "be0d57c4-0a8c-4d7b-8af5-1cba12a9f16a" );
     // Step 5: vaildation Type 2D
-    await Type2DValidations.start(blobHelper.stringToStream(fileData), context);
-
+    await Type2DValidations.start(blobHelper.stringToStream(fileData), context, fileId, "be0d57c4-0a8c-4d7b-8af5-1cba12a9f16a" );
+    
     // // Update contribution member details
     await SaveContributionDetails.updateMemberDetails(
       blobHelper.stringToStream(fileData),

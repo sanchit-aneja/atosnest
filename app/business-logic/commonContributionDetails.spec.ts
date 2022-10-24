@@ -1,6 +1,9 @@
 import { Context } from "@azure/functions";
 import { CommonContributionDetails } from "./";
 const { Readable } = require("stream")
+import sequelize from "../utils/database";
+
+jest.mock("sequelize");
 
 describe("Test: Business logic common Contribution details functions", () => {
     let context: Context;
@@ -12,6 +15,18 @@ describe("Test: Business logic common Contribution details functions", () => {
     afterAll(async () => {
         jest.restoreAllMocks();
         jest.clearAllMocks();
+    });
+
+    test("Should return empty when column index not match, else value", async () => {
+        //Arrage -- Dummy data
+        const mockRow = ['D','1', '2', '3'];
+        //Act
+        const columnValue1 = CommonContributionDetails.getRowColumn(mockRow, 4);
+        const columnValue2 = CommonContributionDetails.getRowColumn(mockRow, 3);
+
+        //Assert
+        expect(columnValue1).toBe('');
+        expect(columnValue2).toBe('3');
     });
 
     test("Should return DB value, when you call getNonNullValue with new vaule null", async () => {
@@ -292,11 +307,24 @@ describe("Test: Business logic common Contribution details functions", () => {
         expect(membDetails.membNonPayEffDate).toBe('2022-11-11')
     });
 
+    test("Should return member contribution D row details object", async () => {
+        //Arrage -- Dummy data
+        const mockRow = ['D','1', '2', '3', '4', '5', '6', '7', '8', '9', '2022-09-09', '11', '2022-11-11',
+                    '13', '14', '15', '16', '17', 'Y', '19', '20'];
+        const dummyExpecetdResultObjStr = '{"pensEarnings":"5","membLeaveEarnings":"6","emplContriAmt":"7","membContriAmt":"8","membNonPayReason":"9","membNonPayEffDate":"2022-09-09","newGroupName":"11","newGroupEffDate":"2022-11-11","newPaymentSourceName":"13","newGroupPensEarnings":"14","newGroupEmplContriAmt":"15","newGroupMembContriAmt":"16","optoutRefNum":"17","optoutDeclarationFlag":"Y","secEnrolPensEarnings":"19","secEnrolEmplContriAmt":"20","membChangeOfGroupDate":"2022-11-11","firstName":"1","lastName":"2","nino":"3","alternativeId":"4"}'
+        //Act
+        const membDetails = CommonContributionDetails.getDetailObject(mockRow);
+
+        //Assert
+        expect(JSON.stringify(membDetails)).toBe(dummyExpecetdResultObjStr);
+    });
+
+
     test("Should return member contribution details object", async () => {
         //Arrage -- Dummy data
         const mockRow = ['D','1', '2', '3', '4', '5', '6', '7', '8', '9', '2022-09-09', '11', '2022-11-11',
                     '13', '14', '15', '16', '17', 'Y', '19', '20'];
-        const dummyExpecetdResultObjStr = '{"pensEarnings":"5","membLeaveEarnings":"6","emplContriAmt":"7","membContriAmt":"8","membNonPayReason":"9","membNonPayEffDate":"2022-09-09","newGroupName":"11","newPaymentSourceName":"13","newGroupPensEarnings":"14","newGroupEmplContriAmt":"15","newGroupMembContriAmt":"16","optoutRefNum":"17","optoutDeclarationFlag":"Y","secEnrolPensEarnings":"19","secEnrolEmplContriAmt":"20"}'
+        const dummyExpecetdResultObjStr = '{"pensEarnings":"5","membLeaveEarnings":"6","emplContriAmt":"7","membContriAmt":"8","membNonPayReason":"9","membNonPayEffDate":"2022-09-09","newGroupName":"11","newGroupEffDate":"2022-11-11","newPaymentSourceName":"13","newGroupPensEarnings":"14","newGroupEmplContriAmt":"15","newGroupMembContriAmt":"16","optoutRefNum":"17","optoutDeclarationFlag":"Y","secEnrolPensEarnings":"19","secEnrolEmplContriAmt":"20"}'
         //Act
         const membDetails = CommonContributionDetails.convertToContributionDetails(mockRow, {}, false);
 
