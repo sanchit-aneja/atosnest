@@ -1,14 +1,14 @@
 /*
-In >= 1 detail record, reason code 7 or reason code 12 has been entered and the name entered in 
-the New Group Name field doesn't match a group name held by the employer (field is case sensitive)
-
+In >= 1 detail record, reason code 7 or reason code 8 has been entered and the members 
+new group falls within the same CS. The figure entered in the Pensionable Earnings for
+ New or Second Group field is < figures for Employer Contribution for New or Second Group + Member Contribution for New or Second Group fields
 
 
 */
 
-export const id31_58Response = {
+export const id31_62Response = {
   dataHeaderRow: {
-    contribHeaderId: "3419f2bddb-5516-4871-b1fd-8773503ccccd",
+    contribHeaderId: "3419f2bddb-5516-4871-fdfdb1fd-8773503ccccd",
     fileId: "65fefbb2-10b5-4535-b1ba-38ca38678476",
     nestScheduleRef: "CSM19062201100",
     externalScheduleRef: "2022-19-04-10.59.58.141556.7419 ",
@@ -40,13 +40,13 @@ export const id31_58Response = {
   },
   dataDetailRows: [
     {
-      membContribDetlId: "ee8ee10988880d2bf2c65",
+      membContribDetlId: "ee8ee10cdgvvvvvg988880d2bf2c65",
       contribHeaderId: "3419f2bb-5516-4871-b1fd-8f595773503d",
       nestScheduleRef: "CSM19062201100",
       membEnrolmentRef: "N7893791",
       membContriDueDate: "2022-06-19",
       membPlanRef: "N7893791",
-      groupName: "groupName",
+      groupName: "ffff1",
       schdlMembStatusCd: "MS1",
       membPartyId: "membPartyId",
       scmPartyId: "15013484",
@@ -58,8 +58,8 @@ export const id31_58Response = {
       membContriAmt: "0.00",
       membNonPayReason: "CON14",
       membLeaveEarnings: "0.00",
-      newGroupName: "ffff",
-      newGroupPensEarnings: "2.0",
+      newGroupName: "ffff2",
+      newGroupPensEarnings: "3.0",
       newGroupEmplContriAmt: "2.0",
       newGroupMembContriAmt: "2.0",
       optoutRefNum: null,
@@ -88,7 +88,7 @@ export const id31_58Response = {
   paymentGroupSource: {
     paymentGroupSourceId: "1",
 
-    groupName: "payegroup",
+    groupName: "ffff2",
 
     frequency: "W",
 

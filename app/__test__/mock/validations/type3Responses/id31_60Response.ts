@@ -1,12 +1,11 @@
 /*
 In >= 1 detail record, reason code 7 or reason code 12 has been entered and the name entered in 
-the New Group Name field doesn't match a group name held by the employer (field is case sensitive)
-
+the New Group Name field is the same group that the member is currently in (field is case sensitive)
 
 
 */
 
-export const id31_58Response = {
+export const id31_60Response = {
   dataHeaderRow: {
     contribHeaderId: "3419f2bddb-5516-4871-b1fd-8773503ccccd",
     fileId: "65fefbb2-10b5-4535-b1ba-38ca38678476",
@@ -40,13 +39,13 @@ export const id31_58Response = {
   },
   dataDetailRows: [
     {
-      membContribDetlId: "ee8ee10988880d2bf2c65",
+      membContribDetlId: "ee8ee10cdgg988880d2bf2c65",
       contribHeaderId: "3419f2bb-5516-4871-b1fd-8f595773503d",
       nestScheduleRef: "CSM19062201100",
       membEnrolmentRef: "N7893791",
       membContriDueDate: "2022-06-19",
       membPlanRef: "N7893791",
-      groupName: "groupName",
+      groupName: "ffff1",
       schdlMembStatusCd: "MS1",
       membPartyId: "membPartyId",
       scmPartyId: "15013484",
@@ -58,7 +57,7 @@ export const id31_58Response = {
       membContriAmt: "0.00",
       membNonPayReason: "CON14",
       membLeaveEarnings: "0.00",
-      newGroupName: "ffff",
+      newGroupName: "ffff1",
       newGroupPensEarnings: "2.0",
       newGroupEmplContriAmt: "2.0",
       newGroupMembContriAmt: "2.0",
@@ -88,7 +87,7 @@ export const id31_58Response = {
   paymentGroupSource: {
     paymentGroupSourceId: "1",
 
-    groupName: "payegroup",
+    groupName: "ffff1",
 
     frequency: "W",
 

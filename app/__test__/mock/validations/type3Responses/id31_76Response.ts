@@ -1,14 +1,14 @@
 /*
-In >= 1 detail record, reason code 7 or reason code 12 has been entered and the name entered in 
-the New Group Name field doesn't match a group name held by the employer (field is case sensitive)
-
-
+In >= 1 detail record, reason code 10 has been entered and the figure for Employer Contribution for
+ Second Enrolment field is < the minimum level for contributions based on the Pensionable Earnings for
+  Second Enrolment figure and contribution percentages of the member's group 
+(0 can be a valid value)
 
 */
 
-export const id31_58Response = {
+export const id31_75Response = {
   dataHeaderRow: {
-    contribHeaderId: "3419f2bddb-5516-4871-b1fd-8773503ccccd",
+    contribHeaderId: "3419f2bddb-55vvvvvx16-4871-fdfdb1fd-8773503ccccd",
     fileId: "65fefbb2-10b5-4535-b1ba-38ca38678476",
     nestScheduleRef: "CSM19062201100",
     externalScheduleRef: "2022-19-04-10.59.58.141556.7419 ",
@@ -40,13 +40,13 @@ export const id31_58Response = {
   },
   dataDetailRows: [
     {
-      membContribDetlId: "ee8ee10988880d2bf2c65",
+      membContribDetlId: "xasdsdsdsdsddssdddsd",
       contribHeaderId: "3419f2bb-5516-4871-b1fd-8f595773503d",
       nestScheduleRef: "CSM19062201100",
       membEnrolmentRef: "N7893791",
       membContriDueDate: "2022-06-19",
       membPlanRef: "N7893791",
-      groupName: "groupName",
+      groupName: "ffff1",
       schdlMembStatusCd: "MS1",
       membPartyId: "membPartyId",
       scmPartyId: "15013484",
@@ -56,10 +56,10 @@ export const id31_58Response = {
       pensEarnings: "2500.00",
       emplContriAmt: "0.00",
       membContriAmt: "0.00",
-      membNonPayReason: "CON14",
+      membNonPayReason: "CON17",
       membLeaveEarnings: "0.00",
-      newGroupName: "ffff",
-      newGroupPensEarnings: "2.0",
+      newGroupName: "ffff2",
+      newGroupPensEarnings: "3.0",
       newGroupEmplContriAmt: "2.0",
       newGroupMembContriAmt: "2.0",
       optoutRefNum: null,
@@ -67,9 +67,9 @@ export const id31_58Response = {
       newPaymentPlanNo: null,
       newPaymentSourceName: "sfsf",
       membNonPayEffDate: "2022-05-20",
-      secEnrolPensEarnings: null,
-      secEnrolEmplContriAmt: null,
-      secEnrolMembContriAmt: null,
+      secEnrolPensEarnings: "sfdf",
+      secEnrolEmplContriAmt: "3.0",
+      secEnrolMembContriAmt: "0.0",
       channelType: "WEB",
       memberExcludedFlag: null,
       membPaymentDueDate: null,
@@ -88,7 +88,7 @@ export const id31_58Response = {
   paymentGroupSource: {
     paymentGroupSourceId: "1",
 
-    groupName: "payegroup",
+    groupName: "ffff2",
 
     frequency: "W",
 

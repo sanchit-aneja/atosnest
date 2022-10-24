@@ -77,6 +77,7 @@ export const id31_0Response = {
       newEmpGroupId: null,
       employerNestId: "DC100020218",
       origScheduleRef: null,
+      contribHeaderId: "3419f2bb-5516-4871-b1fd-8f595773503d",
       last_updated_timestamp: "2022-09-26T11:26:05.104Z",
     },
     {
@@ -121,6 +122,7 @@ export const id31_0Response = {
       newEmpGroupId: null,
       employerNestId: "DC100020218",
       origScheduleRef: null,
+      contribHeaderId: "3419f2bb-5516-4871-b1fd-8f595773503d",
       last_updated_timestamp: "2022-09-26T11:26:05.104Z",
     },
     {
@@ -165,6 +167,7 @@ export const id31_0Response = {
       newEmpGroupId: null,
       employerNestId: "DC100020218",
       origScheduleRef: null,
+      contribHeaderId: "3419f2bb-5516-4871-b1fd-8f595773503d",
       last_updated_timestamp: "2022-09-26T11:26:05.104Z",
     },
     {
@@ -209,6 +212,7 @@ export const id31_0Response = {
       newEmpGroupId: null,
       employerNestId: "DC100020218",
       origScheduleRef: null,
+      contribHeaderId: "3419f2bb-5516-4871-b1fd-8f595773503d",
       last_updated_timestamp: "2022-09-26T11:26:05.104Z",
     },
   ],
