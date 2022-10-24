@@ -1,6 +1,6 @@
 import { Type3Validations } from "./type3Validations";
 import { ContributionDetails, ContributionHeader } from "../models";
-import { ErrorDetails } from "../models";
+import { errorDetails } from "../models";
 import { Context } from "@azure/functions";
 import { id31_0Response } from "../__test__/mock/validations/type3Responses/id31_0Response";
 import { id31_1Response } from "../__test__/mock/validations/type3Responses/id31_1Response";
@@ -21,6 +21,18 @@ import { id31_54Response } from "../__test__/mock/validations/type3Responses/id3
 import { id31_55Response } from "../__test__/mock/validations/type3Responses/id31_55Response";
 import { id31_56Response } from "../__test__/mock/validations/type3Responses/id31_56Response";
 import { id31_58Response } from "../__test__/mock/validations/type3Responses/id31_58Response";
+import { id31_60Response } from "../__test__/mock/validations/type3Responses/id31_60Response";
+import { id31_62Response } from "../__test__/mock/validations/type3Responses/id31_62Response";
+import { id31_75Response } from "../__test__/mock/validations/type3Responses/id31_75Response";
+import { id32_00Response } from "../__test__/mock/validations/type3Responses/id32_00Response";
+import { id32_01Response } from "../__test__/mock/validations/type3Responses/id32_01Response";
+import { id32_02Response } from "../__test__/mock/validations/type3Responses/id32_02Response";
+import { id33_00Response } from "../__test__/mock/validations/type3Responses/id33_00Response";
+import { id33_02Response } from "../__test__/mock/validations/type3Responses/id33_02Response";
+import { id34_00Response } from "../__test__/mock/validations/type3Responses/id34_00Response";
+import { id34_01Response } from "../__test__/mock/validations/type3Responses/id34_01Response";
+import { id34_02Response1 } from "../__test__/mock/validations/type3Responses/id34_02Response1";
+import { id34_02Response2 } from "../__test__/mock/validations/type3Responses/id34_02Response2";
 import {
   type3DataResponse,
   ContributionDetailsResponse,
@@ -57,7 +69,7 @@ describe("Type 3 Validation Interactions", () => {
     .spyOn(http, "httpRequestGenerator")
     .mockReturnValueOnce(customerIndexResponseMock);
   const contributionDetailsSpy: any = jest.spyOn(ContributionDetails, "update");
-  const fileErrorDetailsSpy: any = jest.spyOn(ErrorDetails, "bulkCreate");
+  const fileErrorDetailsSpy: any = jest.spyOn(errorDetails, "bulkCreate");
   const updateDBSpy: any = jest.spyOn(Type3Validations, "updateDB");
 
   it("test end to end", async () => {
@@ -71,16 +83,19 @@ describe("Type 3 Validation Interactions", () => {
       };
     });
 
-    await Type3Validations.start("CSM19062201100", context);
+    await Type3Validations.start(
+      "9dc2eea5-4a04-481d-bb44-ebad33393719",
+      context
+    );
 
     expect(updateDBSpy).toHaveBeenCalledTimes(1);
-    expect(contributionDetailsSpy).toHaveBeenCalledTimes(1);
+    //  expect(contributionDetailsSpy).toHaveBeenCalledTimes(1);
     expect(fileErrorDetailsSpy).toHaveBeenCalledTimes(1);
-    const { Type3Errors, updateIds } = await Type3Validations.validateDataRows(
+    const { Type3Errors, errorIds } = await Type3Validations.validateDataRows(
       type3DataResponse,
       context
     );
-    expect(updateDBSpy).toBeCalledWith(updateIds, Type3Errors);
+    // expect(updateDBSpy).toBeCalledWith(errorIds, Type3Errors);
   });
 });
 
@@ -114,6 +129,7 @@ describe("Type 3 Validations rules", () => {
       id31_3Response,
       context
     );
+
     const errorCheck = Type3Errors.filter(
       (error) => error.Error_Code == "ID31.3"
     );
@@ -310,6 +326,151 @@ describe("Type 3 Validations rules", () => {
 
     const errorCheck = Type3Errors.filter(
       (error) => error.Error_Code == "ID31.58"
+    );
+
+    expect(errorCheck.length).toBeGreaterThan(0);
+  });
+  it("test ID31.60", async () => {
+    const { Type3Errors } = await Type3Validations.validateDataRows(
+      id31_60Response,
+      context
+    );
+
+    const errorCheck = Type3Errors.filter(
+      (error) => error.Error_Code == "ID31.60"
+    );
+
+    expect(errorCheck.length).toBeGreaterThan(0);
+  });
+  it("test ID31.63", async () => {
+    const { Type3Errors } = await Type3Validations.validateDataRows(
+      id31_62Response,
+      context
+    );
+
+    const errorCheck = Type3Errors.filter(
+      (error) => error.Error_Code == "ID31.62"
+    );
+
+    expect(errorCheck.length).toBeGreaterThan(0);
+  });
+  it("test ID31.75", async () => {
+    const { Type3Errors } = await Type3Validations.validateDataRows(
+      id31_75Response,
+      context
+    );
+
+    const errorCheck = Type3Errors.filter(
+      (error) => error.Error_Code == "ID31.75"
+    );
+
+    expect(errorCheck.length).toBeGreaterThan(0);
+  });
+  it("test ID32.00", async () => {
+    const { Type3Errors } = await Type3Validations.validateDataRows(
+      id32_00Response,
+      context
+    );
+
+    const errorCheck = Type3Errors.filter(
+      (error) => error.Error_Code == "ID32.00"
+    );
+
+    expect(errorCheck.length).toBeGreaterThan(0);
+  });
+  it("test ID32.01", async () => {
+    const { Type3Errors } = await Type3Validations.validateDataRows(
+      id32_01Response,
+      context
+    );
+
+    const errorCheck = Type3Errors.filter(
+      (error) => error.Error_Code == "ID32.1"
+    );
+
+    expect(errorCheck.length).toBeGreaterThan(0);
+  });
+  it("test ID32.02", async () => {
+    const { Type3Errors } = await Type3Validations.validateDataRows(
+      id32_02Response,
+      context
+    );
+
+    const errorCheck = Type3Errors.filter(
+      (error) => error.Error_Code == "ID32.2"
+    );
+
+    expect(errorCheck.length).toBeGreaterThan(0);
+  });
+  it("test ID33.00", async () => {
+    const { Type3Errors } = await Type3Validations.validateDataRows(
+      id33_00Response,
+      context
+    );
+
+    const errorCheck = Type3Errors.filter(
+      (error) => error.Error_Code == "ID33.00"
+    );
+
+    expect(errorCheck.length).toBeGreaterThan(0);
+  });
+  it("test ID33.02", async () => {
+    const { Type3Errors } = await Type3Validations.validateDataRows(
+      id33_02Response,
+      context
+    );
+
+    const errorCheck = Type3Errors.filter(
+      (error) => error.Error_Code == "ID33.2"
+    );
+
+    expect(errorCheck.length).toBeGreaterThan(0);
+  });
+  it("test ID34.00", async () => {
+    const { Type3Errors } = await Type3Validations.validateDataRows(
+      id34_00Response,
+      context
+    );
+
+    const errorCheck = Type3Errors.filter(
+      (error) => error.Error_Code == "ID34.00"
+    );
+
+    expect(errorCheck.length).toBeGreaterThan(0);
+  });
+  it("test ID34.01", async () => {
+    const { Type3Errors } = await Type3Validations.validateDataRows(
+      id34_01Response,
+      context
+    );
+
+    const errorCheck = Type3Errors.filter(
+      (error) => error.Error_Code == "ID34.01"
+    );
+
+    expect(errorCheck.length).toBeGreaterThan(0);
+  });
+
+  it("test ID34.02-1", async () => {
+    const { Type3Errors } = await Type3Validations.validateDataRows(
+      id34_02Response1,
+      context
+    );
+
+    const errorCheck = Type3Errors.filter(
+      (error) => error.Error_Code == "ID34.02"
+    );
+
+    expect(errorCheck.length).toBeGreaterThan(0);
+  });
+  it("test ID34.02-2", async () => {
+    const { Type3Errors } = await Type3Validations.validateDataRows(
+      id34_02Response2,
+      context
+    );
+
+    const errorCheck = Type3Errors.filter(
+      (error) => error.Error_Code == "ID34.02"
     );
 
     expect(errorCheck.length).toBeGreaterThan(0);

@@ -1,6 +1,8 @@
 /*
-In >= 1 detail record, reason code 6 or reason code 12 has been entered and the date entered in the Effective Date o
-f Partial or Non-Payment of Contributions field is before the EPSD (date = to EPSD is accepted) of the CS
+In >= 1 detail record, reason code 6 or reason code 12 has been entered and the date entered in
+ the Effective Date of Partial or Non-Payment of Contributions field is more than 1
+  day after the EPED of the CS (ie. if EPED is 31/01, the 01/02 is accepted but 02/02 isn't accepted)
+
 */
 
 export const id31_44Response = {

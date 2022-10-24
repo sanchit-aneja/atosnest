@@ -27,7 +27,6 @@ import app from "../utils/app";
 import {
   ContributionDetailsRequestDTO,
   ContributionDetailsResponseDTO,
-  ContributionMemberDetails,
 } from "../schemas";
 import { Context } from "@azure/functions";
 import {

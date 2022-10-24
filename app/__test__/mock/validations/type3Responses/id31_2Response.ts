@@ -1,6 +1,6 @@
 /*
-In >= 1 detail record, reason code 6 or reason code 12 has been entered without
- the New Payment Source Name field being provided
+In >= 1 detail record, reason code 7 has been entered without the Effective Date of Group 
+Change field being provided
 */
 export const id31_1Response = {
   dataHeaderRow: {
@@ -36,7 +36,7 @@ export const id31_1Response = {
   },
   dataDetailRows: [
     {
-      membContribDetlId: "ee8eed07-391f-4e67-92f5-1090d2bf2c65",
+      membContribDetlId: "ee8eed07-391f-4e6cxcxccc7-92f5-1090d2bf2c65",
       contribHeaderId: "3419f2bb-5516-4871-b1fd-8f595773503d",
       nestScheduleRef: "CSM19062201100",
       membEnrolmentRef: "N7893791",
@@ -52,7 +52,7 @@ export const id31_1Response = {
       pensEarnings: "2500.00",
       emplContriAmt: "0.00",
       membContriAmt: "0.00",
-      membNonPayReason: "CON13",
+      membNonPayReason: "CON14",
       membLeaveEarnings: "0.00",
       newGroupName: null,
       newGroupPensEarnings: null,

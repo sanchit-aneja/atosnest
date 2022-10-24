@@ -1,9 +1,8 @@
 import { Context } from "@azure/functions";
 import { Op } from "sequelize";
 import sequelize from "../utils/database";
-import { ContributionDetails } from "../models";
-import { ContributionHeader } from "../models";
-import { ErrorDetails } from "../models";
+import { ContributionDetails, ContributionHeader } from "../models";
+import { errorDetails } from "../models";
 import { httpRequestGenerator } from "../utils/httpRequestGenerator";
 import { AxiosResponse } from "axios";
 
@@ -735,7 +734,7 @@ export const Type3Validations = {
           },
         }
       );
-      await ErrorDetails.destroy({
+      await errorDetails.destroy({
         where: {
           membContribDetlId: {
             [Op.in]: sucessIds,
@@ -753,7 +752,7 @@ export const Type3Validations = {
         );
       }
 
-      await ErrorDetails.bulkCreate(Type3Errors, {
+      await errorDetails.bulkCreate(Type3Errors, {
         validate: true,
         returning: true,
       });
