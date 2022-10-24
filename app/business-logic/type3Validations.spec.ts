@@ -1,6 +1,9 @@
 import { Type3Validations } from "./type3Validations";
-import { ContributionDetails, ContributionHeader } from "../models";
-import { errorDetails } from "../models";
+import {
+  ContributionDetails,
+  ContributionHeader,
+  errorDetails,
+} from "../models";
 import { Context } from "@azure/functions";
 import { id31_0Response } from "../__test__/mock/validations/type3Responses/id31_0Response";
 import { id31_1Response } from "../__test__/mock/validations/type3Responses/id31_1Response";
@@ -68,8 +71,7 @@ describe("Type 3 Validation Interactions", () => {
   jest
     .spyOn(http, "httpRequestGenerator")
     .mockReturnValueOnce(customerIndexResponseMock);
-  const contributionDetailsSpy: any = jest.spyOn(ContributionDetails, "update");
-  const fileErrorDetailsSpy: any = jest.spyOn(errorDetails, "bulkCreate");
+
   const updateDBSpy: any = jest.spyOn(Type3Validations, "updateDB");
 
   it("test end to end", async () => {
@@ -89,13 +91,6 @@ describe("Type 3 Validation Interactions", () => {
     );
 
     expect(updateDBSpy).toHaveBeenCalledTimes(1);
-    //  expect(contributionDetailsSpy).toHaveBeenCalledTimes(1);
-    expect(fileErrorDetailsSpy).toHaveBeenCalledTimes(1);
-    const { Type3Errors, errorIds } = await Type3Validations.validateDataRows(
-      type3DataResponse,
-      context
-    );
-    // expect(updateDBSpy).toBeCalledWith(errorIds, Type3Errors);
   });
 });
 
