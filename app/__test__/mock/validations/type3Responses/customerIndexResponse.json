@@ -1,0 +1,41 @@
+{
+  "paymentGroupSourceId": "1",
+
+  "groupName": "payegroup",
+
+  "frequency": "W",
+
+  "earningsPeriodEndDate": "2022-09-29",
+
+  "paymentDueDayOfMonth": 25,
+
+  "earningsBasis": "B",
+
+  "paymentDueDateRule": "FS",
+
+  "employerContribRate": "67.45",
+
+  "memberContribRate": "20.89",
+
+  "paymentSourceName": "payu",
+
+  "groupSchemeId": "CSM19062201100",
+
+  "billingPlanId": "plan1",
+
+  "subSchemeId": "1",
+
+  "emplCatId": "1",
+
+  "createdBy": "Admin",
+
+  "updatedBy": null,
+
+  "deletedBy": null,
+
+  "deletedTimestamp": null,
+
+  "createdTimestamp": "2022-09-30T00:28:22.942Z",
+
+  "updatedTimestamp": "2022-09-30T00:28:22.942Z"
+}

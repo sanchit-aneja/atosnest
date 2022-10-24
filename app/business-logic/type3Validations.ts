@@ -3,7 +3,7 @@ import { Op } from "sequelize";
 import sequelize from "../utils/database";
 import { ContributionDetails } from "../models";
 import { ContributionHeader } from "../models";
-import { errorDetails } from "../models";
+import { ErrorDetails } from "../models";
 import { httpRequestGenerator } from "../utils/httpRequestGenerator";
 import { AxiosResponse } from "axios";
 
@@ -735,7 +735,7 @@ export const Type3Validations = {
           },
         }
       );
-      await errorDetails.destroy({
+      await ErrorDetails.destroy({
         where: {
           membContribDetlId: {
             [Op.in]: sucessIds,
@@ -753,7 +753,7 @@ export const Type3Validations = {
         );
       }
 
-      await errorDetails.bulkCreate(Type3Errors, {
+      await ErrorDetails.bulkCreate(Type3Errors, {
         validate: true,
         returning: true,
       });

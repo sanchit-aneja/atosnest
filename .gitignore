@@ -104,3 +104,6 @@ app/package-lock.json
 app/build/
 app/*.zip
 __azurite_db_*__.json
+__azurite_db_blob__.json
+__azurite_db_blob_extent__.json
+__blobstorage__/*

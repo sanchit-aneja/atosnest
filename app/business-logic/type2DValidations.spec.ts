@@ -1,6 +1,9 @@
 import { Context } from "@azure/functions";
 import { Type2DValidations } from "./";
 const { Readable } = require("stream")
+import sequelize from "../utils/database";
+import CommonContributionDetails from "./commonContributionDetails";
+jest.mock("sequelize");
 
 describe("Test: Business logic common Contribution details functions", () => {
     let context: Context;
@@ -296,25 +299,32 @@ describe("Test: Business logic common Contribution details functions", () => {
         //Act
 
         //Assert
-        await expect(Type2DValidations.start(stream, context)).rejects.toThrow(Error);
+        await expect(Type2DValidations.start(stream, context, "fbb13972-1527-47de-8c36-7d1a2a469ee8", "84c91266-026d-4041-902f-01f4c3fbda93")).rejects.toThrow(Error);
     })
 
     test("Should return dummy errors, when you call start", async () => {
         // Arrage
         const mockErrors = [{
             code: "ID 1",
-            message: "Error 1"
+            message: "Error 1",
+            lineNumber:1
         },
         {
             code: "ID 2",
-            message: "Error 2"
+            message: "Error 2",
+            lineNumber:2
         }]
+        const fileId="fbb13972-1527-47de-8c36-7d1a2a469ee8"
+        const contributionHeaderId = "84c91266-026d-4041-902f-01f4c3fbda93"
         const stream = Readable.from(`H,column1\nD,column_row1\nD,column_row2\nT,2,3`);
         Type2DValidations.executeRulesOneByOne = jest.fn().mockImplementation(()=> Promise.resolve(mockErrors))
+        const spySaveFileErrDtl = jest.spyOn(CommonContributionDetails, "saveFileErrorDetails");
         //Act
 
         //Assert
-        await expect(Type2DValidations.start(stream, context)).rejects.toBe(mockErrors);
+        await expect(Type2DValidations.start(stream, context, fileId, contributionHeaderId)).rejects.toBe(mockErrors);
+        expect(spySaveFileErrDtl).toBeCalledTimes(1);
+        expect(spySaveFileErrDtl).toBeCalledWith(mockErrors,fileId, '2C')
         
         Type2DValidations.executeRulesOneByOne = executeRulesOneByOne;
     })
@@ -326,7 +336,7 @@ describe("Test: Business logic common Contribution details functions", () => {
         //Act
 
         //Assert
-        await expect(Type2DValidations.start(stream, context)).resolves.toBe(true);
+        await expect(Type2DValidations.start(stream, context, "fbb13972-1527-47de-8c36-7d1a2a469ee8", "84c91266-026d-4041-902f-01f4c3fbda93")).resolves.toBe(true);
 
         
         Type2DValidations.executeRulesOneByOne = executeRulesOneByOne;

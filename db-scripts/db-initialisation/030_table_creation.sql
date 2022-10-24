@@ -375,3 +375,4 @@ CREATE TABLE IF NOT EXISTS contribution_index_schema."RD_Error_Type"
     CONSTRAINT XAK1RD_Error_Type_PK PRIMARY KEY (Error_Type_Id),
     CONSTRAINT XAK1RD_Error_Type UNIQUE (Error_Number,Process_Type)
 );
+

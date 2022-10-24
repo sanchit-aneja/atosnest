@@ -1,7 +1,7 @@
 import { Context } from "@azure/functions"
 import * as csvf from 'fast-csv';
 import { FileUploadHelper } from "../utils";
-import commonContributionDetails from "./commonContributionDetails";
+import {default as CommonContributionDetails, EnumRowDColumns} from "./commonContributionDetails";
 
  const Type2CValidations = {
      /**
@@ -168,16 +168,22 @@ import commonContributionDetails from "./commonContributionDetails";
             const validationFunc = Type2CValidations.rules[key];
             const validationErrors = await validationFunc(row, context);
             if (validationErrors) {
-                validationErrors.row = row;
-                validationErrors.rowIndex = rowIndex;
+                // Currently not needed validationErrors.row = row;
+                validationErrors.lineNumber = rowIndex;
                 errors.push(validationErrors)
             }
         }
         return errors;
     },
-    
-
-    start: async function (readStream: NodeJS.ReadableStream, context: Context): Promise<any> {
+    /**
+     * This will invoke type 2C rules one by one
+     * @param readStream
+     * @param context
+     * @param fileId
+     * @param contributionHeaderId
+     * @returns
+     */
+    start: async function (readStream: NodeJS.ReadableStream, context: Context, fileId, contributionHeaderId): Promise<any> {
 
         let results = [];
         let currentRowIndex = -1; 
@@ -195,8 +201,8 @@ import commonContributionDetails from "./commonContributionDetails";
                         Type2CValidations.alts=[];
                         Type2CValidations.ninos=[];
                     }
-                    if(currentRowIndex>0 && row[0].trim()==='D'){
-                        const memberDetails= commonContributionDetails.getDetailObject(row);
+                    if(currentRowIndex>0 && CommonContributionDetails.getRowColumn(row, EnumRowDColumns.RECORD_IDENTIFIER).trim()==='D'){
+                        const memberDetails= CommonContributionDetails.getDetailObject(row);
                         await Type2CValidations.executeRulesOneByOne(memberDetails, context, errorMessages, currentRowIndex);
                         
                         return cb(null, true, null);
@@ -213,36 +219,39 @@ import commonContributionDetails from "./commonContributionDetails";
                 })
                 .on('data-invalid', (row, rowNumber) => {
                     context.log(row);
-
                 })
-                .on('error', (e) => {
+                .on('error', async (e) => {
                     context.log(`Error Type 2C : ${e.message}`);
                     const error = {
                         code: "ID9999",
                         message: "Someting went wrong"
                     }
                     errorMessages.push(error);
+                    await CommonContributionDetails.saveFileErrorDetails(errorMessages, fileId, '2C');
                     reject(errorMessages);
                 })
                 .on('end', async (_e,) => {
-                    if (errorMessages.length > 0){
-                        reject(errorMessages);
-                        return;
-                    }
+                    // Type 2C need change same like type 2D TO DO: Sanchit think better way of doing this in rules itself, we need to know which D row is having issue
                     try {
                         const rows =  await FileUploadHelper.getAllRecordsFromNinoAlt({alts: Type2CValidations.alts, ninos: Type2CValidations.ninos})
-                    
                         if(rows.length>0){
-                            return {
+                            errorMessages.push({
                                 code:"ID20.1",
                                 message: "the members NINO and/or ALT ID matches to > 1 member in the CS the file is being uploaded for"
-                            }
+                            })
                        }
                     } catch (error) {
-                        return {
+                        context.log(`Error Type 2C : ${error.message}`);
+                        errorMessages.push({
                             code:"9999",
                             message: "Something went wrong"
-                        }
+                        })
+                    }
+
+                    if (errorMessages.length > 0){
+                        await CommonContributionDetails.saveFileErrorDetails(errorMessages, fileId, '2C');
+                        reject(errorMessages);
+                        return;
                     }
 
                     let data = {
