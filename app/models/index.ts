@@ -6,6 +6,7 @@ export { default as File } from "./file";
 export { default as errorDetails } from "./errorDetails";
 export { default as FileHeaderMap } from "./fileheadermap";
 export { default as RDErrorType } from "./rderrortype";
+export { default as StgFileMemberDetails } from "./stgfilememberdetails";
 
 export {
   default as ContributionDetails,
