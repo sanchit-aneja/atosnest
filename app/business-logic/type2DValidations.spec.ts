@@ -32,8 +32,8 @@ describe("Test: Business logic common Contribution details functions", () => {
     const output4 = await Type2DValidations.rules.PensEarnings(input4);
     // Assert
     expect(output1).toBe(null);
-    expect(output2.code).toBe("ID25.0");
-    expect(output3.code).toBe("ID30.0");
+    expect(output2).toBe("ID25.0");
+    expect(output3).toBe("ID30.0");
     expect(output4).toBe(null);
   });
 
@@ -51,8 +51,8 @@ describe("Test: Business logic common Contribution details functions", () => {
     const output4 = await Type2DValidations.rules.EmplContriAmt(input4);
     // Assert
     expect(output1).toBe(null);
-    expect(output2.code).toBe("ID25.1");
-    expect(output3.code).toBe("ID30.1");
+    expect(output2).toBe("ID25.1");
+    expect(output3).toBe("ID30.1");
     expect(output4).toBe(null);
   });
 
@@ -70,8 +70,8 @@ describe("Test: Business logic common Contribution details functions", () => {
     const output4 = await Type2DValidations.rules.MembContriAmt(input4);
     // Assert
     expect(output1).toBe(null);
-    expect(output2.code).toBe("ID25.2");
-    expect(output3.code).toBe("ID30.2");
+    expect(output2).toBe("ID25.2");
+    expect(output3).toBe("ID30.2");
     expect(output4).toBe(null);
   });
 
@@ -89,8 +89,8 @@ describe("Test: Business logic common Contribution details functions", () => {
     const output4 = await Type2DValidations.rules.MembLeaveEarnings(input4);
     // Assert
     expect(output1).toBe(null);
-    expect(output2.code).toBe("ID31.24");
-    expect(output3.code).toBe("ID31.12");
+    expect(output2).toBe("ID31.24");
+    expect(output3).toBe("ID31.12");
     expect(output4).toBe(null);
   });
 
@@ -108,8 +108,8 @@ describe("Test: Business logic common Contribution details functions", () => {
     const output4 = await Type2DValidations.rules.NewGroupEmplContriAmt(input4);
     // Assert
     expect(output1).toBe(null);
-    expect(output2.code).toBe("ID31.30");
-    expect(output3.code).toBe("ID31.18");
+    expect(output2).toBe("ID31.30");
+    expect(output3).toBe("ID31.18");
     expect(output4).toBe(null);
   });
 
@@ -127,8 +127,8 @@ describe("Test: Business logic common Contribution details functions", () => {
     const output4 = await Type2DValidations.rules.NewGroupMembContriAmt(input4);
     // Assert
     expect(output1).toBe(null);
-    expect(output2.code).toBe("ID31.31");
-    expect(output3.code).toBe("ID31.19");
+    expect(output2).toBe("ID31.31");
+    expect(output3).toBe("ID31.19");
     expect(output4).toBe(null);
   });
 
@@ -147,8 +147,8 @@ describe("Test: Business logic common Contribution details functions", () => {
 
     // Assert
     expect(output1).toBe(null);
-    expect(output2.code).toBe("ID31.34");
-    expect(output3.code).toBe("ID31.21");
+    expect(output2).toBe("ID31.34");
+    expect(output3).toBe("ID31.21");
     expect(output4).toBe(null);
   });
 
@@ -167,8 +167,8 @@ describe("Test: Business logic common Contribution details functions", () => {
 
     // Assert
     expect(output1).toBe(null);
-    expect(output2.code).toBe("ID31.35");
-    expect(output3.code).toBe("ID31.22");
+    expect(output2).toBe("ID31.35");
+    expect(output3).toBe("ID31.22");
     expect(output4).toBe(null);
   });
 
@@ -187,8 +187,8 @@ describe("Test: Business logic common Contribution details functions", () => {
 
     // Assert
     expect(output1).toBe(null);
-    expect(output2.code).toBe("ID31.36");
-    expect(output3.code).toBe("ID31.23");
+    expect(output2).toBe("ID31.36");
+    expect(output3).toBe("ID31.23");
     expect(output4).toBe(null);
   });
 
@@ -204,7 +204,7 @@ describe("Test: Business logic common Contribution details functions", () => {
     const output3 = await Type2DValidations.rules.OptoutDeclarationFlag(input3);
     // Assert
     expect(output1).toBe(null);
-    expect(output2.code).toBe("ID31.20");
+    expect(output2).toBe("ID31.20");
     expect(output3).toBe(null);
   });
 
@@ -221,7 +221,7 @@ describe("Test: Business logic common Contribution details functions", () => {
     // Assert
     expect(output1).toBe(null);
     expect(output2).toBe(null);
-    expect(output3.code).toBe("ID31.32");
+    expect(output3).toBe("ID31.32");
   });
 
   test("Should pass all validation for EffectiveDatePartialNonPayment", async () => {
@@ -239,8 +239,8 @@ describe("Test: Business logic common Contribution details functions", () => {
       await Type2DValidations.rules.EffectiveDatePartialNonPayment(input3);
     // Assert
     expect(output1).toBe(null);
-    expect(output2.code).toBe("ID31.13");
-    expect(output3.code).toBe("ID31.13");
+    expect(output2).toBe("ID31.13");
+    expect(output3).toBe("ID31.13");
   });
 
   test("Should pass all validation for EffectiveDateChangeGroup", async () => {
@@ -261,8 +261,8 @@ describe("Test: Business logic common Contribution details functions", () => {
     );
     // Assert
     expect(output1).toBe(null);
-    expect(output2.code).toBe("ID31.15");
-    expect(output3.code).toBe("ID31.15");
+    expect(output2).toBe("ID31.15");
+    expect(output3).toBe("ID31.15");
   });
 
   test("Should pass all validation for NewPaymentSourceName", async () => {
@@ -278,7 +278,7 @@ describe("Test: Business logic common Contribution details functions", () => {
     // Assert
     expect(output1).toBe(null);
     expect(output2).toBe(null);
-    expect(output3.code).toBe("ID31.14");
+    expect(output3).toBe("ID31.14");
   });
 
   test("Should pass all validation for NewGroupName", async () => {
@@ -294,7 +294,7 @@ describe("Test: Business logic common Contribution details functions", () => {
     // Assert
     expect(output1).toBe(null);
     expect(output2).toBe(null);
-    expect(output3.code).toBe("ID31.16");
+    expect(output3).toBe("ID31.16");
   });
 
   test("Should throw error, when you call start", async () => {
@@ -315,7 +315,8 @@ describe("Test: Business logic common Contribution details functions", () => {
         stream,
         context,
         "fbb13972-1527-47de-8c36-7d1a2a469ee8",
-        "84c91266-026d-4041-902f-01f4c3fbda93"
+        "84c91266-026d-4041-902f-01f4c3fbda93",
+        {} // rdErrorTypes
       )
     ).rejects.toThrow(Error);
   });
@@ -350,10 +351,10 @@ describe("Test: Business logic common Contribution details functions", () => {
 
     //Assert
     await expect(
-      Type2DValidations.start(stream, context, fileId, contributionHeaderId)
+      Type2DValidations.start(stream, context, fileId, contributionHeaderId, {})
     ).rejects.toBe(mockErrors);
     expect(spySaveFileErrDtl).toBeCalledTimes(1);
-    expect(spySaveFileErrDtl).toBeCalledWith(mockErrors, fileId, "2C");
+    expect(spySaveFileErrDtl).toBeCalledWith(mockErrors, fileId);
 
     Type2DValidations.executeRulesOneByOne = executeRulesOneByOne;
   });
@@ -374,7 +375,8 @@ describe("Test: Business logic common Contribution details functions", () => {
         stream,
         context,
         "fbb13972-1527-47de-8c36-7d1a2a469ee8",
-        "84c91266-026d-4041-902f-01f4c3fbda93"
+        "84c91266-026d-4041-902f-01f4c3fbda93",
+        {}
       )
     ).resolves.toBe(true);
 
@@ -387,13 +389,9 @@ describe("Test: Business logic common Contribution details functions", () => {
     for (const key in Type2DValidations.rules) {
       rules[key] = Type2DValidations.rules[key];
       if (key == "PensEarnings") {
-        Type2DValidations.rules[key] = jest.fn().mockImplementation(() =>
-          Promise.resolve({
-            code: "ID25.0",
-            message:
-              "Please remove invalid characters. The format must be numerical.",
-          })
-        );
+        Type2DValidations.rules[key] = jest
+          .fn()
+          .mockImplementation(() => Promise.resolve("ID25.0"));
       } else {
         Type2DValidations.rules[key] = jest
           .fn()
@@ -407,7 +405,9 @@ describe("Test: Business logic common Contribution details functions", () => {
     const errors = await Type2DValidations.executeRulesOneByOne(
       customRow,
       context,
-      []
+      [],
+      0,
+      {}
     );
 
     // Assert

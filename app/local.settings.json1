@@ -29,7 +29,8 @@
       "contribution_ValidationMemberSubject": "validate-members",
       "contribution_ValidationPolicySubject": "validate-policy",
       "contribution_LoadStagingSubject": "load-staging",
-      "contribution_LoadNormalisationSubject": "load-normalisation"
+      "contribution_LoadNormalisationSubject": "load-normalisation",
+      "contribution_ValidateFUMType3Suject": "validate-contribution-fum-file-type3"
     },
     "Host": {
       "CORS": "*"
