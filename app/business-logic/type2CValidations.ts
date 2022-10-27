@@ -1,269 +1,237 @@
-import { Context } from "@azure/functions"
-import * as csvf from 'fast-csv';
+import { Context } from "@azure/functions";
 import { FileUploadHelper } from "../utils";
-import {default as CommonContributionDetails, EnumRowDColumns} from "./commonContributionDetails";
+import { default as CommonContributionDetails } from "./commonContributionDetails";
 
- const Type2CValidations = {
-     /**
-     * Check value is null, undefined or empty
-     * @param value
-     * @returns bool if value is null or empty return true
-     */
-      isNullOrEmpty: function (value: any) {
-        if (
-            value == undefined ||
-            value == null ||
-            value == ""
-        ) {
-            return true;
-        } else {
-            return false;
-        }
-    },
-    ninos:[],
-    alts:[],
-    isNinoFormatted: function(value: string){
-       if(!(/[^DFIQUV]/.test(value.charAt(0)))){
-            return false; 
-       }
-       if(!(/[^DFIOQUV]/.test(value.charAt(1)))){
-        return false;
-       }
-       if(!(/[ABCD]/.test(value.charAt(value.length-1)))){
-        return false;
-       }
-       if(!(/[^(GB)(BG)(NK)(KN)(TN)(NT)(ZZ)]+/.test(value.slice(0,2)))){
-        return false;
-       }
-       return true;
-    },
-
-    rules:{
-
-        "isNinoAltValid": async (row: any, context: Context) => {
-            const validationError = {
-                code: "ID17",
-                message: "Please ensure your record has valid nino."
-            }
-            try {
-                let nino= row.nino;
-                let alt = row.alternativeId;
-                const ninoRegex = /[(A-Za-z0-9)]\w+/;
-                const altRegex = /[A-Za-z0-9"‘#$%&\(\)\[\]{}\-\*\+.:\\/=?@!_\s]+/; 
-                let isNinoEmpty = Type2CValidations.isNullOrEmpty(nino);
-                let isAltEmpty = Type2CValidations.isNullOrEmpty(alt)
-                let ninoValid = false;
-                let altValid = false;
-                
-                if(isNinoEmpty && isAltEmpty){
-                    return {
-                        code: "ID17",
-                        message: "The NINO and ALT ID have not been entered"
-                    }
-                }
-
-                if(!isNinoEmpty){
-                    ninoValid = ninoRegex.test(nino);
-                }
-                if(!isAltEmpty){
-                    altValid = altRegex.test(alt);
-                }
-                if((!ninoValid && !altValid) ){ 
-
-                    return {
-                        code: "ID18",
-                        message: "The NINO or ALT ID or both have invalid characters"
-                    }
-                    
-                }
-
-                if(ninoValid && !Type2CValidations.isNinoFormatted(nino)){
-                    return {
-                        code: "ID19",
-                        message: "Nino has incorrect format"
-                    }
-                }
-
-                if(nino === alt){
-                    return {
-                        code: "ID20.0",
-                        message: "the members NINO and/or ALT ID is identical"
-                    }
-                }
-                
-                let isNinoExist = (!isNinoEmpty && Type2CValidations.ninos.indexOf(nino)>-1);
-                let isAltExist = (!isAltEmpty && Type2CValidations.alts.indexOf(alt)>-1)
-                if( isNinoExist || isAltExist  ) {
-                    return {
-                        code:"ID20.1",
-                        message: "the members NINO and/or ALT ID matches to > 1 member in the CS the file is being uploaded for"
-                    }
-                }
-
-                const members = await FileUploadHelper.checkRecordValid({
-                    nino: nino, 
-                    alt: alt
-                })
-
-
-                if(members.length > 1){
-                    return {
-                        code: "ID20.1",
-                        message: "the members NINO and/or ALT ID matches to > 1 member in the CS the file is being uploaded for"
-                    }
-                }
-                if(ninoValid && altValid ){
-                    if(members[0]["nino"] != nino || members[0]["alternativeId"] != alt){
-                        return {
-                            code: "ID20.1",
-                            message: "the nino and alt does not match the record"
-                        }
-                    }
-                }
-                               
-                if(!isNinoEmpty){
-                    Type2CValidations.ninos.push(nino);
-                }
-                if(!isAltEmpty){
-                    Type2CValidations.alts.push(alt);
-                }
-                return null;
-
-            } catch (error) {
-                context.log(`Nino and Alt id failed :  error message ${error.message}`);
-                return validationError;
-            }
-            
-        },
-
-        "isFirstNameValid": async (row: any, context:Context )=>{
-            const firstName = row.firstName;
-            const regex = /([A-Za-z])\w+/;
-
-            if(!Type2CValidations.isNullOrEmpty(firstName) && !regex.test(firstName)){
-                 return {
-                    code:"ID18.1",
-                    message: "the first name contains invalid characters"
-                };
-            }
-
-        },
-
-        "isLastNameValid": async (row: any)=>{
-            const lastName = row.lastName;
-            const regex = /([A-Za-z])\w+/;
-            
-            if(!Type2CValidations.isNullOrEmpty(lastName) && !regex.test(lastName)){
-                 return {
-                    code:"ID18.2",
-                    message: "the last name contains invalid characters"
-                };
-            }
-
-        },
-    },
-
-    executeRulesOneByOne: async (row:any, context:Context, errors:Array<Object>, rowIndex: number)=>{
-        for (const key in Type2CValidations.rules) {
-            const validationFunc = Type2CValidations.rules[key];
-            const validationErrors = await validationFunc(row, context);
-            if (validationErrors) {
-                // Currently not needed validationErrors.row = row;
-                validationErrors.lineNumber = rowIndex;
-                errors.push(validationErrors)
-            }
-        }
-        return errors;
-    },
-    /**
-     * This will invoke type 2C rules one by one
-     * @param readStream
-     * @param context
-     * @param fileId
-     * @param contributionHeaderId
-     * @returns
-     */
-    start: async function (readStream: NodeJS.ReadableStream, context: Context, fileId, contributionHeaderId): Promise<any> {
-
-        let results = [];
-        let currentRowIndex = -1; 
-        let errorMessages = [];
-        return new Promise(async function (resolve, reject) {
-            try {   
-            readStream
-                .pipe(csvf.parse<any, any>({
-                    ignoreEmpty: true,
-                }))
-                .validate(async (row: any, cb) => {
-                
-                    currentRowIndex++; 
-                    if(currentRowIndex==0){
-                        Type2CValidations.alts=[];
-                        Type2CValidations.ninos=[];
-                    }
-                    if(currentRowIndex>0 && CommonContributionDetails.getRowColumn(row, EnumRowDColumns.RECORD_IDENTIFIER).trim()==='D'){
-                        const memberDetails= CommonContributionDetails.getDetailObject(row);
-                        await Type2CValidations.executeRulesOneByOne(memberDetails, context, errorMessages, currentRowIndex);
-                        
-                        return cb(null, true, null);
-
-                    }           
-                    return cb(null, true, null);
-                }).on('headers', (row) => {
-
-                })
-                .on('data', (row) => {
-                    context.log(row);
-                    results.push(row);
-    
-                })
-                .on('data-invalid', (row, rowNumber) => {
-                    context.log(row);
-                })
-                .on('error', async (e) => {
-                    context.log(`Error Type 2C : ${e.message}`);
-                    const error = {
-                        code: "ID9999",
-                        message: "Someting went wrong"
-                    }
-                    errorMessages.push(error);
-                    await CommonContributionDetails.saveFileErrorDetails(errorMessages, fileId, '2C');
-                    reject(errorMessages);
-                })
-                .on('end', async (_e,) => {
-                    // Type 2C need change same like type 2D TO DO: Sanchit think better way of doing this in rules itself, we need to know which D row is having issue
-                    try {
-                        const rows =  await FileUploadHelper.getAllRecordsFromNinoAlt({alts: Type2CValidations.alts, ninos: Type2CValidations.ninos})
-                        if(rows.length>0){
-                            errorMessages.push({
-                                code:"ID20.1",
-                                message: "the members NINO and/or ALT ID matches to > 1 member in the CS the file is being uploaded for"
-                            })
-                       }
-                    } catch (error) {
-                        context.log(`Error Type 2C : ${error.message}`);
-                        errorMessages.push({
-                            code:"9999",
-                            message: "Something went wrong"
-                        })
-                    }
-
-                    if (errorMessages.length > 0){
-                        await CommonContributionDetails.saveFileErrorDetails(errorMessages, fileId, '2C');
-                        reject(errorMessages);
-                        return;
-                    }
-
-                    let data = {
-                        results: results,
-                    }
-                    resolve(data);
-                })
-            }catch(e){
-              reject(e);  
-            } 
-        })
+const Type2CValidations = {
+  ninos: [],
+  alts: [],
+  isNinoFormatted: function (value: string) {
+    // http://en.wikipedia.org/wiki/National_Insurance_number#Format
+    // https://stackoverflow.com/a/17779536
+    if (
+      /^(?!BG)(?!GB)(?!NK)(?!KN)(?!TN)(?!NT)(?!ZZ)(?:[A-CEGHJ-PR-TW-Z][A-CEGHJ-NPR-TW-Z])(?:\d){6}([A-D])$/.test(
+        value
+      )
+    ) {
+      return true;
     }
-}
+    return false;
+  },
+
+  rules: {
+    isNinoAltValid: async (
+      row: any,
+      context: Context,
+      _contributionHeaderId
+    ) => {
+      const validationError = "ID17";
+      try {
+        let nino = row.nino;
+        let alt = row.alternativeId;
+        const ninoRegex = /[(A-Za-z0-9)]\w+/;
+        const altRegex = /[A-Za-z0-9"'#$%&\(\)\[\]{}\-\*\+.:\\/=?@!_\s]+/;
+        let isNinoEmpty = CommonContributionDetails.isNullOrEmpty(nino);
+        let isAltEmpty = CommonContributionDetails.isNullOrEmpty(alt);
+        let ninoValid = false;
+        let altValid = false;
+
+        if (isNinoEmpty && isAltEmpty) {
+          return "ID17";
+        }
+
+        if (!isNinoEmpty) {
+          ninoValid = ninoRegex.test(nino);
+        }
+        if (!isAltEmpty) {
+          altValid = altRegex.test(alt);
+        }
+        if (!ninoValid && !altValid) {
+          return "ID18";
+        }
+
+        if (ninoValid && !Type2CValidations.isNinoFormatted(nino)) {
+          return "ID19";
+        }
+
+        if (nino === alt) {
+          return "ID20.0";
+        }
+
+        if (!isNinoEmpty) {
+          Type2CValidations.ninos.push(nino);
+        }
+        if (!isAltEmpty) {
+          Type2CValidations.alts.push(alt);
+        }
+        return null;
+      } catch (error) {
+        context.log(`Nino and Alt id failed :  error message ${error.message}`);
+        return validationError;
+      }
+    },
+
+    checkNinoAltUniqueness: async (
+      row: any,
+      context: Context,
+      contributionHeaderId
+    ) => {
+      const validationError = "ID17";
+      try {
+        let nino = row.nino;
+        let alt = row.alternativeId;
+        let isNinoEmpty = CommonContributionDetails.isNullOrEmpty(nino);
+        let isAltEmpty = CommonContributionDetails.isNullOrEmpty(alt);
+
+        let isNinoExist =
+          !isNinoEmpty && Type2CValidations.ninos.indexOf(nino) > -1;
+        let isAltExist =
+          !isAltEmpty && Type2CValidations.alts.indexOf(alt) > -1;
+        if (isNinoExist || isAltExist) {
+          return "ID20.1";
+        }
+
+        const members = await FileUploadHelper.checkRecordValid({
+          nino: nino,
+          alt: alt,
+          contribHeaderId: contributionHeaderId,
+        });
+
+        if (members.length > 1) {
+          return "ID20.1";
+        }
+        if (members[0]["nino"] != nino || members[0]["alternativeId"] != alt) {
+          return "ID20.1";
+        }
+        return null;
+      } catch (error) {
+        context.log(`Nino and Alt id failed :  error message ${error.message}`);
+        return validationError;
+      }
+    },
+
+    isFirstNameValid: async (
+      row: any,
+      _context: Context,
+      _contributionHeaderId
+    ) => {
+      const firstName = row.firstName;
+      const regex = /([A-Za-z])\w+/;
+
+      if (
+        !CommonContributionDetails.isNullOrEmpty(firstName) &&
+        !regex.test(firstName)
+      ) {
+        return "ID18.1";
+      }
+      return null;
+    },
+
+    isLastNameValid: async (
+      row: any,
+      _context: Context,
+      _contributionHeaderId
+    ) => {
+      const lastName = row.lastName;
+      const regex = /([A-Za-z])\w+/;
+
+      if (
+        !CommonContributionDetails.isNullOrEmpty(lastName) &&
+        !regex.test(lastName)
+      ) {
+        return "ID18.2";
+      }
+      return null;
+    },
+  },
+
+  executeRulesOneByOne: async (
+    row: any,
+    context: Context,
+    errors: Array<Object>,
+    rowIndex: number,
+    rdErrorTypes,
+    contributionHeaderId
+  ) => {
+    for (const key in Type2CValidations.rules) {
+      const validationFunc = Type2CValidations.rules[key];
+      const errorCode = await validationFunc(
+        row,
+        context,
+        contributionHeaderId
+      );
+      if (errorCode) {
+        let validationErrors = CommonContributionDetails.getRdErrorType(
+          rdErrorTypes,
+          errorCode
+        );
+        validationErrors.lineNumber = rowIndex;
+        errors.push(validationErrors);
+      }
+    }
+    return errors;
+  },
+
+  /**
+   * This will invoke type 2D rules one by one
+   * @param readStream
+   * @param context
+   * @param fileId
+   * @param contributionHeaderId
+   * @returns
+   */
+  start: async function (
+    readStream: NodeJS.ReadableStream,
+    context: Context,
+    fileId,
+    contributionHeaderId,
+    rderrorTypes
+  ): Promise<any> {
+    let currentDRowIndex = 0;
+    let errorMessages = [];
+    return new Promise(async function (resolve, reject) {
+      try {
+        // Get D rows first from CSV parse - Reusing from saveContribution
+        const dRows = await CommonContributionDetails.getOnlyDRows(
+          readStream,
+          context
+        );
+        // Start updating one by one with transcation
+        for (const row of dRows) {
+          context.log(
+            `Rows updating for current D row ${currentDRowIndex} contributionHeaderId: ${contributionHeaderId}`
+          );
+          // Pass empty value for actual values here we no need that
+          const customRow =
+            CommonContributionDetails.convertToContributionDetails(
+              row,
+              {},
+              true
+            );
+          errorMessages = await Type2CValidations.executeRulesOneByOne(
+            customRow,
+            context,
+            errorMessages,
+            currentDRowIndex,
+            rderrorTypes,
+            contributionHeaderId
+          );
+          currentDRowIndex++;
+        }
+        if (errorMessages.length > 0) {
+          await CommonContributionDetails.saveFileErrorDetails(
+            errorMessages,
+            fileId
+          );
+          reject(errorMessages);
+        } else {
+          resolve(true);
+        }
+      } catch (e) {
+        context.log(`****Something went wrong***** : ${e.message}`);
+        reject(e);
+      }
+    });
+  },
+};
 
 export default Type2CValidations;

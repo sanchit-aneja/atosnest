@@ -58,6 +58,12 @@ enum EnumRowTColumns {
   VERSION_NUMBER = 2,
 }
 
+enum EnumScheduleMemberStatusCD {
+  TO_BE_REVIEWED = "MS1",
+  ATTENTION_NEEDED = "CS2",
+  READY_TO_SUBMIT = "MS2",
+}
+
 const commonContributionDetails = {
   /**
    * It will return empty string or the value if column present
@@ -86,7 +92,7 @@ const commonContributionDetails = {
    */
   convertToContributionDetails: function (
     row,
-    memDetailsRows,
+    memDetailsRow,
     addExtraParams: boolean = false
   ) {
     // Currently this row index may change, this was done bcased on Contribution template - specification v1.9
@@ -96,35 +102,35 @@ const commonContributionDetails = {
           row,
           EnumRowDColumns.PENS_EARNINGS
         ),
-        memDetailsRows.EmployerReferenceNumber
+        memDetailsRow.EmployerReferenceNumber
       ),
       membLeaveEarnings: commonContributionDetails.getNonNullValue(
         commonContributionDetails.getRowColumn(
           row,
           EnumRowDColumns.MEMB_LEAVE_EARNINGS
         ),
-        memDetailsRows.membLeaveEarnings
+        memDetailsRow.membLeaveEarnings
       ),
       emplContriAmt: commonContributionDetails.getNonNullValue(
         commonContributionDetails.getRowColumn(
           row,
           EnumRowDColumns.EMPL_CONTRIAMT
         ),
-        memDetailsRows.emplContriAmt
+        memDetailsRow.emplContriAmt
       ),
       membContriAmt: commonContributionDetails.getNonNullValue(
         commonContributionDetails.getRowColumn(
           row,
           EnumRowDColumns.MEMB_CONTRIAMT
         ),
-        memDetailsRows.membContriAmt
+        memDetailsRow.membContriAmt
       ),
       membNonPayReason: commonContributionDetails.getNonNullValue(
         commonContributionDetails.getRowColumn(
           row,
           EnumRowDColumns.MEMB_NON_PAY_REASON
         ),
-        memDetailsRows.membNonPayReason
+        memDetailsRow.membNonPayReason
       ),
       membNonPayEffDate: commonContributionDetails.getNonNullValue(
         commonContributionDetails.getRowColumn(
@@ -139,56 +145,56 @@ const commonContributionDetails = {
               row,
               EnumRowDColumns.NEW_GROUP_EFF_DATE
             ),
-        memDetailsRows.membNonPayEffDate
+        memDetailsRow.membNonPayEffDate
       ),
       newGroupName: commonContributionDetails.getNonNullValue(
         commonContributionDetails.getRowColumn(
           row,
           EnumRowDColumns.NEW_GROUP_NAME
         ),
-        memDetailsRows.newGroupName
+        memDetailsRow.newGroupName
       ),
       newGroupEffDate: commonContributionDetails.getNonNullValue(
         commonContributionDetails.getRowColumn(
           row,
           EnumRowDColumns.NEW_GROUP_EFF_DATE
         ),
-        memDetailsRows.newGroupEffDate
+        memDetailsRow.newGroupEffDate
       ),
       newPaymentSourceName: commonContributionDetails.getNonNullValue(
         commonContributionDetails.getRowColumn(
           row,
           EnumRowDColumns.NEW_PAYMENT_SOURCE_NAME
         ),
-        memDetailsRows.newPaymentSourceName
+        memDetailsRow.newPaymentSourceName
       ),
       newGroupPensEarnings: commonContributionDetails.getNonNullValue(
         commonContributionDetails.getRowColumn(
           row,
           EnumRowDColumns.NEW_GROUP_PENS_EARNINGS
         ),
-        memDetailsRows.newGroupPensEarnings
+        memDetailsRow.newGroupPensEarnings
       ),
       newGroupEmplContriAmt: commonContributionDetails.getNonNullValue(
         commonContributionDetails.getRowColumn(
           row,
           EnumRowDColumns.NEW_GROUP_EMPL_CONTRIAMT
         ),
-        memDetailsRows.newGroupEmplContriAmt
+        memDetailsRow.newGroupEmplContriAmt
       ),
       newGroupMembContriAmt: commonContributionDetails.getNonNullValue(
         commonContributionDetails.getRowColumn(
           row,
           EnumRowDColumns.NEW_GROUP_MEMB_CONTRIAMT
         ),
-        memDetailsRows.newGroupMembContriAmt
+        memDetailsRow.newGroupMembContriAmt
       ),
       optoutRefNum: commonContributionDetails.getNonNullValue(
         commonContributionDetails.getRowColumn(
           row,
           EnumRowDColumns.OPT_OUT_REF_NUM
         ),
-        memDetailsRows.optoutRefNum
+        memDetailsRow.optoutRefNum
       ),
       // in spec it was saying  bool and validation we need to check for Y.. not sure what will be true.. considering as Y only
       optoutDeclarationFlag: commonContributionDetails.getNonNullValue(
@@ -196,28 +202,28 @@ const commonContributionDetails = {
           row,
           EnumRowDColumns.OPT_OUT_DECLARATION_FLAG
         ),
-        memDetailsRows.optoutDeclarationFlag
+        memDetailsRow.optoutDeclarationFlag
       ),
       secEnrolPensEarnings: commonContributionDetails.getNonNullValue(
         commonContributionDetails.getRowColumn(
           row,
           EnumRowDColumns.SEC_ENROL_PENS_EARNINGS
         ),
-        memDetailsRows.secEnrolPensEarnings
+        memDetailsRow.secEnrolPensEarnings
       ),
       secEnrolEmplContriAmt: commonContributionDetails.getNonNullValue(
         commonContributionDetails.getRowColumn(
           row,
           EnumRowDColumns.SEC_ENROL_EMPL_CONTRIAMT
         ),
-        memDetailsRows.secEnrolEmplContriAmt
+        memDetailsRow.secEnrolEmplContriAmt
       ),
       secEnrolMembContriAmt: commonContributionDetails.getNonNullValue(
         commonContributionDetails.getRowColumn(
           row,
           EnumRowDColumns.SEC_ENROL_MEMB_CONTRIAMT
         ),
-        memDetailsRows.secEnrolMembContriAmt
+        memDetailsRow.secEnrolMembContriAmt
       ),
     };
 
@@ -243,76 +249,7 @@ const commonContributionDetails = {
     }
     return customRow;
   },
-  /**
-   * This will convert row into STGMemberDetails object
-   * @param row
-   * @returns STGMemberDetails object
-   */
-  convertToSTGMemberDetails: function (row) {
-    // Currently this row index may change, this was done bcased on Contribution template - specification v1.9
-    let customRow = {
-      uploadFileId: "63cdcf03-19ef-4ffd-b178-f50fe5c4e075",
-      forename: row[EnumRowDColumns.FORE_NAME],
-      surname: row[EnumRowDColumns.SURE_NAME],
-      nino: row[EnumRowDColumns.NINO],
-      alternateUniqueId: row[EnumRowDColumns.ALT_ID],
-      pensionableEarnings: row[EnumRowDColumns.PENS_EARNINGS]
-        ? parseFloat(row[EnumRowDColumns.PENS_EARNINGS])
-        : 0,
-      memberEarnings: row[EnumRowDColumns.MEMB_LEAVE_EARNINGS]
-        ? parseFloat(row[EnumRowDColumns.MEMB_LEAVE_EARNINGS])
-        : 0,
-      employerContribution: row[EnumRowDColumns.EMPL_CONTRIAMT]
-        ? parseFloat(row[EnumRowDColumns.EMPL_CONTRIAMT])
-        : 0,
-      memberContribution: row[EnumRowDColumns.MEMB_CONTRIAMT]
-        ? parseFloat(row[EnumRowDColumns.MEMB_CONTRIAMT])
-        : 0,
-      reasonPartNonPayment: row[EnumRowDColumns.MEMB_NON_PAY_REASON],
-      effectivePartNonPaymentDate: row[EnumRowDColumns.MEMB_NON_PAY_EFF_DATE]
-        ? commonContributionDetails.getDateValue(
-            row[EnumRowDColumns.MEMB_NON_PAY_EFF_DATE]
-          )
-        : commonContributionDetails.getDateValue(
-            row[EnumRowDColumns.NEW_GROUP_EFF_DATE]
-          ),
 
-      newGroupName: row[EnumRowDColumns.NEW_GROUP_NAME],
-      effectiveGroupChangeDate: commonContributionDetails.getDateValue(
-        row[EnumRowDColumns.NEW_GROUP_EFF_DATE]
-      ),
-      newPaymentSourceName: row[EnumRowDColumns.NEW_PAYMENT_SOURCE_NAME],
-      newGroupPensionableEarnings: row[EnumRowDColumns.NEW_GROUP_PENS_EARNINGS]
-        ? parseFloat(row[EnumRowDColumns.NEW_GROUP_PENS_EARNINGS])
-        : 0,
-      newGroupEmployerContribution: row[
-        EnumRowDColumns.NEW_GROUP_EMPL_CONTRIAMT
-      ]
-        ? parseFloat(row[EnumRowDColumns.NEW_GROUP_EMPL_CONTRIAMT])
-        : 0,
-      newGroupMemberContribution: row[EnumRowDColumns.NEW_GROUP_MEMB_CONTRIAMT]
-        ? parseFloat(row[EnumRowDColumns.NEW_GROUP_MEMB_CONTRIAMT])
-        : 0,
-      optoutReferenceNumber: row[EnumRowDColumns.OPT_OUT_REF_NUM],
-      // in spec it was saying  bool and validation we need to check for Y.. not sure what will be true.. considering as Y only
-      optoutDeclarationFlag: row[EnumRowDColumns.OPT_OUT_DECLARATION_FLAG],
-      secEnrolPensEarnings: row[EnumRowDColumns.SEC_ENROL_PENS_EARNINGS]
-        ? parseFloat(row[EnumRowDColumns.SEC_ENROL_PENS_EARNINGS])
-        : 0,
-      secEnrolEmplContriAmt: row[EnumRowDColumns.SEC_ENROL_EMPL_CONTRIAMT]
-        ? parseFloat(row[EnumRowDColumns.SEC_ENROL_EMPL_CONTRIAMT])
-        : 0,
-      secEnrolMembContriAmt: row[EnumRowDColumns.SEC_ENROL_MEMB_CONTRIAMT]
-        ? parseFloat(row[EnumRowDColumns.SEC_ENROL_MEMB_CONTRIAMT])
-        : 0,
-    };
-
-    return customRow;
-  },
-  getDateValue: function (input) {
-    if (input && input != "") return input;
-    else return null;
-  },
   getHeaderObject: function (row: any) {
     return {
       employerReferenceNumber: commonContributionDetails.getRowColumn(
@@ -663,21 +600,25 @@ const commonContributionDetails = {
    * Save file error details
    * @param errors
    * @param fileId
-   * @param errorType
    */
-  saveFileErrorDetails: async function (errors, fileId, errorType) {
+  saveFileErrorDetails: async function (
+    errors: Array<any>,
+    fileId,
+    membContribDetlId = null
+  ) {
     let fileErrors: any = [];
     let errorSequenceNum = 1;
     for (const error of errors) {
       const fileError = {} as FileError;
-      fileError.errorTypeId = error.errorTypeId || 155; // For now passing 155
-      fileError.errorCode = error.code;
-      fileError.errorMessage = error.message;
+
+      fileError.errorTypeId = error.errorTypeId;
+      fileError.errorCode = error.errorNumber;
+      fileError.errorMessage = error.onlineErrorMessageTxt;
       fileError.errorFileId = fileId;
       fileError.errorSequenceNum = errorSequenceNum;
       fileError.sourceRecordId = error.lineNumber || 0;
       fileError.createdBy = "SYSTEM"; // Currently it is hard coded
-      fileError.membContribDetlId = null;
+      fileError.membContribDetlId = membContribDetlId;
       fileErrors.push(fileError);
       errorSequenceNum++;
     }
@@ -701,8 +642,98 @@ const commonContributionDetails = {
     }
     return errors;
   },
+
+  getRdErrorType: function (rderrorTypes, byErrorCode) {
+    if (rderrorTypes[byErrorCode]) {
+      return rderrorTypes[byErrorCode];
+    }
+    return {
+      errorNumber: byErrorCode,
+      errorType: "UK", //UNKNOWN
+      processType: "CC",
+      onlineErrorMessageTxt: "Something went wrong",
+      detailedErrorMessageTxt: null,
+      errorTypeId: -1,
+      errorSeverity: 2,
+    };
+  },
+  /**
+   * This will convert row into STGMemberDetails object
+   * @param row
+   * @returns STGMemberDetails object
+   */
+  convertToSTGMemberDetails: function (row) {
+    // Currently this row index may change, this was done bcased on Contribution template - specification v1.9
+    let customRow = {
+      uploadFileId: "63cdcf03-19ef-4ffd-b178-f50fe5c4e075",
+      forename: row[EnumRowDColumns.FORE_NAME],
+      surname: row[EnumRowDColumns.SURE_NAME],
+      nino: row[EnumRowDColumns.NINO],
+      alternateUniqueId: row[EnumRowDColumns.ALT_ID],
+      pensionableEarnings: row[EnumRowDColumns.PENS_EARNINGS]
+        ? parseFloat(row[EnumRowDColumns.PENS_EARNINGS])
+        : 0,
+      memberEarnings: row[EnumRowDColumns.MEMB_LEAVE_EARNINGS]
+        ? parseFloat(row[EnumRowDColumns.MEMB_LEAVE_EARNINGS])
+        : 0,
+      employerContribution: row[EnumRowDColumns.EMPL_CONTRIAMT]
+        ? parseFloat(row[EnumRowDColumns.EMPL_CONTRIAMT])
+        : 0,
+      memberContribution: row[EnumRowDColumns.MEMB_CONTRIAMT]
+        ? parseFloat(row[EnumRowDColumns.MEMB_CONTRIAMT])
+        : 0,
+      reasonPartNonPayment: row[EnumRowDColumns.MEMB_NON_PAY_REASON],
+      effectivePartNonPaymentDate: row[EnumRowDColumns.MEMB_NON_PAY_EFF_DATE]
+        ? commonContributionDetails.getDateValue(
+            row[EnumRowDColumns.MEMB_NON_PAY_EFF_DATE]
+          )
+        : commonContributionDetails.getDateValue(
+            row[EnumRowDColumns.NEW_GROUP_EFF_DATE]
+          ),
+
+      newGroupName: row[EnumRowDColumns.NEW_GROUP_NAME],
+      effectiveGroupChangeDate: commonContributionDetails.getDateValue(
+        row[EnumRowDColumns.NEW_GROUP_EFF_DATE]
+      ),
+      newPaymentSourceName: row[EnumRowDColumns.NEW_PAYMENT_SOURCE_NAME],
+      newGroupPensionableEarnings: row[EnumRowDColumns.NEW_GROUP_PENS_EARNINGS]
+        ? parseFloat(row[EnumRowDColumns.NEW_GROUP_PENS_EARNINGS])
+        : 0,
+      newGroupEmployerContribution: row[
+        EnumRowDColumns.NEW_GROUP_EMPL_CONTRIAMT
+      ]
+        ? parseFloat(row[EnumRowDColumns.NEW_GROUP_EMPL_CONTRIAMT])
+        : 0,
+      newGroupMemberContribution: row[EnumRowDColumns.NEW_GROUP_MEMB_CONTRIAMT]
+        ? parseFloat(row[EnumRowDColumns.NEW_GROUP_MEMB_CONTRIAMT])
+        : 0,
+      optoutReferenceNumber: row[EnumRowDColumns.OPT_OUT_REF_NUM],
+      // in spec it was saying  bool and validation we need to check for Y.. not sure what will be true.. considering as Y only
+      optoutDeclarationFlag: row[EnumRowDColumns.OPT_OUT_DECLARATION_FLAG],
+      secEnrolPensEarnings: row[EnumRowDColumns.SEC_ENROL_PENS_EARNINGS]
+        ? parseFloat(row[EnumRowDColumns.SEC_ENROL_PENS_EARNINGS])
+        : 0,
+      secEnrolEmplContriAmt: row[EnumRowDColumns.SEC_ENROL_EMPL_CONTRIAMT]
+        ? parseFloat(row[EnumRowDColumns.SEC_ENROL_EMPL_CONTRIAMT])
+        : 0,
+      secEnrolMembContriAmt: row[EnumRowDColumns.SEC_ENROL_MEMB_CONTRIAMT]
+        ? parseFloat(row[EnumRowDColumns.SEC_ENROL_MEMB_CONTRIAMT])
+        : 0,
+    };
+
+    return customRow;
+  },
+  getDateValue: function (input) {
+    if (input && input != "") return input;
+    else return null;
+  },
 };
 
 export default commonContributionDetails;
 
-export { EnumRowDColumns, EnumRowHColumns, EnumRowTColumns };
+export {
+  EnumRowDColumns,
+  EnumRowHColumns,
+  EnumRowTColumns,
+  EnumScheduleMemberStatusCD,
+};

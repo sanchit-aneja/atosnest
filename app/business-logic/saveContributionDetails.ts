@@ -4,6 +4,7 @@ import sequelize from "../utils/database";
 import {
   default as CommonContributionDetails,
   EnumRowDColumns,
+  EnumScheduleMemberStatusCD,
 } from "./commonContributionDetails";
 
 const saveContributionDetails = {
@@ -12,7 +13,14 @@ const saveContributionDetails = {
    * @param row
    * @param transaction
    */
-  InsertOrUpdateRow: async function (row, transaction, context: Context) {
+  InsertOrUpdateRow: async function (
+    row,
+    transaction,
+    context: Context,
+    contributionHeaderId,
+    currentDRowIndex,
+    rderrorTypes
+  ) {
     const nino = CommonContributionDetails.getRowColumn(
       row,
       EnumRowDColumns.NINO
@@ -25,25 +33,53 @@ const saveContributionDetails = {
     // Default condition
     let whereCondition: any = {
       nino: nino,
+      contribHeaderId: contributionHeaderId,
     };
     if (!nino && alternativeId) {
       // When nino is empty
       whereCondition = {
         alternativeId: alternativeId,
+        contribHeaderId: contributionHeaderId,
       };
     } else if (nino && alternativeId) {
       // Adding alternativeId also
       whereCondition.alternativeId = alternativeId;
     }
-    const memDetailsRows = await ContributionDetails.findOne({
+    const memDetailsRow = (await ContributionDetails.findOne({
       where: whereCondition,
-    });
+    })) as any;
 
-    if (memDetailsRows) {
+    const awaitingForSubmitStatuses = [
+      EnumScheduleMemberStatusCD.READY_TO_SUBMIT,
+      EnumScheduleMemberStatusCD.ATTENTION_NEEDED,
+      EnumScheduleMemberStatusCD.TO_BE_REVIEWED,
+    ];
+
+    // Checking is already processing or not. If yes, write type error ID24
+    if (
+      awaitingForSubmitStatuses.indexOf(memDetailsRow.schdlMembStatusCd) == -1
+    ) {
+      context.log(
+        `Current D row index ${currentDRowIndex} : This member is already submitted or paid and will show on the submitted or paid tabs`
+      );
+      const id24Error = CommonContributionDetails.getRdErrorType(
+        rderrorTypes,
+        "ID24"
+      );
+      id24Error.lineNumber = currentDRowIndex + 1;
+      await CommonContributionDetails.saveFileErrorDetails(
+        [id24Error],
+        null,
+        memDetailsRow.membContribDetlId
+      );
+      return;
+    }
+
+    if (memDetailsRow) {
       const currentMemberDetails =
         CommonContributionDetails.convertToContributionDetails(
           row,
-          memDetailsRows
+          memDetailsRow
         );
       const effectRows = (await ContributionDetails.update(
         {
@@ -61,14 +97,9 @@ const saveContributionDetails = {
     } else {
       const fileMemberDetails =
         CommonContributionDetails.convertToSTGMemberDetails(row);
-
-      try {
-        await StgFileMemberDetails.create({
-          ...fileMemberDetails,
-        });
-      } catch (error) {
-        context.log(error);
-      }
+      await StgFileMemberDetails.create({
+        ...fileMemberDetails,
+      });
     }
   },
 
@@ -80,7 +111,9 @@ const saveContributionDetails = {
    */
   updateMemberDetails: async function (
     readStream: NodeJS.ReadableStream,
-    context: Context
+    context: Context,
+    contributionHeaderId,
+    rderrorTypes
   ): Promise<boolean> {
     const transaction = await sequelize.transaction();
     let currentDRowIndex = 0;
@@ -96,7 +129,10 @@ const saveContributionDetails = {
         await saveContributionDetails.InsertOrUpdateRow(
           row,
           transaction,
-          context
+          context,
+          contributionHeaderId,
+          currentDRowIndex,
+          rderrorTypes
         );
         currentDRowIndex++;
       }
