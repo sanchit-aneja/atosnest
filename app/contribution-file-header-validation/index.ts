@@ -52,7 +52,8 @@ const eventGridTrigger: AzureFunction = async function (
 
     const result = await Type2Validations.start(
       blobHelper.stringToStream(fileData),
-      context
+      context, 
+      errors
     );
 
     // Step 4: vaildation Type 2C
@@ -80,7 +81,7 @@ const eventGridTrigger: AzureFunction = async function (
       errors
     );
 
-    // // Update contribution member details
+    // Update contribution member details
     await SaveContributionDetails.updateMemberDetails(
       blobHelper.stringToStream(fileData),
       context,

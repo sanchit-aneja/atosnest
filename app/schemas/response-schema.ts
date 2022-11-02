@@ -518,3 +518,8 @@ export interface SearchMemberContributionResultResponse<T> {
   totalRecordCount: number;
   results: T[];
 }
+
+export interface ContributionCorrectionAddMemberDetails {
+  membContribDetlId: string;
+}
+

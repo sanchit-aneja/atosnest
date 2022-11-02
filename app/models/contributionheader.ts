@@ -30,6 +30,10 @@ ContributionHeader.init(
         },
       },
     },
+    origContribHeaderId: {
+      type: DataTypes.UUID,
+      field: "orig_contrib_header_id"
+    },
     nestScheduleRef: {
       type: DataTypes.STRING(14),
       allowNull: false,
