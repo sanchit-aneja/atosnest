@@ -1,9 +1,12 @@
 import * as moment from "moment";
 import { Model, Op } from "sequelize";
-import * as csvf from 'fast-csv';
-import { regexPattern } from './constants';
+import * as csvf from "fast-csv";
+import { regexPattern } from "./constants";
 import Status from "../utils/config";
-import { DetailsFilterElements, HeaderFilterElements } from "../schemas/response-schema";
+import {
+  DetailsFilterElements,
+  HeaderFilterElements,
+} from "../schemas/response-schema";
 import errorHandler from "../utils/errorHandler";
 
 const app = {
@@ -14,6 +17,21 @@ const app = {
   DEFAULT_OFFSET: 0,
   DEFAULT_EFFECTIVE_START_DATE: "1970-01-01",
   DEFAULT_EFFECTIVE_END_DATE: "9999-12-31",
+
+  splitStr(str, index) {
+    return [str.slice(0, index), str.slice(index)];
+  },
+
+  async createNestScheduleRef(item): Promise<any> {
+    let nestScheduleRef = item["dataValues"]["nestScheduleRef"];
+    let splittxt = nestScheduleRef?.split("CS");
+    nestScheduleRef = nestScheduleRef?.substring(0, 2).replace("CS", "CC");
+    nestScheduleRef = nestScheduleRef + splittxt[1];
+    let splittxt1 = app.splitStr(nestScheduleRef, 9);
+    let splittxt2 = app.splitStr(splittxt1[1], 2);
+    let count = app.addLeadingZeros(parseInt(splittxt2[0]) + 1, 2);
+    return splittxt1[0] + count + splittxt2[1];
+  },
 
   isEmptyString(input) {
     if (input == null || input == undefined || input == "") {
@@ -65,9 +83,19 @@ const app = {
     let params = {};
     if (!this.isNullEmpty(request.options)) {
       if (type == "CH") {
-        options = this.mapHeaderFilterOptions(request.options, defOptions, defFilter, type);
+        options = this.mapHeaderFilterOptions(
+          request.options,
+          defOptions,
+          defFilter,
+          type
+        );
       } else {
-        options = this.mapDetailsFilterOptions(request.options, defOptions, defFilter, type);
+        options = this.mapDetailsFilterOptions(
+          request.options,
+          defOptions,
+          defFilter,
+          type
+        );
       }
     }
     params = request.params;
@@ -90,29 +118,32 @@ const app = {
     }
   },
 
-  mapFilterOptions(reqOptions,
-    optionsObj,
-    defFilter,
-    type) {
+  mapFilterOptions(reqOptions, optionsObj, defFilter, type) {
     try {
       const options = optionsObj;
       reqOptions &&
         Object.entries(reqOptions).forEach(([key, value]: any) => {
           let optionsKey = key.toString().toLowerCase();
           switch (optionsKey) {
-            case 'limit':
+            case "limit":
               options["limit"] = isNaN(value)
                 ? this.DEFAULT_LIMIT
                 : parseInt(value);
               break;
-            case 'offset':
+            case "offset":
               options["offset"] = isNaN(value)
                 ? this.DEFAULT_OFFSET
                 : parseInt(value);
               break;
-            case 'sort':
+            case "sort":
               if (type == "CH") {
-                options["sort"] = (value && value.length > 0) ? this.mapFilterSorting(value, defFilter) : this.mapFilterSorting("earningPeriodEndDate.desc", defFilter);
+                options["sort"] =
+                  value && value.length > 0
+                    ? this.mapFilterSorting(value, defFilter)
+                    : this.mapFilterSorting(
+                        "earningPeriodEndDate.desc",
+                        defFilter
+                      );
               } else {
                 options["sort"] = this.mapFilterSorting(value, defFilter);
               }
@@ -131,10 +162,7 @@ const app = {
     type
   ) {
     try {
-      return this.mapFilterOptions(reqOptions,
-        optionsObj,
-        defFilter,
-        type);
+      return this.mapFilterOptions(reqOptions, optionsObj, defFilter, type);
     } catch (e) {
       return null;
     }
@@ -146,10 +174,7 @@ const app = {
     type
   ) {
     try {
-      return this.mapFilterOptions(reqOptions,
-        optionsObj,
-        defFilter,
-        type);
+      return this.mapFilterOptions(reqOptions, optionsObj, defFilter, type);
     } catch (e) {
       return null;
     }
@@ -162,7 +187,12 @@ const app = {
           if (ele && ele.includes(".")) {
             const [ipField, ipOrder] = ele.split(".");
             const element = defFilter[ipField] && defFilter[ipField].split(".");
-            if (element && element.length && (element[0] == "ContributionHeader" || element[0] == "ContributionDetails")) {
+            if (
+              element &&
+              element.length &&
+              (element[0] == "ContributionHeader" ||
+                element[0] == "ContributionDetails")
+            ) {
               sortArr.push([element[1], ipOrder]);
             } else {
               ipOrder && element.push(ipOrder);
@@ -222,11 +252,11 @@ const app = {
   },
 
   addLeadingZeros(num, totalLength) {
-    return String(num).padStart(totalLength, '0');
+    return String(num).padStart(totalLength, "0");
   },
 
   getFileName(subject: string) {
-    return subject.split('blobs/')[1].replace(/\d$/, '');
+    return subject.split("blobs/")[1].replace(/\d$/, "");
   },
 
   getFileTimeStamp(time: string) {
@@ -271,7 +301,7 @@ const app = {
       body: item,
       headers: {
         "Content-Type": "application/json",
-      }
+      },
     };
   },
   async mapErrorResponse(param1, param2, param3, param4, param5) {
@@ -286,7 +316,7 @@ const app = {
   checkEmployerNestId(arr, val) {
     let maxCount = 0;
     let minCount = 0;
-    arr.forEach(element => {
+    arr.forEach((element) => {
       if ((element._previousDataValues?.groupSchemeID).trim() === val) {
         maxCount++;
         minCount = 0;
@@ -303,14 +333,22 @@ const app = {
     return id.substr(id.length - 3);
   },
 
-  async getCSVDataFromReadStream(readStream: NodeJS.ReadableStream, columns: string[], formats: Array<Array<any>>): Promise<Array<any>> {
+  async getCSVDataFromReadStream(
+    readStream: NodeJS.ReadableStream,
+    columns: string[],
+    formats: Array<Array<any>>
+  ): Promise<Array<any>> {
     let results = [];
-    let errorMessage = { name: '', message: '' };
+    let errorMessage = { name: "", message: "" };
     return new Promise(function (resolve, reject) {
       readStream
-        .pipe(csvf.parse<any, any>({
-          headers: columns, renameHeaders: true, ignoreEmpty: true
-        }))
+        .pipe(
+          csvf.parse<any, any>({
+            headers: columns,
+            renameHeaders: true,
+            ignoreEmpty: true,
+          })
+        )
         .validate((row, cb): void => {
           const result = app.validateFields(row, formats);
           if (!result[1]) {
@@ -319,23 +357,25 @@ const app = {
             return cb(result[0], result[1]);
           }
         })
-        .on('data', (row) => {
+        .on("data", (row) => {
           results.push(row);
         })
-        .on('data-invalid', (row, rowNumber, reason) => {
+        .on("data-invalid", (row, rowNumber, reason) => {
           errorMessage.name = "Invalid Data";
-          errorMessage.message = `Invalid [rowNumber=${rowNumber}] [row=${JSON.stringify(row)}] [reason=${reason}]`;
+          errorMessage.message = `Invalid [rowNumber=${rowNumber}] [row=${JSON.stringify(
+            row
+          )}] [reason=${reason}]`;
           reject(errorMessage);
         })
-        .on('error', (e) => {
+        .on("error", (e) => {
           errorMessage.name = "Column Mismatch";
           errorMessage.message = e.message;
           reject(errorMessage);
         })
-        .on('end', (_e) => {
+        .on("end", (_e) => {
           resolve(results);
-        })
-    })
+        });
+    });
   },
 
   validateFields(rowData: string, formats: any): any {
@@ -344,25 +384,32 @@ const app = {
     for (const format of iterator) {
       let fieldData = rowData[format[0]];
       switch (format[1]) {
-        case 'VARCHAR':
-          errMsg = new fieldVal(fieldData, format).isNotEmpty().isAlphaNumeric(format[3]).getError();
+        case "VARCHAR":
+          errMsg = new fieldVal(fieldData, format)
+            .isNotEmpty()
+            .isAlphaNumeric(format[3])
+            .getError();
           if (errMsg) {
             return [null, false, errMsg];
           }
           break;
-        case 'NUMBER':
-          errMsg = new fieldVal(fieldData, format).isNumeric(format[3]).getError();
+        case "NUMBER":
+          errMsg = new fieldVal(fieldData, format)
+            .isNumeric(format[3])
+            .getError();
           if (errMsg) {
             return [null, false, errMsg];
           }
           break;
-        case 'DECIMAL':
-          errMsg = new fieldVal(fieldData, format).isDecimal(format[3]).getError()
+        case "DECIMAL":
+          errMsg = new fieldVal(fieldData, format)
+            .isDecimal(format[3])
+            .getError();
           if (errMsg) {
             return [null, false, errMsg];
           }
           break;
-        case 'DATE':
+        case "DATE":
           errMsg = new fieldVal(fieldData, format).isDate().getError();
           if (errMsg) {
             return [null, false, errMsg];
@@ -371,9 +418,8 @@ const app = {
       }
     }
     return [null, true];
-  }
-
-}
+  },
+};
 
 class fieldVal {
   val: any;
@@ -386,7 +432,7 @@ class fieldVal {
 
   constructor(arg: any, format: any) {
     this.val = arg;
-    this.errMsg = '';
+    this.errMsg = "";
     this.errors = false;
     this.fieldName = format[0];
     this.required = format[2];
@@ -395,16 +441,23 @@ class fieldVal {
   }
 
   isNotEmpty() {
-    if (!this.errors && this.required && (this.val === '' || this.val == null || this.val == undefined)) {
-      this.errMsg = `${this.fieldName} is empty`
+    if (
+      !this.errors &&
+      this.required &&
+      (this.val === "" || this.val == null || this.val == undefined)
+    ) {
+      this.errMsg = `${this.fieldName} is empty`;
       this.errors = true;
     }
     return this;
   }
 
   isAlphaNumeric(length) {
-    if (!this.errors && this.val != undefined && this.val != '') {
-      if (!regexPattern.alphaNumPattern.test(this.val) || this.val?.length > length) {
+    if (!this.errors && this.val != undefined && this.val != "") {
+      if (
+        !regexPattern.alphaNumPattern.test(this.val) ||
+        this.val?.length > length
+      ) {
         this.errMsg = `${this.fieldName} is should be alphanumeric & max ${length} chars -- 
         value received ${this.val} `;
         this.errors = true;
@@ -415,7 +468,10 @@ class fieldVal {
 
   isNumeric(digits) {
     if (!this.errors && this.val != undefined) {
-      if (!regexPattern.numPattern.test(this.val) && this.val.length <= digits) {
+      if (
+        !regexPattern.numPattern.test(this.val) &&
+        this.val.length <= digits
+      ) {
         this.errMsg = `${this.fieldName} should be number`;
         this.errors = true;
       }
@@ -434,9 +490,9 @@ class fieldVal {
   }
 
   isDecimal([digits, precision]) {
-    if (this.val?.indexOf('.')) {
-      let number = this.val?.split('.');
-      if ((number[0]?.length > digits) && (number[1]?.length > precision)) {
+    if (this.val?.indexOf(".")) {
+      let number = this.val?.split(".");
+      if (number[0]?.length > digits && number[1]?.length > precision) {
         this.errMsg = `${this.fieldName} is not valid decimal number`;
         this.errors = true;
       }
@@ -451,6 +507,5 @@ class fieldVal {
     return false;
   }
 }
-
 
 export default app;

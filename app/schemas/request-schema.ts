@@ -3,7 +3,8 @@ import {
   ContributionStgMemberResponse,
   ContributionStgPolicyResponse,
   ContributionHeaderResponse,
-  MemberContributionDetailsResponse
+  MemberContributionDetailsResponse,
+  ContributionCorrectionAddMemberDetails
 } from "./response-schema";
 
 type commonFields = "createdBy" | "updatedBy" | "updatedAt";
@@ -22,3 +23,8 @@ export interface ContributionHeaderRequest
 
 export interface MemberContributionDetailsRequest
   extends Omit<MemberContributionDetailsResponse, ''> { }
+
+export interface ContributionCorrectionAddMemberRequest {
+  contribHeaderId: string;
+  contributionDetail: Array<ContributionCorrectionAddMemberDetails>;
+}

@@ -25,11 +25,7 @@ const Type2Validations = {
         EnumRowHColumns.RECORD_IDENTIFIER
       ) !== "H"
     ) {
-      return {
-        code: "ID5",
-        message:
-          "Please ensure that the first record in your file is marked 'H', to show that it's the header.",
-      };
+      return "ID5"
     }
 
     if (
@@ -38,11 +34,7 @@ const Type2Validations = {
         EnumRowHColumns.BULK_UPDATE_TO_NO_CONTRIBUTIONS_DUE
       ).toUpperCase() === "Y"
     ) {
-      return {
-        code: "ID8",
-        message:
-          "There are no detail records in your file. Please ensure there is at least one detail record identified with a 'D', between the header and trailer",
-      };
+      return "ID8";
     }
 
     return null;
@@ -97,11 +89,7 @@ const Type2Validations = {
    */
   rulesType2B: {
     EmployerReferenceNumber: async (row: any) => {
-      const validationError = {
-        code: "ID10.0",
-        message:
-          "Please ensure your file contains the Employer Reference Number in the header record.",
-      };
+      const validationError = "ID10.0";
       try {
         const empRefNo = row.employerReferenceNumber;
         if (CommonContributionDetails.isNullOrEmpty(empRefNo)) {
@@ -109,11 +97,7 @@ const Type2Validations = {
         }
         const pattern = /^(EMP)(\d{9})$/;
         if (!pattern.test(empRefNo)) {
-          return {
-            code: "ID13.0",
-            message:
-              "Please check the Employer Reference Number in the header record is in a valid format. Note, the prefix (before numerical digits) should be EMP.",
-          };
+          return "ID13.0";
         }
         return null;
       } catch (err) {
@@ -121,22 +105,14 @@ const Type2Validations = {
       }
     },
     ProcessType: async (row) => {
-      const validationError = {
-        code: "ID10.1",
-        message:
-          "Please ensure your file contains the Process type in the header record.",
-      };
+      const validationError = "ID10.1";
       try {
         const processType = row.processType;
         if (CommonContributionDetails.isNullOrEmpty(processType)) {
           return validationError;
         }
         if (processType !== "CS") {
-          return {
-            code: "ID13.1",
-            message:
-              "Please check the details in the header record field Process type is in a valid format and the text is exactly as shown here: CS - Contribution Schedule.",
-          };
+          return "ID13.1";
         }
         return null;
       } catch (err) {
@@ -144,11 +120,7 @@ const Type2Validations = {
       }
     },
     EarningsPeriodEndDate: async (row) => {
-      const validationError = {
-        code: "ID10.2",
-        message:
-          "Please ensure your file contains the EPED in the header record.",
-      };
+      const validationError = "ID10.2";
       try {
         const epedDate = row.earningPeriodEndDate;
         if (CommonContributionDetails.isNullOrEmpty(epedDate)) {
@@ -156,11 +128,7 @@ const Type2Validations = {
         }
         if (!CommonContributionDetails.isValidateDate(epedDate)) {
           // Only format checking is done. But for example 9999-10-31 is also valid..
-          return {
-            code: "ID13.2",
-            message:
-              "Please check the details in the header record field as they appear to be in the wrong format: EPED. Please format dates in this field as YYYY-MM-DD.",
-          };
+          return "ID13.2";
         }
         return null;
       } catch (err) {
@@ -168,24 +136,15 @@ const Type2Validations = {
       }
     },
     PaymentSource: async (row) => {
-      const validationError = {
-        code: "ID10.3",
-        message:
-          "Please ensure your file contains the Payment Source in the header record.",
-      };
+      const validationError = "ID10.3";
       try {
         const paymentSource = row.paymentSource;
         if (CommonContributionDetails.isNullOrEmpty(paymentSource)) {
           return validationError;
         }
-        const pattern =
-          /^(\d|[a-zA-Z])[A-Za-z\d"'#$%&@=?:\.\+\*\-/\\\(\)\[\]\{\}]+$/;
+        const pattern = /^(\d|[a-zA-Z])[A-Za-z\d"'#$%&@=?:\.\+\*\-/\\\(\)\[\]\{\}]+$/;
         if (!pattern.test(paymentSource)) {
-          return {
-            code: "ID13.3",
-            message:
-              "Please check the details in these header record field as it appears to be in the wrong format: Payment Source. Note, the Payment Source must begin with an alphanumerical character.",
-          };
+          return "ID13.3";
         }
         return null;
       } catch (err) {
@@ -193,11 +152,7 @@ const Type2Validations = {
       }
     },
     PayPeriodFrequency: async (row) => {
-      const validationError = {
-        code: "ID10.4",
-        message:
-          "Please ensure your file contains the Pay Period Frequency in the header record.",
-      };
+      const validationError = "ID10.4"; 
       try {
         const payPeriod = row.payPeriodFrequency;
         if (CommonContributionDetails.isNullOrEmpty(payPeriod)) {
@@ -214,11 +169,7 @@ const Type2Validations = {
           "tax monthly",
         ];
         if (frequencyTypes.indexOf(payPeriod.toLowerCase()) === -1) {
-          return {
-            code: "ID13.4",
-            message:
-              "Please check the details in these header record fields as they appear to be in the wrong format: Pay Period Frequency. Note, the Pay Period Frequency has to exactly match one of the following: weekly, tax weekly, fortnightly, tax fortnightly, 4 weekly, tax 4 weekly, monthly, tax monthly.",
-          };
+          return "ID13.4";
         }
         return null;
       } catch (err) {
@@ -226,11 +177,7 @@ const Type2Validations = {
       }
     },
     PaymentDueDate: async (row) => {
-      const validationError = {
-        code: "ID14.3",
-        message:
-          "Please check the details in the header record field as they appear to be in the wrong format: PDD. Please format dates in this field as YYYY-MM-DD.",
-      };
+      const validationError = "ID14.3"; 
       try {
         const pddDate = row.paymentDueDate;
         if (pddDate === "") {
@@ -246,11 +193,7 @@ const Type2Validations = {
       }
     },
     EarningsPeriodStartDate: async (row) => {
-      const validationError = {
-        code: "ID14.4",
-        message:
-          "Please check the details in the header record field as they appear to be in the wrong format: EPSD. Please format dates in this field as YYYY-MM-DD.",
-      };
+      const validationError = "ID14.4";
       try {
         const epedDate = row.earningPeriodEndDate;
         const epsdDate = row.earningPeriodStartDate;
@@ -263,11 +206,7 @@ const Type2Validations = {
         }
         // End date most be greater than start date, else error
         if (new Date(epedDate) < new Date(epsdDate)) {
-          return {
-            code: "ID12.4",
-            message:
-              "You cannot provide contributions for this schedule as the Earning Period Start Date is after the date you chose to stop using Nest.",
-          };
+          return "ID12.4";
         }
 
         return null;
@@ -276,11 +215,7 @@ const Type2Validations = {
       }
     },
     BulkUpdateToNoContributionsDue: async (row) => {
-      const validationError = {
-        code: "ID14.2",
-        message:
-          "Please check the details in these header record fields as they appear to be in the wrong format: Bulk Update to no Contributions Due. Please use either Y, N or blank.",
-      };
+      const validationError = "ID14.2"; 
       try {
         const bulkUpdateToContriDueFlag = row.bulkUpdateToNoContributionsDue;
         if (
@@ -312,14 +247,10 @@ const Type2Validations = {
       context: Context,
       actualRows: ContributionHeader[]
     ) => {
-      const validationError = {
-        code: "ID12.0",
-        message:
-          "Please check the Employer Reference Number in the header record as it doesn't match what we're expecting for this schedule.",
-      };
+      const validationError = "ID12.0";
       if (actualRows.length == 0) {
         context.log(
-          "Actul data check  failed for Employer Refrence Number, No records found"
+          "Actual data check  failed for Employer Refrence Number, No records found"
         );
         return validationError;
       }
@@ -331,11 +262,7 @@ const Type2Validations = {
       context: Context,
       actualRows: ContributionHeader[]
     ) => {
-      const validationError = {
-        code: "ID12.1",
-        message:
-          "Please check the Earnings Period End Date as it doesn't match what we're expecting for this schedule.",
-      };
+      const validationError = "ID12.1"; 
       const filterRow = actualRows.filter(
         (data: any) => data.earningPeriodEndDate == row.earningPeriodEndDate
       );
@@ -353,11 +280,7 @@ const Type2Validations = {
       context: Context,
       actualRows: ContributionHeader[]
     ) => {
-      const validationError = {
-        code: "ID12.2",
-        message:
-          "Please check the Payment Source name in the header record as it doesn't match what we're expecting for this schedule. Note, this field is case sensitive.",
-      };
+      const validationError = "ID12.2";
       const filterRow = actualRows.filter(
         (data: any) =>
           data.earningPeriodEndDate == row.EPED &&
@@ -379,11 +302,7 @@ const Type2Validations = {
     ) => {
       const pddDate = row.paymentDueDate;
       const epsdDate = row.earningPeriodStartDate;
-      const validationError = {
-        code: "ID12.3",
-        message:
-          "Please check the Pay Period Frequency in the header record as it doesn't match what we're expecting for this schedule.",
-      };
+      const validationError = "ID12.3";
       const filterRow = actualRows.filter(
         (data: any) =>
           data.earningPeriodEndDate == row.EPED &&
@@ -397,11 +316,7 @@ const Type2Validations = {
         );
         return validationError;
       } else if (filterRow.length > 1 && (pddDate === "" || epsdDate === "")) {
-        return {
-          code: "ID16.0",
-          message:
-            "We are unable to identify the Contribution Schedule this file is being uploaded for. Please provide the Payment Due Date and the Earnings Period Start Date to help us identify the Contribution Schedule you wish to upload the file for.",
-        };
+        return "ID16.0";
       }
       return null;
     },
@@ -411,11 +326,7 @@ const Type2Validations = {
       context: Context,
       actualRows: ContributionHeader[]
     ) => {
-      const validationError = {
-        code: "ID15.0",
-        message:
-          "Please check the Payment Due Date in this file as it doesn't match what we're expecting for this schedule. The date values must match those in the Contribution Schedule held online.",
-      };
+      const validationError = "ID15.0";
       const pddDate = row.paymentDueDate;
       const epsdDate = row.earningPeriodStartDate;
       if (pddDate === "") {
@@ -435,11 +346,7 @@ const Type2Validations = {
         );
         return validationError;
       } else if (filterRow.length > 1 && epsdDate === "") {
-        return {
-          code: "ID16.1",
-          message:
-            "We are unable to identify the Contribution Schedule this file is being uploaded for. Please provide the Earning Period Start Date to help us identify the Contribution Schedule you wish to upload the file for",
-        };
+        return "ID16.1";
       }
       return null;
     },
@@ -449,11 +356,7 @@ const Type2Validations = {
       context: Context,
       actualRows: ContributionHeader[]
     ) => {
-      const validationError = {
-        code: "ID15.1",
-        message:
-          "Please check the Earning Period Start Date in this file as it doesn't match what we're expecting for this schedule.",
-      };
+      const validationError = "ID15.1"; 
       const epsdDate = row.earningPeriodStartDate;
       if (epsdDate === "") {
         return null;
@@ -472,11 +375,7 @@ const Type2Validations = {
         );
         return validationError;
       } else if (filterRow.length > 1 && epsdDate === "") {
-        return {
-          code: "ID16.2",
-          message:
-            "We are unable to identify the Contribution Schedule this file is being uploaded for. Please provide the Payment Due Date to help us identify the Contribution Schedule you wish to upload the file for",
-        };
+        return "ID16.2";
       }
       return null;
     },
@@ -514,25 +413,31 @@ const Type2Validations = {
   executeRulesOneByOne: async function (
     rules: any,
     row,
-    callback: Function,
-    errors: Array<any>
+    rowNumber: any,
+    errors: Array<any>, 
+    rdErrorTypes,
+    contributionHeaderId,
+    context, 
+    callback: Function
   ) {
     try {
       for (const key in rules) {
         const validationFunc = rules[key];
-        const errMsg = await validationFunc(row);
-        if (errMsg) {
-          errors.push(errMsg);
+        const errorCode = await validationFunc(row, context, contributionHeaderId);
+        if (errorCode) {
+          let validationErrors = CommonContributionDetails.getRdErrorType(
+            rdErrorTypes,
+            errorCode, 
+          );
+          validationErrors.lineNumber = rowNumber;
+          errors.push(validationErrors);
         }
+
+
       }
-      return callback(null, true, null);
+      return;
     } catch (error) {
-      throw new Error(
-        JSON.stringify({
-          code: "ID9999",
-          message: "Something went wrong",
-        })
-      );
+      throw error;
     }
   },
 
@@ -596,7 +501,8 @@ const Type2Validations = {
 
   start: async function (
     readStream: NodeJS.ReadableStream,
-    context: Context
+    context: Context, 
+    rdErrorTypes
   ): Promise<any> {
     let trailerFound = false;
     let headers;
@@ -609,6 +515,7 @@ const Type2Validations = {
     let totalRecordsInTRow = 0;
     let header_id;
     let headerObject;
+    let contributionHeaderId;
 
     return new Promise(function (resolve, reject) {
       try {
@@ -620,15 +527,15 @@ const Type2Validations = {
           )
           .validate((row: any, cb) => {
             try {
-              let errMsg;
               currentRowIndex++;
               if (trailerFound) {
-                errMsg = `Please ensure that the last record in your file is marked 'T', to show that it's the trailer.`;
-                errorMessage = {
-                  code: "ID6",
-                  message: errMsg,
-                };
-                errorMessages.push(errorMessage);
+                let errorCode = "ID6";
+                let validationErrors = CommonContributionDetails.getRdErrorType(
+                  rdErrorTypes,
+                  errorCode
+                );
+                validationErrors.lineNumber = currentRowIndex;
+                errorMessages.push(validationErrors);
                 return cb(null, true, null);
               }
 
@@ -638,8 +545,12 @@ const Type2Validations = {
                   currentRowIndex
                 );
                 if (headerRowError !== null) {
-                  errorMessage = headerRowError;
-                  errorMessages.push(errorMessage);
+                  let validationErrors = CommonContributionDetails.getRdErrorType(
+                    rdErrorTypes,
+                    headerRowError
+                  );
+                  validationErrors.lineNumber = currentRowIndex;
+                  errorMessages.push(validationErrors);
                   return cb(null, true, null);
                 }
                 headerObject = CommonContributionDetails.getHeaderObject(row);
@@ -647,8 +558,12 @@ const Type2Validations = {
                 Type2Validations.executeRulesOneByOne(
                   Type2Validations.rulesType2B,
                   headerObject,
-                  cb,
-                  errorMessages
+                  currentRowIndex,
+                  errorMessages, 
+                  rdErrorTypes,
+                  contributionHeaderId, 
+                  context, 
+                  cb
                 );
                 return;
               }
@@ -658,26 +573,25 @@ const Type2Validations = {
                 const previousCount = countDRows;
                 countDRows = Type2Validations.isRowDValidation(row, countDRows);
                 if (previousCount === countDRows) {
-                  errMsg =
-                    "Unknown record types found. Please ensure that all records, between the header and trailer, are marked with the letter 'D'. This tells us they contain member details.";
-                  errorMessage = {
-                    code: "ID7",
-                    message: errMsg,
-                  };
-                  errorMessages.push(errorMessage);
+                  
+                  let validationErrors = CommonContributionDetails.getRdErrorType(
+                    rdErrorTypes,
+                    "ID7"
+                  );
+                  validationErrors.lineNumber = currentRowIndex;
+                  errorMessages.push(validationErrors);
                   return cb(null, true, null);
                 }
               }
 
               if (trailerFound) {
                 if (countDRows === 0) {
-                  errMsg =
-                    "There are no detail records in your file. Please ensure there is at least one detail record identified with a 'D', between the header and trailer, if you're unsure. ";
-                  errorMessage = {
-                    code: "ID8",
-                    message: errMsg,
-                  };
-                  errorMessages.push(errorMessage);
+                  let validationErrors = CommonContributionDetails.getRdErrorType(
+                    rdErrorTypes,
+                    "ID8"
+                  );
+                  validationErrors.lineNumber = currentRowIndex;
+                  errorMessages.push(validationErrors);
                   return cb(null, true, null);
                 }
 
@@ -687,23 +601,22 @@ const Type2Validations = {
                 if (totalRecordsInTRow != -1) {
                   const pattern = /^((-)?[\d]+)$/;
                   if (!pattern.test(totalRecordsInTRow.toString())) {
-                    let errMsg =
-                      "The number of detail records in your file has not been specified. Please ensure the number of records in your file is specified in the trailer record.";
-                    const error = {
-                      code: "ID9.0",
-                      message: errMsg,
-                    };
-                    errorMessages.push(error);
+                    let validationErrors = CommonContributionDetails.getRdErrorType(
+                      rdErrorTypes,
+                      "ID9.0"
+                    );
+                    validationErrors.lineNumber = currentRowIndex;
+                    errorMessages.push(validationErrors);
                     return cb(null, true, null);
                   }
                 }
                 if (totalRecordsInTRow !== countDRows) {
-                  const error = {
-                    code: "ID9.1",
-                    message:
-                      "The number of detail records in your file is different to the number specified in the trailer record. Please check the trailer record matches the number of detail records contained in your file.",
-                  };
-                  errorMessages.push(error);
+                  let validationErrors = CommonContributionDetails.getRdErrorType(
+                    rdErrorTypes,
+                    "ID9.1"
+                  );
+                  validationErrors.lineNumber = currentRowIndex;
+                  errorMessages.push(validationErrors);
                   return cb(null, true, null);
                 }
               }
@@ -730,13 +643,13 @@ const Type2Validations = {
           })
           .on("end", async (_e) => {
             if (!trailerFound) {
-              let errMsg =
-                "Please ensure that the last record in your file is marked 'T', to show that it's the trailer.";
-              const errorMessage = {
-                code: "ID6",
-                message: errMsg,
-              };
-              errorMessages.push(errorMessage);
+              
+              let validationErrors = CommonContributionDetails.getRdErrorType(
+                rdErrorTypes,
+                "ID6"
+              );
+              validationErrors.lineNumber = currentRowIndex;
+              errorMessages.push(validationErrors);
             }
             if (headerObject) {
               let records = await Type2Validations.getHeaderRecords(

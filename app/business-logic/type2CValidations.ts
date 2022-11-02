@@ -53,9 +53,6 @@ const Type2CValidations = {
           return "ID19";
         }
 
-        if (nino === alt) {
-          return "ID20.0";
-        }
 
         if (!isNinoEmpty) {
           Type2CValidations.ninos.push(nino);
@@ -87,7 +84,7 @@ const Type2CValidations = {
         let isAltExist =
           !isAltEmpty && Type2CValidations.alts.indexOf(alt) > -1;
         if (isNinoExist || isAltExist) {
-          return "ID20.1";
+          return "ID20.0";
         }
 
         const members = await FileUploadHelper.checkRecordValid({
