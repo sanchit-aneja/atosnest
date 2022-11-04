@@ -262,7 +262,7 @@ const normalisation = {
               value._previousDataValues?.stgcontrmember?._previousDataValues
                 ?.category,
             groupName: "groupName",
-            schdlMembStatusCd: "MS1",
+            schdlMembStatusCd: "MCS1",
             membPartyId: "membPartyId", //value._previousDataValues.crmPartyId,
             scmPartyId:
               value._previousDataValues?.stgcontrmember?._previousDataValues
