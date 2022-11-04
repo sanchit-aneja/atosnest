@@ -59,7 +59,7 @@ enum EnumRowTColumns {
 }
 
 enum EnumScheduleMemberStatusCD {
-  TO_BE_REVIEWED = "MS1",
+  TO_BE_REVIEWED = "MCS1",
   ATTENTION_NEEDED = "CS2",
   READY_TO_SUBMIT = "MS2",
 }
