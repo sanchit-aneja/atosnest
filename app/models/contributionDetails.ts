@@ -11,7 +11,7 @@ import { CustomError } from "../Errors";
 import RDScheduleMemberStatus from "./rdschedulememberstatus";
 import RDPartContribReason from "./rdpartcontribreason";
 import ErrorDetails from "./errorDetails";
-class ContributionDetails extends Model { }
+class ContributionDetails extends Model {}
 
 ContributionDetails.init(
   {
@@ -71,7 +71,7 @@ ContributionDetails.init(
     },
     membPlanRef: {
       type: DataTypes.STRING(16),
-      field: "memb_plan_ref"
+      field: "memb_plan_ref",
     },
     groupName: {
       type: DataTypes.STRING(40),
@@ -114,31 +114,31 @@ ContributionDetails.init(
     },
     scmPartyId: {
       type: DataTypes.STRING(16),
-      field: "scm_party_id"
+      field: "scm_party_id",
     },
     nino: {
       type: DataTypes.STRING(9),
-      field: "nino"
+      field: "nino",
     },
     alternativeId: {
       type: DataTypes.STRING(16),
-      field: "alternative_id"
+      field: "alternative_id",
     },
     autoCalcFlag: {
       type: DataTypes.STRING(1),
-      field: "auto_calc_flag"
+      field: "auto_calc_flag",
     },
     pensEarnings: {
       type: DataTypes.DECIMAL,
-      field: "pens_earnings"
+      field: "pens_earnings",
     },
     emplContriAmt: {
       type: DataTypes.DECIMAL,
-      field: "empl_contri_amt"
+      field: "empl_contri_amt",
     },
     membContriAmt: {
       type: DataTypes.DECIMAL,
-      field: "memb_contri_amt"
+      field: "memb_contri_amt",
     },
     membNonPayReason: {
       type: DataTypes.STRING(5),
@@ -155,72 +155,74 @@ ContributionDetails.init(
     },
     membLeaveEarnings: {
       type: DataTypes.DECIMAL,
-      field: "memb_leave_earnings"
+      field: "memb_leave_earnings",
     },
     newGroupName: {
       type: DataTypes.STRING(40),
-      field: "new_group_name"
+      field: "new_group_name",
     },
     newGroupPensEarnings: {
       type: DataTypes.DECIMAL,
-      field: "new_group_pens_earnings"
+      field: "new_group_pens_earnings",
     },
     newGroupEmplContriAmt: {
       type: DataTypes.DECIMAL,
-      field: "new_group_empl_contri_amt"
+      field: "new_group_empl_contri_amt",
     },
     newGroupMembContriAmt: {
       type: DataTypes.DECIMAL,
-      field: "new_group_memb_contri_amt"
+      field: "new_group_memb_contri_amt",
     },
     optoutRefNum: {
       type: DataTypes.STRING(20),
-      field: "optout_ref_num"
+      field: "optout_ref_num",
     },
     optoutDeclarationFlag: {
       type: DataTypes.STRING(1),
-      field: "optout_declaration_flag"
+      field: "optout_declaration_flag",
     },
     newPaymentPlanNo: {
       type: DataTypes.STRING(11),
-      field: "new_payment_plan_no"
+      field: "new_payment_plan_no",
     },
     newPaymentSourceName: {
       type: DataTypes.STRING(40),
-      field: "new_payment_source_name"
+      field: "new_payment_source_name",
     },
     membNonPayEffDate: {
       type: DataTypes.DATE,
-      field: "memb_non_pay_eff_date"
+      field: "memb_non_pay_eff_date",
     },
     secEnrolPensEarnings: {
       type: DataTypes.DECIMAL,
-      field: "sec_enrol_pens_earnings"
+      field: "sec_enrol_pens_earnings",
     },
     secEnrolEmplContriAmt: {
       type: DataTypes.DECIMAL,
-      field: "sec_enrol_empl_contri_amt"
+      field: "sec_enrol_empl_contri_amt",
     },
     secEnrolMembContriAmt: {
       type: DataTypes.DECIMAL,
-      field: "sec_enrol_memb_contri_amt"
+      field: "sec_enrol_memb_contri_amt",
     },
     channelType: {
       type: DataTypes.STRING(3),
-      field: "channel_type"
+      field: "channel_type",
     },
     memberExcludedFlag: {
       type: DataTypes.STRING(1),
-      field: "member_excluded_flag"
+      field: "member_excluded_flag",
     },
     membPaymentDueDate: {
       type: DataTypes.DATE,
-      field: "memb_payment_due_date"
+      field: "memb_payment_due_date",
     },
     recordStartDate: {
       type: DataTypes.DATEONLY,
       field: "record_start_date",
-      defaultValue: Joi.date().iso().default(() => moment().format(app.DEFAULT_DATE_FORMAT))
+      defaultValue: Joi.date()
+        .iso()
+        .default(() => moment().format(app.DEFAULT_DATE_FORMAT)),
     },
     recordEndDate: {
       type: DataTypes.DATE,
@@ -236,7 +238,7 @@ ContributionDetails.init(
     },
     lastUpdatedTimestamp: {
       type: DataTypes.DATE,
-      field: "last_updated_timestamp"
+      field: "last_updated_timestamp",
     },
     empGroupId: {
       type: DataTypes.BIGINT,
@@ -253,7 +255,7 @@ ContributionDetails.init(
     },
     newEmpGroupId: {
       type: DataTypes.BIGINT,
-      field: "new_emp_group_id"
+      field: "new_emp_group_id",
     },
     employerNestId: {
       type: DataTypes.STRING(30),
@@ -270,11 +272,11 @@ ContributionDetails.init(
     },
     origScheduleRef: {
       type: DataTypes.STRING(14),
-      field: "orig_schedule_ref"
+      field: "orig_schedule_ref",
     },
     contribHeaderId: {
       type: DataTypes.UUID,
-      field: "contrib_header_id"
+      field: "contrib_header_id",
     },
     firstName: {
       type: DataTypes.STRING(50),
@@ -304,11 +306,11 @@ ContributionDetails.init(
     },
     enrolmentType: {
       type: DataTypes.STRING(1),
-      field: "enrolment_type"
+      field: "enrolment_type",
     },
     secEnrolmentType: {
       type: DataTypes.STRING(1),
-      field: "sec_enrolment_type"
+      field: "sec_enrolment_type",
     },
     emplContriPct: {
       type: DataTypes.DECIMAL,
@@ -338,19 +340,25 @@ ContributionDetails.init(
     },
     newGroupEmplContriPct: {
       type: DataTypes.DECIMAL,
-      field: "new_group_empl_contri_pct"
+      field: "new_group_empl_contri_pct",
     },
     newGroupMembContriPct: {
       type: DataTypes.DECIMAL,
-      field: "new_group_memb_contri_pct"
+      field: "new_group_memb_contri_pct",
     },
     recordChangedFlag: {
       type: DataTypes.STRING(1),
-      field: "record_changed_flag"
+      field: "record_changed_flag",
+      get() {
+        return app.getValue(this, "recordChangedFlag");
+      },
+      set(value) {
+        app.setValue(this, "recordChangedFlag", value);
+      },
     },
     memTaxReliefEligibility: {
       type: DataTypes.STRING(1),
-      field: "mem_tax_relief_eligibility"
+      field: "mem_tax_relief_eligibility",
     },
   },
   {
@@ -358,7 +366,7 @@ ContributionDetails.init(
     tableName: "Member_Contribution_Details",
     updatedAt: "last_updated_timestamp",
     timestamps: true,
-    createdAt: false
+    createdAt: false,
   }
 );
 ContributionDetails.hasOne(RDScheduleMemberStatus, {
@@ -390,7 +398,7 @@ RDPartContribReason.belongsTo(ContributionDetails, {
 ContributionDetails.hasMany(ErrorDetails, {
   sourceKey: "membContribDetlId",
   foreignKey: "membContribDetlId",
-  as: "errorDetails"
+  as: "errorDetails",
 });
 ErrorDetails.belongsTo(ContributionDetails, {
   as: "contributiondetails",
@@ -417,19 +425,21 @@ ContributionDetails.beforeUpdate((contributionDetails, _options) => {
       newGroupName: Joi.string().max(40).optional().allow(null, ""),
 
       optoutRefNum: Joi.string().max(20).optional().allow(null, ""),
-      optoutDeclarationFlag: Joi.string().max(1).min(1).optional().allow(null, ""),
+      optoutDeclarationFlag: Joi.string()
+        .max(1)
+        .min(1)
+        .optional()
+        .allow(null, ""),
       newPaymentPlanNo: Joi.string().max(11).optional().allow(null, ""),
       newPaymentSourceName: Joi.string().max(40).optional().allow(null, ""),
 
       channelType: Joi.string().max(3).optional().allow(null, ""),
       memberExcludedFlag: Joi.string().max(1).min(1).optional().allow(null, ""),
 
-
       membPaymentDueDate: Joi.date().iso().optional().allow(null, ""),
       recordStartDate: Joi.date().iso().optional().allow(null, ""),
       recordEndDate: Joi.date().iso().optional().allow(null, ""),
       membNonPayEffDate: Joi.date().iso().optional().allow(null, ""),
-
 
       secEnrolPensEarnings: Joi.number().optional().allow(null, ""),
       secEnrolEmplContriAmt: Joi.number().optional().allow(null, ""),
@@ -442,76 +452,90 @@ ContributionDetails.beforeUpdate((contributionDetails, _options) => {
       emplContriAmt: Joi.number().optional().allow(null, ""),
       membContriAmt: Joi.number().optional().allow(null, ""),
       newEmpGroupId: Joi.number().integer().optional().allow(null, ""),
-
     });
 
     Joi.assert(contributionDetails, schema, {
-      allowUnknown: true
+      allowUnknown: true,
     });
-
   } catch (error) {
-    throw new CustomError("CONTRIBUTION_DETAILS_VALIDATION_FAILED", error.message);
+    throw new CustomError(
+      "CONTRIBUTION_DETAILS_VALIDATION_FAILED",
+      error.message
+    );
   }
-
-})
+});
 
 // Model helper methods
 
 /**
  * This is helper method to update one by one member details
- * @param membContribDetlId 
- * @param currentMemberDetails 
- * @param currentIndex 
- * @param allErrors 
- * @param transaction 
- * @param context 
- * @returns 
+ * @param membContribDetlId
+ * @param currentMemberDetails
+ * @param currentIndex
+ * @param allErrors
+ * @param transaction
+ * @param context
+ * @returns
  */
-export const contributionDetailsUpdateHelper = async function (membContribDetlId: string, currentMemberDetails: ContributionMemberDetails, currentIndex: number, allErrors: Array<UpdateError>, transaction, context: Context) {
+export const contributionDetailsUpdateHelper = async function (
+  membContribDetlId: string,
+  currentMemberDetails: ContributionMemberDetails,
+  currentIndex: number,
+  allErrors: Array<UpdateError>,
+  transaction,
+  context: Context
+) {
   if (app.isNullEmpty(currentMemberDetails)) {
     context.log(`currentMemberDetails is empty object`);
     allErrors.push({
       statusCode: Status.BAD_REQUEST,
       errorCode: errorDetails.CIA0600[0],
-      errorDetail: errorDetails.CIA0600[1]
+      errorDetail: errorDetails.CIA0600[1],
     });
   } else if (!membContribDetlId) {
-    context.log(`membContribDetlId is not present or undefined! value is ${membContribDetlId}`);
+    context.log(
+      `membContribDetlId is not present or undefined! value is ${membContribDetlId}`
+    );
     allErrors.push({
       statusCode: Status.NOT_FOUND,
       errorCode: errorDetails.CIA0601[0],
-      errorDetail: errorDetails.CIA0601[1]
+      errorDetail: errorDetails.CIA0601[1],
     });
   } else {
     currentMemberDetails["updatedBy"] = "SYSTEM"; // This need be changed once we confirm
-    const effectRows = await ContributionDetails.update({
-      ...currentMemberDetails
-    }, {
-      where: { 'membContribDetlId': membContribDetlId },
-      transaction,
-      individualHooks: true
-    }) as any;
+    currentMemberDetails["recordChangedFlag"] = "Y";
+    const effectRows = (await ContributionDetails.update(
+      {
+        ...currentMemberDetails,
+      },
+      {
+        where: { membContribDetlId: membContribDetlId },
+        transaction,
+        individualHooks: true,
+      }
+    )) as any;
 
     // Expecting effect rows may be zero when same value passed, but find row will present
     // If zero rows effected the not found
     if (effectRows[1]?.length === 0) {
-      context.log(`Update of membContribDetlId:${membContribDetlId} is failed..! ${effectRows}`)
+      context.log(
+        `Update of membContribDetlId:${membContribDetlId} is failed..! ${effectRows}`
+      );
       allErrors.push({
         statusCode: Status.NOT_FOUND,
         errorCode: errorDetails.CIA0601[0],
-        errorDetail: errorDetails.CIA0601[1]
-      })
+        errorDetail: errorDetails.CIA0601[1],
+      });
     }
   }
   return allErrors;
-}
-
+};
 
 export default ContributionDetails;
 
 export interface UpdateError {
-  statusCode: Status,
-  errorDetail: string,
-  errorCode: string,
-  membContribDetlId?: string
+  statusCode: Status;
+  errorDetail: string;
+  errorCode: string;
+  membContribDetlId?: string;
 }
