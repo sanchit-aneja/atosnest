@@ -5,13 +5,14 @@ import { ContributionDetails, ContributionHeader } from "../models";
 import { errorDetails } from "../models";
 import { httpRequestGenerator } from "../utils/httpRequestGenerator";
 import { AxiosResponse } from "axios";
+import commonContributionDetails from "./commonContributionDetails";
 
 interface Type3Error {
   membContribDetlId: string;
   errorSequenceNum: number;
-  Error_Code: string;
-  Error_Message: string;
-  Created_By: string;
+  errorCode: string;
+  errorMessage: string;
+  createdBy: string;
 }
 enum EnumREASONMAPPING {
   REASON5 = "CON12",
@@ -36,7 +37,6 @@ export const Type3Validations = {
       if (errors) {
         return {
           code: "ID31.0",
-          message: "Please enter a valid date.",
           dataRows: errors,
         };
       }
@@ -54,7 +54,6 @@ export const Type3Validations = {
       if (errors) {
         return {
           code: "ID31.1",
-          message: "Please complete this field.",
           dataRows: errors,
         };
       }
@@ -71,7 +70,6 @@ export const Type3Validations = {
       if (errors) {
         return {
           code: "ID31.2",
-          message: "Please complete this field.",
           dataRows: errors,
         };
       }
@@ -89,7 +87,6 @@ export const Type3Validations = {
       if (errors) {
         return {
           code: "ID31.3",
-          message: "Please complete this field.",
           dataRows: errors,
         };
       }
@@ -107,7 +104,6 @@ export const Type3Validations = {
       if (errors) {
         return {
           code: "ID31.4",
-          message: "Please complete this field.",
           dataRows: errors,
         };
       }
@@ -125,7 +121,6 @@ export const Type3Validations = {
       if (errors) {
         return {
           code: "ID31.5",
-          message: "Please complete this field.",
           dataRows: errors,
         };
       }
@@ -144,7 +139,6 @@ export const Type3Validations = {
       if (errors) {
         return {
           code: "ID31.6",
-          message: "Please complete this field.",
           dataRows: errors,
         };
       }
@@ -161,7 +155,6 @@ export const Type3Validations = {
       if (errors) {
         return {
           code: "ID31.7",
-          message: "Please complete this field.",
           dataRows: errors,
         };
       }
@@ -178,7 +171,6 @@ export const Type3Validations = {
       if (errors) {
         return {
           code: "ID31.8",
-          message: "Please complete this field.",
           dataRows: errors,
         };
       }
@@ -195,7 +187,6 @@ export const Type3Validations = {
       if (errors) {
         return {
           code: "ID31.9",
-          message: "Please enter a value.",
           dataRows: errors,
         };
       }
@@ -212,7 +203,6 @@ export const Type3Validations = {
       if (errors) {
         return {
           code: "ID31.10",
-          message: "Please complete this field.",
           dataRows: errors,
         };
       }
@@ -229,7 +219,6 @@ export const Type3Validations = {
       if (errors) {
         return {
           code: "ID31.11",
-          message: "Please complete this field.",
           dataRows: errors,
         };
       }
@@ -249,8 +238,6 @@ export const Type3Validations = {
       if (errors) {
         return {
           code: "ID31.43",
-          message:
-            "This date cannot be earlier than the Earnings Period Start Date of the Contribution Schedule.",
           dataRows: errors,
         };
       }
@@ -272,8 +259,6 @@ export const Type3Validations = {
       if (errors) {
         return {
           code: "ID31.44",
-          message:
-            "This date must be no more than one day after the Earnings Period End Date for this Contribution Schedule.",
           dataRows: errors,
         };
       }
@@ -296,8 +281,6 @@ export const Type3Validations = {
       if (errors) {
         return {
           code: "ID31.45",
-          message:
-            "As the effective date of the Payment Source Change is equal to the Earnings Period Start Date of the Contribution Schedule, the contributions cannot exceed £0. ",
           dataRows: errors,
         };
       }
@@ -317,8 +300,6 @@ export const Type3Validations = {
       if (errors) {
         return {
           code: "ID31.48",
-          message:
-            "This date must be no more than one day after the Earnings Period End Date for this Contribution Schedule.",
           dataRows: errors,
         };
       }
@@ -337,8 +318,6 @@ export const Type3Validations = {
       if (errors) {
         return {
           code: "ID31.54",
-          message:
-            "This date cannot be earlier than the Earnings Period Start Date of the Contribution Schedule.",
           dataRows: errors,
         };
       }
@@ -359,8 +338,6 @@ export const Type3Validations = {
       if (errors) {
         return {
           code: "ID31.55",
-          message:
-            "This date must be no more than one day after the Earnings Period End Date for this Contribution Schedule.",
           dataRows: errors,
         };
       }
@@ -382,8 +359,6 @@ export const Type3Validations = {
       if (errors) {
         return {
           code: "ID31.56",
-          message:
-            "As the effective date of the Payment Source Change is equal to the Earnings Period Start Date of the Contribution Schedule, the contributions cannot exceed £0. ",
           dataRows: errors,
         };
       }
@@ -401,8 +376,6 @@ export const Type3Validations = {
       if (errors) {
         return {
           code: "ID31.58",
-          message:
-            "The group name must exactly match a group held by the employer. This field is case sensitive. ",
           dataRows: errors,
         };
       }
@@ -422,8 +395,6 @@ export const Type3Validations = {
       if (errors) {
         return {
           code: "ID31.60",
-          message:
-            "The name entered cannot be the same as the group the member is currently in. ",
           dataRows: errors,
         };
       }
@@ -443,8 +414,6 @@ export const Type3Validations = {
       if (errors) {
         return {
           code: "ID31.62",
-          message:
-            "The total of employer and member contributions cannot be greater than member's pensionable earnings.   ",
           dataRows: errors,
         };
       }
@@ -463,8 +432,6 @@ export const Type3Validations = {
       if (errors) {
         return {
           code: "ID31.75",
-          message:
-            "The total of employer and member contributions cannot be greater than member's pensionable earnings.   ",
           dataRows: errors,
         };
       }
@@ -483,7 +450,6 @@ export const Type3Validations = {
       if (errors) {
         return {
           code: "ID32.00",
-          message: "The value entered for this member should not exceed £0.   ",
           dataRows: errors,
         };
       }
@@ -502,7 +468,7 @@ export const Type3Validations = {
       if (errors) {
         return {
           code: "ID32.1",
-          message: "The value entered for this member should not exceed £0.   ",
+
           dataRows: errors,
         };
       }
@@ -521,7 +487,7 @@ export const Type3Validations = {
       if (errors) {
         return {
           code: "ID32.2",
-          message: "The value entered for this member should not exceed £0.   ",
+
           dataRows: errors,
         };
       }
@@ -539,7 +505,7 @@ export const Type3Validations = {
       if (errors) {
         return {
           code: "ID33.00",
-          message: "Please provide a valid reason code. ",
+
           dataRows: errors,
         };
       }
@@ -557,7 +523,7 @@ export const Type3Validations = {
       if (errors) {
         return {
           code: "ID33.2",
-          message: "Please provide a valid reason code. ",
+
           dataRows: errors,
         };
       }
@@ -575,8 +541,6 @@ export const Type3Validations = {
       if (errors) {
         return {
           code: "ID34.00",
-          message:
-            "The total of employer and member contributions cannot be greater than member's pensionable earnings.   ",
           dataRows: errors,
         };
       }
@@ -591,7 +555,6 @@ export const Type3Validations = {
       if (errors) {
         return {
           code: "ID34.01",
-          message: "Please enter a value. ",
           dataRows: errors,
         };
       }
@@ -610,7 +573,7 @@ export const Type3Validations = {
       if (errors) {
         return {
           code: "ID34.02",
-          message: "Please provide a valid reason code. ",
+
           dataRows: errors,
         };
       }
@@ -625,7 +588,7 @@ export const Type3Validations = {
 
     const dataDetailRows: ContributionDetails[] =
       await ContributionDetails.findAll({
-        where: { contrib_header_id: contribHeaderId },
+        where: { contrib_header_id: contribHeaderId, record_changed_flag: "Y" },
       });
     let paymentGroupSource = {};
     try {
@@ -660,12 +623,12 @@ export const Type3Validations = {
         if (existsingItem === undefined) {
           const type3Error = {} as Type3Error;
 
-          type3Error.Error_Code = error.code;
-          type3Error.Error_Message = error.message;
+          type3Error.errorCode = error.code;
+          type3Error.errorMessage = error.message;
 
           type3Error.errorSequenceNum = 1;
 
-          type3Error.Created_By = "Sooraj";
+          type3Error.createdBy = "System";
           type3Error.membContribDetlId = dataRow.membContribDetlId;
 
           Type3Errors.push(type3Error);
@@ -696,11 +659,21 @@ export const Type3Validations = {
         const sucessIds = allIds.filter(function (item) {
           return errorIds.indexOf(item) === -1;
         });
+        const errorLookup: any = await commonContributionDetails.getAllErrors();
+        Type3Errors.map((type3Error: Type3Error) => {
+          const rdErrorType = commonContributionDetails.getRdErrorType(
+            errorLookup,
+            type3Error.errorCode
+          );
+
+          type3Error.errorMessage = rdErrorType.onlineErrorMessageTxt;
+        });
 
         await Type3Validations.updateDB(
           contribHeaderId,
           errorIds,
           sucessIds,
+          allIds,
           Type3Errors
         );
         resolve({ errorIds, sucessIds });
@@ -710,16 +683,23 @@ export const Type3Validations = {
       }
     });
   },
-  updateDB: async function (contribHeaderId, errorIds, sucessIds, Type3Errors) {
+  updateDB: async function (
+    contribHeaderId,
+    errorIds,
+    sucessIds,
+    allIds,
+    Type3Errors
+  ) {
     let transaction;
     try {
       transaction = await sequelize.transaction();
+
       await ContributionDetails.update(
-        { schdlMembStatusCd: "MS2" },
+        { record_changed_flag: null },
         {
           where: {
             membContribDetlId: {
-              [Op.in]: sucessIds,
+              [Op.in]: allIds,
             },
           },
         }
@@ -730,6 +710,16 @@ export const Type3Validations = {
           where: {
             membContribDetlId: {
               [Op.in]: errorIds,
+            },
+          },
+        }
+      );
+      await ContributionDetails.update(
+        { schdlMembStatusCd: "MS2" },
+        {
+          where: {
+            membContribDetlId: {
+              [Op.in]: sucessIds,
             },
           },
         }
