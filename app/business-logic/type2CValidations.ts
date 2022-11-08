@@ -53,7 +53,6 @@ const Type2CValidations = {
           return "ID19";
         }
 
-
         if (!isNinoEmpty) {
           Type2CValidations.ninos.push(nino);
         }
@@ -215,10 +214,6 @@ const Type2CValidations = {
           currentDRowIndex++;
         }
         if (errorMessages.length > 0) {
-          await CommonContributionDetails.saveFileErrorDetails(
-            errorMessages,
-            fileId
-          );
           reject(errorMessages);
         } else {
           resolve(true);

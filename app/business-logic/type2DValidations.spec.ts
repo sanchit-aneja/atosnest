@@ -343,18 +343,12 @@ describe("Test: Business logic common Contribution details functions", () => {
     Type2DValidations.executeRulesOneByOne = jest
       .fn()
       .mockImplementation(() => Promise.resolve(mockErrors));
-    const spySaveFileErrDtl = jest.spyOn(
-      CommonContributionDetails,
-      "saveFileErrorDetails"
-    );
     //Act
 
     //Assert
     await expect(
       Type2DValidations.start(stream, context, fileId, contributionHeaderId, {})
     ).rejects.toBe(mockErrors);
-    expect(spySaveFileErrDtl).toBeCalledTimes(1);
-    expect(spySaveFileErrDtl).toBeCalledWith(mockErrors, fileId);
 
     Type2DValidations.executeRulesOneByOne = executeRulesOneByOne;
   });
