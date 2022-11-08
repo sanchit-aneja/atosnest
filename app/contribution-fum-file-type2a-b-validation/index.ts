@@ -1,13 +1,7 @@
 import { AzureFunction, Context } from "@azure/functions";
 import blobHelper from "../utils/blobHelper";
 import { LOADING_DATA_ERROR_CODES } from "../utils/constants";
-import {
-  SaveContributionDetails,
-  Type2CValidations,
-  Type2DValidations,
-  Type2Validations,
-  CommonContributionDetails,
-} from "../business-logic";
+import { Type2Validations, CommonContributionDetails } from "../business-logic";
 import { FQSHelper } from "../utils";
 import { fqsStage, fqsStatus } from "../utils/fqsBody";
 import { v4 as uuidv4 } from "uuid";
@@ -22,6 +16,7 @@ const eventGridTrigger: AzureFunction = async function (
   const fileName = eventGridEvent.data.fileName;
   const correlationId = eventGridEvent.data.correlationId;
   const fqsHelper = new FQSHelper(context);
+  const fileId = uuidv4();
   try {
     context.log(`Started vaildation for correlation Id ${correlationId}`);
 
@@ -38,70 +33,35 @@ const eventGridTrigger: AzureFunction = async function (
     await fqsHelper.updateFQSProcessingStatus(correlationId, fqsBody);
 
     // Step 1: get data from blob file
-    const fileId = uuidv4();
     const _blobServiceClient = blobHelper.getBlobServiceClient();
-    const fileProperties = await blobHelper.getBlobProperties(
-      fileName,
-      _blobServiceClient
-    );
     const readStream = await blobHelper.getBlobStream(
       fileName,
       _blobServiceClient
     );
     const fileData = await blobHelper.streamToString(readStream);
 
+    // STEP 2 & 3 : Type 2A & 2B errors
     const result = await Type2Validations.start(
       blobHelper.stringToStream(fileData),
-      context, 
+      context,
       errors
     );
 
-    // Step 4: vaildation Type 2C
-    // PN-97531: be0d57c4-0a8c-4d7b-8af5-1cba12a9f16a is hard coded need to change once TO DO once header details ticket is done. PN-97531
-    await CommonContributionDetails.createFileEntry(
-      fileId,
-      fileName,
-      fileProperties,
-      result.header_id,
-      "CSU"
-    ); // File type is `CSU : Contribution Schedule upload from the employer`
-    await Type2CValidations.start(
-      blobHelper.stringToStream(fileData),
-      context,
-      fileId,
-      result.header_id,
-      errors
-    );
-    // Step 5: vaildation Type 2D
-    await Type2DValidations.start(
-      blobHelper.stringToStream(fileData),
-      context,
-      fileId,
-      result.header_id, //"be0d57c4-0a8c-4d7b-8af5-1cba12a9f16a",
-      errors
-    );
-
-    // Update contribution member details
-    await SaveContributionDetails.updateMemberDetails(
-      blobHelper.stringToStream(fileData),
-      context,
-      result.header_id,
-      errors
-    );
-
+    // Sending message to Type 2C & D
     const timeStamp = new Date().toUTCString();
     context.bindings.outputEvent = {
       id: uuidv4(),
       subject:
-        process.env.contribution_ValidateFUMType3Suject ||
-        "validate-contribution-fum-file-type3",
+        process.env.contribution_ValidateFUMType2CDSuject ||
+        "validate-contribution-fum-file-type2c-d",
       dataVersion: "1.0",
       eventType: "csv-validated",
       data: {
-        message: "contribution fum file type3 validated",
+        message: "contribution fum file type3 validate",
         correlationId: correlationId,
         contributionHeaderId: result.header_id,
         fileId: fileId,
+        fileName: fileName,
       },
       eventTime: timeStamp,
     };
@@ -119,6 +79,7 @@ const eventGridTrigger: AzureFunction = async function (
         },
       ];
     }
+    // Send error to FQS
     const errorPayload = [
       {
         ...LOADING_DATA_ERROR_CODES.FILE_HEADER_VALIDATION,

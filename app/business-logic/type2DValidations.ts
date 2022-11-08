@@ -287,10 +287,6 @@ const Type2DValidations = {
           currentDRowIndex++;
         }
         if (errorMessages.length > 0) {
-          await CommonContributionDetails.saveFileErrorDetails(
-            errorMessages,
-            fileId
-          );
           reject(errorMessages);
         } else {
           resolve(true);
