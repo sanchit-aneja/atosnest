@@ -142,16 +142,7 @@ ContributionDetails.init(
     },
     membNonPayReason: {
       type: DataTypes.STRING(5),
-      allowNull: false,
       field: "memb_non_pay_reason",
-      validate: {
-        notEmpty: {
-          msg: "membNonPayReason field cannot be empty",
-        },
-        notNull: {
-          msg: "membNonPayReason field cannot be null",
-        },
-      },
     },
     membLeaveEarnings: {
       type: DataTypes.DECIMAL,

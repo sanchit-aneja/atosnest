@@ -1,7 +1,7 @@
 export interface ContributionStgPolicyResponse {
   /**
-  * @isInt
-  */
+   * @isInt
+   */
   contrPolicyId: number;
   recordId: string;
   scheduleReference: string;
@@ -14,20 +14,20 @@ export interface ContributionStgPolicyResponse {
   regularContributionType: string;
   regularContributionTypeDesc: string;
   /**
-  * @isInt
-  */
+   * @isInt
+   */
   contributionPercentage: number;
   /**
-  * @isInt
-  */
+   * @isInt
+   */
   lastPaidAmount: number;
   /**
-  * @isDate
-  */
+   * @isDate
+   */
   recordStartDate?: Date;
   /**
-  * @isDate
-  */
+   * @isDate
+   */
   recordEndDate?: Date;
   createdBy?: string;
 }
@@ -36,8 +36,8 @@ export interface ContributionStgMemberResponse {
   recordId: string;
   scheduleReference: string;
   /**
-  * @isInt
-  */
+   * @isInt
+   */
   cmPartyId: number;
   crmPartyId: string;
   planReference: string;
@@ -47,48 +47,48 @@ export interface ContributionStgMemberResponse {
   forename: string;
   surname: string;
   /**
-  * @isDate
-  */
+   * @isDate
+   */
   membershipEffectiveDate: Date;
   membershipStatus: string;
   membershipStatusDesc: string;
   /**
-  * @isInt
-  */
+   * @isInt
+   */
   category: number;
   categoryName: string;
   /**
-  * @isInt
-  */
+   * @isInt
+   */
   pensionableSalary: number;
   reasonCode: string;
   /**
-  * @isInt
-  */
+   * @isInt
+   */
   currentEmployerContribution: number;
   /**
-  * @isInt
-  */
+   * @isInt
+   */
   currentMemberContribution: number;
   /**
-  * @isInt
-  */
+   * @isInt
+   */
   newEmployerContribution: number;
   /**
-  * @isInt
-  */
+   * @isInt
+   */
   newMemberContribution: number;
   /**
-  * @isInt
-  */
+   * @isInt
+   */
   newSalary: number;
   /**
-  * @isDate
-  */
+   * @isDate
+   */
   recordStartDate?: Date;
   /**
-  * @isDate
-  */
+   * @isDate
+   */
   recordEndDate?: Date;
   createdBy?: string;
 }
@@ -97,23 +97,23 @@ export interface ContributionStgScheduleResponse {
   scheduleReference: string;
   subSchemeId?: string;
   /**
-  * @isDate
-  */
+   * @isDate
+   */
   effectiveDate: Date;
   scheduleType: string;
   paymentPlanNo: number;
   payReference?: string;
   /**
-  * @isDate
-  */
+   * @isDate
+   */
   paymentDueDate?: Date;
   /**
-  * @isDate
-  */
+   * @isDate
+   */
   startDate?: Date;
   /**
-  * @isDate
-  */
+   * @isDate
+   */
   endDate?: Date;
   mopType: string;
   mopTypeDesc?: string;
@@ -122,12 +122,12 @@ export interface ContributionStgScheduleResponse {
   taxPeriodFreqInd?: string;
   numberOfMembers?: number;
   /**
-  * @isDate
-  */
+   * @isDate
+   */
   recordStartDate?: Date;
   /**
-  * @isDate
-  */
+   * @isDate
+   */
   recordEndDate?: Date;
   createdBy?: string;
 }
@@ -139,18 +139,18 @@ export interface ContributionHeaderResponse {
   scheduleType: string;
   scheduleStatusCd: string;
   /**
-  * @isDate
-  */
+   * @isDate
+   */
   scheduleGenerationDate: Date;
   employerNestId: string;
   subSchemeId?: string;
   /**
-  * @isDate
-  */
+   * @isDate
+   */
   earningPeriodStartDate: Date;
   /**
-  * @isDate
-  */
+   * @isDate
+   */
   earningPeriodEndDate: Date;
   paymentPlanNo?: string;
   paymentRef?: string;
@@ -162,19 +162,19 @@ export interface ContributionHeaderResponse {
   paymentFrequencyDesc: string;
   taxPayFrequencyInd?: string;
   /**
-  * @isDate
-  */
+   * @isDate
+   */
   paymentDueDate: Date;
   pegaCaseRef?: string;
   noOfMembs?: number;
-  totScheduleAmt?: number,
+  totScheduleAmt?: number;
   /**
-  * @isDate
-  */
+   * @isDate
+   */
   recordStartDate?: Date;
   /**
-  * @isDate
-  */
+   * @isDate
+   */
   recordEndDate?: Date;
   createdBy?: string;
   updatedBy?: string;
@@ -185,13 +185,13 @@ export interface MemberContributionDetailsResponse {
   nestScheduleRef: string;
   membEnrolmentRef: string;
   /**
-  * @isDate
-  */
+   * @isDate
+   */
   membContriDueDate: Date;
   membPlanRef?: string;
   /**
-  * @isInt
-  */
+   * @isInt
+   */
   empGroupId: number;
   groupName: string;
   schdlMembStatusCd: string;
@@ -201,75 +201,75 @@ export interface MemberContributionDetailsResponse {
   alternativeId?: string;
   autoCalcFlag?: string;
   /**
-  * @isFloat
-  */
+   * @isFloat
+   */
   pensEarnings?: number;
   /**
-  * @isFloat
-  */
+   * @isFloat
+   */
   emplContriAmt?: number;
   /**
-  * @isFloat
-  */
+   * @isFloat
+   */
   membContriAmt?: number;
   /**
-  * @isFloat
-  */
+   * @isFloat
+   */
   membNonPayReason: string;
   /**
-  * @isFloat
-  */
+   * @isFloat
+   */
   membLeaveEarnings?: number;
   newGroupName?: string;
   /**
-  * @isFloat
-  */
+   * @isFloat
+   */
   newGroupPensEarnings?: number;
   /**
-  * @isFloat
-  */
+   * @isFloat
+   */
   newGroupEmplContriAmt?: number;
   /**
-  * @isFloat
-  */
+   * @isFloat
+   */
   newGroupMembContriAmt?: number;
   optoutRefNum?: string;
   optoutDeclarationFlag?: string;
   newPaymentPlanNo?: string;
   newPaymentSourceName?: string;
   /**
-  * @isDate
-  */
+   * @isDate
+   */
   membNonPayEffDate?: Date;
   /**
-  * @isFloat
-  */
+   * @isFloat
+   */
   secEnrolPensEarnings?: number;
   /**
-  * @isFloat
-  */
+   * @isFloat
+   */
   secEnrolEmplContriAmt?: number;
   /**
-  * @isFloat
-  */
+   * @isFloat
+   */
   secEnrolMembContriAmt?: number;
   channelType?: string;
   memberExcludedFlag?: string;
   /**
-  * @isDate
-  */
+   * @isDate
+   */
   membPaymentDueDate?: Date;
   /**
-  * @isInt
-  */
+   * @isInt
+   */
   newEmpGroupId?: number;
   /**
-  * @isDate
-  */
+   * @isDate
+   */
   recordStartDate?: Date;
   /**
-  * @isDate
-  */
+   * @isDate
+   */
   recordEndDate?: Date;
   createdBy?: string;
   updatedBy?: string;
@@ -281,20 +281,20 @@ export interface MemberContributionDetailsResponse {
   enrolmentType?: string;
   secEnrolmentType?: string;
   /**
-  * @isFloat
-  */
+   * @isFloat
+   */
   emplContriPct: number;
   /**
-  * @isFloat
-  */
+   * @isFloat
+   */
   membContriPct: number;
   /**
-  * @isFloat
-  */
+   * @isFloat
+   */
   newGroupEmplContriPct?: number;
   /**
-  * @isFloat
-  */
+   * @isFloat
+   */
   newGroupMembContriPct?: number;
   recordChangedFlag?: string;
   memTaxReliefEligibility?: string;
@@ -302,19 +302,19 @@ export interface MemberContributionDetailsResponse {
 
 export interface ErrorDetailsResponse {
   /**
-  * @isInt
-  */
+   * @isInt
+   */
   errorLogId: number;
   errorFileId: string;
   /**
-  * @isFloat
-  */
+   * @isFloat
+   */
   errorSequenceNum: number;
   errorCode: string;
   errorMessage?: string;
   /**
-  * @isInt
-  */
+   * @isInt
+   */
   errorTypeId?: number;
 }
 
@@ -371,25 +371,25 @@ export interface RetriveContributionDetailsResponse {
   employerNestId?: string;
   updatedBy?: string;
   /**
-  * @isDate
-  */
+   * @isDate
+   */
   membPaymentDueDate?: Date;
 
   /**
-  * @isDate
-  */
+   * @isDate
+   */
 
   recordEndDate?: Date;
   createdBy?: string;
   /**
-  * @isInt
-  */
+   * @isInt
+   */
   newEmpGroupId?: number;
 
   recordStartDate?: Date;
   /**
-  * @isDate
-  */
+   * @isDate
+   */
 
   memberExcludedFlag?: string;
   nestScheduleRef: string;
@@ -399,13 +399,13 @@ export interface RetriveContributionDetailsResponse {
 
   membPlanRef?: string;
   /**
-  * @isDate
-  */
+   * @isDate
+   */
 
   membContriDueDate: Date;
   /**
-  * @isInt
-  */
+   * @isInt
+   */
   empGroupId: number;
 
   groupName: string;
@@ -420,35 +420,35 @@ export interface RetriveContributionDetailsResponse {
   alternativeId?: string;
   autoCalcFlag?: string;
   /**
-  * @isFloat
-  */
+   * @isFloat
+   */
   emplContriAmt?: number;
   /**
-  * @isFloat
-  */
+   * @isFloat
+   */
   pensEarnings?: number;
 
   /**
-  * @isFloat
-  */
+   * @isFloat
+   */
   membContriAmt?: number;
   /**
-  * @isFloat
-  */
+   * @isFloat
+   */
   membLeaveEarnings?: number;
 
   membNonPayReason: string;
   /**
-  * @isFloat
-  */
+   * @isFloat
+   */
   newGroupPensEarnings?: number;
   /**
-  * @isFloat
-  */
+   * @isFloat
+   */
   newGroupName?: string;
   /**
-  * @isFloat
-  */
+   * @isFloat
+   */
 
   optoutDeclarationFlag?: string;
 
@@ -456,49 +456,49 @@ export interface RetriveContributionDetailsResponse {
   optoutRefNum?: string;
 
   /**
-  * @isFloat
-  */
+   * @isFloat
+   */
   newGroupMembContriAmt?: number;
 
   newPaymentPlanNo?: string;
   /**
-  * @isFloat
-  */
+   * @isFloat
+   */
   secEnrolMembContriAmt?: number;
 
   newPaymentSourceName?: string;
   /**
-  * @isDate
-  */
+   * @isDate
+   */
   membNonPayEffDate?: Date;
   /**
-  * @isFloat
-  */
+   * @isFloat
+   */
   secEnrolPensEarnings?: number;
   /**
-  * @isFloat
-  */
+   * @isFloat
+   */
   channelType?: string;
   enrolmentType?: string;
   /**
-  * @isFloat
-  */
+   * @isFloat
+   */
   emplContriPct: number;
   /**
-  * @isFloat
-  */
+   * @isFloat
+   */
   membContriPct: number;
   /**
-  * @isFloat
-  */
+   * @isFloat
+   */
   newGroupEmplContriPct?: number;
   secEnrolEmplContriAmt?: number;
   firstName: string;
   secEnrolmentType?: string;
   lastName: string;
   /**
-  * @isFloat
-  */
+   * @isFloat
+   */
   newGroupMembContriPct?: number;
   recordChangedFlag?: string;
   memTaxReliefEligibility?: string;
@@ -523,3 +523,6 @@ export interface ContributionCorrectionAddMemberDetails {
   membContribDetlId: string;
 }
 
+export interface ClearScheduleStatusResponse {
+  clearSuccess: string;
+}

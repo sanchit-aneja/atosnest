@@ -2,7 +2,7 @@ import { Context } from "@azure/functions";
 import { Op } from "sequelize";
 import sequelize from "../utils/database";
 import { ContributionDetails, ContributionHeader } from "../models";
-import { errorDetails } from "../models";
+import errorDetails from "../models/errorDetails";
 import { httpRequestGenerator } from "../utils/httpRequestGenerator";
 import { AxiosResponse } from "axios";
 import commonContributionDetails from "./commonContributionDetails";
