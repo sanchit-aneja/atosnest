@@ -73,7 +73,7 @@ export class ContributionCorrectionController {
             const whereCdn = {
               membContribDetlId: element.membContribDetlId,
               contribHeaderId: origContribHeaderId,
-              schdlMembStatusCd: "MS6",
+              schdlMembStatusCd: "MCS6",
             };
             const item = await ContributionDetails.findOne({
               where: whereCdn,

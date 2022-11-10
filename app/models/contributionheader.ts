@@ -11,7 +11,7 @@ import { Context } from "@azure/functions";
 import app from "../utils/app";
 import FileHeaderMap from "./fileheadermap";
 
-class ContributionHeader extends Model { }
+class ContributionHeader extends Model {}
 
 ContributionHeader.init(
   {
@@ -32,7 +32,7 @@ ContributionHeader.init(
     },
     origContribHeaderId: {
       type: DataTypes.UUID,
-      field: "orig_contrib_header_id"
+      field: "orig_contrib_header_id",
     },
     nestScheduleRef: {
       type: DataTypes.STRING(14),
@@ -49,7 +49,7 @@ ContributionHeader.init(
     },
     externalScheduleRef: {
       type: DataTypes.STRING(32),
-      field: "external_schedule_ref"
+      field: "external_schedule_ref",
     },
     scheduleType: {
       type: DataTypes.STRING(2),
@@ -87,7 +87,7 @@ ContributionHeader.init(
         },
         notNull: {
           msg: "scheduleGenerationDate field cannot be null",
-        }
+        },
       },
     },
     employerNestId: {
@@ -135,11 +135,11 @@ ContributionHeader.init(
     },
     paymentPlanNo: {
       type: DataTypes.STRING(11),
-      field: "payment_plan_no"
+      field: "payment_plan_no",
     },
     paymentRef: {
       type: DataTypes.STRING(35),
-      field: "payment_ref"
+      field: "payment_ref",
     },
     nestPaymentRef: {
       type: DataTypes.STRING(12),
@@ -221,7 +221,7 @@ ContributionHeader.init(
     },
     taxPayFrequencyInd: {
       type: DataTypes.STRING(1),
-      field: "tax_pay_frequency_ind"
+      field: "tax_pay_frequency_ind",
     },
     paymentDueDate: {
       type: DataTypes.DATE,
@@ -242,35 +242,35 @@ ContributionHeader.init(
     },
     noOfMembs: {
       type: DataTypes.NUMBER,
-      field: "no_of_membs"
+      field: "no_of_membs",
     },
     totScheduleAmt: {
       type: DataTypes.DECIMAL,
-      field: "tot_schedule_amt"
+      field: "tot_schedule_amt",
     },
     recordStartDate: {
       type: DataTypes.DATE,
-      field: "record_start_date"
+      field: "record_start_date",
     },
     recordEndDate: {
       type: DataTypes.DATE,
-      field: "record_end_date"
+      field: "record_end_date",
     },
     createdBy: {
       type: DataTypes.STRING(50),
-      field: "created_by"
+      field: "created_by",
     },
     updatedBy: {
       type: DataTypes.STRING(50),
-      field: "updated_by"
-    }
+      field: "updated_by",
+    },
   },
   {
     sequelize,
     tableName: "Contribution_Header",
     createdAt: false,
     updatedAt: "last_updated_timestamp",
-    timestamps: true
+    timestamps: true,
   }
 );
 
@@ -327,32 +327,111 @@ FileHeaderMap.belongsTo(ContributionHeader, {
 
 ContributionHeader.addHook("beforeValidate", (contributionheader, _options) => {
   const schema = Joi.object({
-    contribHeaderId: Joi.string().optional().allow(null, ""),
-    nestScheduleRef: Joi.string().alphanum().max(14).trim(true).optional().allow(null, ""),
-    externalScheduleRef: Joi.string().alphanum().max(32).trim(true).optional().allow(null, ""),
-    scheduleType: Joi.string().alphanum().max(2).trim(true).optional().allow(null, ""),
-    scheduleStatusCd: Joi.string().alphanum().max(5).trim(true).optional().allow(null, ""),
+    nestScheduleRef: Joi.string()
+      .alphanum()
+      .max(14)
+      .trim(true)
+      .optional()
+      .allow(null, ""),
+    externalScheduleRef: Joi.string()
+      .alphanum()
+      .max(32)
+      .trim(true)
+      .optional()
+      .allow(null, ""),
+    scheduleType: Joi.string()
+      .alphanum()
+      .max(2)
+      .trim(true)
+      .optional()
+      .allow(null, ""),
+    scheduleStatusCd: Joi.string()
+      .alphanum()
+      .max(5)
+      .trim(true)
+      .optional()
+      .allow(null, ""),
     scheduleGenerationDate: Joi.date().iso().optional().allow(null),
-    employerNestId: Joi.string().alphanum().max(30).trim(true).optional().allow(null, ""),
-    subSchemeId: Joi.string().alphanum().max(16).trim(true).optional().allow(null, ""),
+    employerNestId: Joi.string()
+      .alphanum()
+      .max(30)
+      .trim(true)
+      .optional()
+      .allow(null, ""),
+    subSchemeId: Joi.string()
+      .alphanum()
+      .max(16)
+      .trim(true)
+      .optional()
+      .allow(null, ""),
     earningPeriodStartDate: Joi.date().iso().optional().allow(null),
     earningPeriodEndDate: Joi.date().iso().optional().allow(null),
-    paymentPlanNo: Joi.string().alphanum().max(11).trim(true).optional().allow(null, ""),
-    paymentRef: Joi.string().alphanum().max(35).trim(true).optional().allow(null, ""),
-    paymentSourceName: Joi.string().alphanum().max(40).trim(true).optional().allow(null, ""),
+    paymentPlanNo: Joi.string()
+      .alphanum()
+      .max(11)
+      .trim(true)
+      .optional()
+      .allow(null, ""),
+    paymentRef: Joi.string()
+      .alphanum()
+      .max(35)
+      .trim(true)
+      .optional()
+      .allow(null, ""),
+    paymentSourceName: Joi.string()
+      .alphanum()
+      .max(40)
+      .trim(true)
+      .optional()
+      .allow(null, ""),
     paymentMethod: Joi.string().alphanum().max(2).trim(true).optional(),
-    paymentMethodDesc: Joi.string().alphanum().max(30).trim(true).optional().allow(null, ""),
-    paymentFrequency: Joi.string().alphanum().max(2).trim(true).optional().allow(null, ""),
-    paymentFrequencyDesc: Joi.string().alphanum().max(30).trim(true).optional().allow(null, ""),
-    taxPayFrequencyInd: Joi.string().alphanum().max(1).trim(true).optional().allow(null, ""),
+    paymentMethodDesc: Joi.string()
+      .alphanum()
+      .max(30)
+      .trim(true)
+      .optional()
+      .allow(null, ""),
+    paymentFrequency: Joi.string()
+      .alphanum()
+      .max(2)
+      .trim(true)
+      .optional()
+      .allow(null, ""),
+    paymentFrequencyDesc: Joi.string()
+      .alphanum()
+      .max(30)
+      .trim(true)
+      .optional()
+      .allow(null, ""),
+    taxPayFrequencyInd: Joi.string()
+      .alphanum()
+      .max(1)
+      .trim(true)
+      .optional()
+      .allow(null, ""),
     paymentDueDate: Joi.date().iso().optional().allow(null),
-    pegaCaseRef: Joi.string().alphanum().max(30).trim(true).optional().allow(null, ""),
+    pegaCaseRef: Joi.string()
+      .alphanum()
+      .max(30)
+      .trim(true)
+      .optional()
+      .allow(null, ""),
     noOfMembs: Joi.number().max(8).optional().allow(null, ""),
     totScheduleAmt: Joi.number().optional().allow(null, ""),
     recordStartDate: Joi.date().iso().optional().allow(null),
     recordEndDate: Joi.date().iso().optional().allow(null),
-    createdBy: Joi.string().alphanum().max(50).trim(true).optional().allow(null, ""),
-    updatedBy: Joi.string().alphanum().max(50).trim(true).optional().allow(null, "")
+    createdBy: Joi.string()
+      .alphanum()
+      .max(50)
+      .trim(true)
+      .optional()
+      .allow(null, ""),
+    updatedBy: Joi.string()
+      .alphanum()
+      .max(50)
+      .trim(true)
+      .optional()
+      .allow(null, ""),
   });
   const { error } = schema.validate(contributionheader, joiOption);
   if (error) throw error;
@@ -360,7 +439,6 @@ ContributionHeader.addHook("beforeValidate", (contributionheader, _options) => {
 
 ContributionHeader.beforeCreate(async (contributionheader, _options) => {
   const schema = Joi.object({
-    contribHeaderId: Joi.string().required(),
     nestScheduleRef: Joi.string().alphanum().max(32).trim(true).required(),
     scheduleType: Joi.string().alphanum().max(2).trim(true).required(),
     scheduleStatusCd: Joi.string().alphanum().max(5).trim(true).required(),
@@ -373,7 +451,7 @@ ContributionHeader.beforeCreate(async (contributionheader, _options) => {
     paymentFrequencyDesc: Joi.string().alphanum().max(30).trim(true).required(),
     paymentMethod: Joi.string().alphanum().max(2).trim(true).required(),
     paymentMethodDesc: Joi.string().alphanum().max(30).trim(true).required(),
-    paymentDueDate: Joi.date().iso().required()
+    paymentDueDate: Joi.date().iso().required(),
   });
   const { error } = schema.validate(contributionheader, joiOption);
   if (error) throw error;
@@ -381,57 +459,71 @@ ContributionHeader.beforeCreate(async (contributionheader, _options) => {
 
 /**
  * This is helper method to update one by one member details
- * @param contribHeaderId 
- * @param currentMemberDetails 
- * @param currentIndex 
- * @param allErrors 
- * @param transaction 
- * @param context 
- * @returns 
+ * @param contribHeaderId
+ * @param currentMemberDetails
+ * @param currentIndex
+ * @param allErrors
+ * @param transaction
+ * @param context
+ * @returns
  */
-export const contributionHeaderUpdateHelper = async function (contribHeaderId: string, currentContributionHeaderDetails: ContributionHeaderDetails, currentIndex: number, allErrors: Array<UpdateError>, transaction, context: Context) {
+export const contributionHeaderUpdateHelper = async function (
+  contribHeaderId: string,
+  currentContributionHeaderDetails: ContributionHeaderDetails,
+  currentIndex: number,
+  allErrors: Array<UpdateError>,
+  transaction,
+  context: Context
+) {
   if (app.isNullEmpty(currentContributionHeaderDetails)) {
     context.log(`currentContributionHeaderDetails is empty object`);
     allErrors.push({
       statusCode: Status.BAD_REQUEST,
       errorCode: errorDetails.CIA0600[0],
-      errorDetail: errorDetails.CIA0600[1]
+      errorDetail: errorDetails.CIA0600[1],
     });
   } else if (!contribHeaderId) {
-    context.log(`contribHeaderId is not present or undefined! value is ${contribHeaderId}`);
+    context.log(
+      `contribHeaderId is not present or undefined! value is ${contribHeaderId}`
+    );
     allErrors.push({
       statusCode: Status.NOT_FOUND,
       errorCode: errorDetails.CIA0603[0],
-      errorDetail: errorDetails.CIA0603[1]
+      errorDetail: errorDetails.CIA0603[1],
     });
   } else {
     currentContributionHeaderDetails["updatedBy"] = "SYSTEM"; // This need be changed once we confirm
-    const effectRows = await ContributionHeader.update({
-      ...currentContributionHeaderDetails
-    }, {
-      where: { 'contribHeaderId': contribHeaderId },
-      transaction,
-      individualHooks: true
-    }) as any;
+    const effectRows = (await ContributionHeader.update(
+      {
+        ...currentContributionHeaderDetails,
+      },
+      {
+        where: { contribHeaderId: contribHeaderId },
+        transaction,
+        individualHooks: true,
+      }
+    )) as any;
 
     // Expecting effect rows may be zero when same value passed, but find row will present
     // If zero rows effected the not found
     if (effectRows[1]?.length === 0) {
-      context.log(`Update of contribHeaderId:${contribHeaderId} is failed..! ${effectRows}`)
+      context.log(
+        `Update of contribHeaderId:${contribHeaderId} is failed..! ${effectRows}`
+      );
       allErrors.push({
         statusCode: Status.NOT_FOUND,
         errorCode: errorDetails.CIA0603[0],
-        errorDetail: errorDetails.CIA0603[1]
-      })
+        errorDetail: errorDetails.CIA0603[1],
+      });
     }
   }
   return allErrors;
-}
+};
 
 export default ContributionHeader;
 export interface UpdateError {
-  statusCode: Status,
-  errorDetail: string,
-  errorCode: string,
-  contribHeaderId?: string
+  statusCode: Status;
+  errorDetail: string;
+  errorCode: string;
+  contribHeaderId?: string;
 }
