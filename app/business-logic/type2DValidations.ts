@@ -236,7 +236,7 @@ const Type2DValidations = {
         );
         // Added Current D row index + H row first line in the file
         validationErrors.lineNumber = currentDRowIndex + 1;
-        errors.push(validationErrors);
+        errors.push({ ...validationErrors });
       }
     }
     return errors;
@@ -268,7 +268,7 @@ const Type2DValidations = {
         // Start updating one by one with transcation
         for (const row of dRows) {
           context.log(
-            `Rows updating for current D row ${currentDRowIndex} contributionHeaderId: ${contributionHeaderId}`
+            `Type 2D: Rows updating for current D row ${currentDRowIndex} contributionHeaderId: ${contributionHeaderId} fileId: ${fileId}`
           );
           // Pass empty value for actual values here we no need that
           const customRow =

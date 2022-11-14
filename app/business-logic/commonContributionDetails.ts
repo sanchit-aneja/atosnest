@@ -3,6 +3,12 @@ import { Context } from "@azure/functions";
 import ErrorDetails from "../models/errorDetails";
 import { File, FileHeaderMap, RDErrorType } from "../models";
 import { v4 as uuidv4 } from "uuid";
+import {
+  FQSError,
+  FQSErrorSummary,
+  FQSRequestPayload,
+} from "./fqsRequestPayload";
+import { blobHelper } from "../utils";
 
 interface FileError {
   membContribDetlId?: string;
@@ -62,6 +68,12 @@ enum EnumScheduleMemberStatusCD {
   TO_BE_REVIEWED = "MCS1",
   ATTENTION_NEEDED = "CS2",
   READY_TO_SUBMIT = "MS2",
+}
+
+interface Type2SaveResult {
+  paidMembers: number;
+  newMembers: number;
+  isFailed: boolean;
 }
 
 const commonContributionDetails = {
@@ -524,11 +536,12 @@ const commonContributionDetails = {
             })
           )
           .on("error", async (e) => {
+            // This will not happen, safer side added this
             context.log(`commonContributionDetails: Error Type : ${e.message}`);
-            const error = {
-              code: "ID9999",
-              message: "Someting went wrong with update Contribution Details",
-            };
+            const error = commonContributionDetails.getSomethingWentWrongError(
+              "2C",
+              "CC"
+            );
             errorMessages.push(error);
             reject(errorMessages);
           })
@@ -727,6 +740,105 @@ const commonContributionDetails = {
     if (input && input != "") return input;
     else return null;
   },
+  /**
+   * Get something went wrong wrong in case technical error happens
+   * @param errorType
+   * @param processType
+   * @returns
+   */
+  getSomethingWentWrongError: function (
+    errorType: string,
+    processType: string
+  ) {
+    return {
+      errorNumber: "ID9999",
+      errorType: errorType,
+      processType: processType,
+      onlineErrorMessageTxt: "Something went wrong.",
+      detailedErrorMessageTxt: null,
+      errorTypeId: "9999999",
+      errorSeverity: 2,
+      recordStartDate: "0001-01-01",
+      recordEndDate: "9999-12-31",
+      createdBy: "SYSTEM",
+      updatedBy: "SYSTEM",
+      last_updated_timestamp: "0001-01-01T00:00:00.0Z",
+      lineNumber: 0,
+    };
+  },
+  /**
+   *
+   * @param type - e.g. contrib-index-sched-file-upload
+   * @param fileErrors - errors array
+   * @param errorType - e.g. Type 2
+   * @param errorFileDownloadLink - Document index URL
+   * @param instance - e.g. contribution-fum-file-type2c-d-validation
+   * @param newMembersIncluded - e.g. Yes or No
+   * @param paidMembersIncluded - e.g. Yes or No
+   */
+  getFQSPayloadForErrors: function (
+    type: string,
+    fileErrors: Array<any>,
+    errorType: string,
+    errorFileDownloadLink: string = "",
+    instance: string = "",
+    newMembersIncluded: string = "No",
+    paidMembersIncluded: string = "No"
+  ) {
+    const fqsReqPayload = {} as FQSRequestPayload;
+    const fQSErrorSummary = {
+      errorsIncluded: fileErrors.length > 0 ? "Yes" : "No",
+      errorType: errorType,
+      errorCount: fileErrors.length + "",
+      errorFileDownloadLink: errorFileDownloadLink,
+      newMembersIncluded,
+      paidMembersIncluded,
+    } as FQSErrorSummary;
+
+    let fqsErrors = [];
+    for (const fileError of fileErrors) {
+      let error = {} as FQSError;
+      error.errorCode = fileError.errorNumber;
+      error.errorDetail = `Line ${fileError.lineNumber}. ${fileError.onlineErrorMessageTxt}`;
+      fqsErrors.push(error);
+    }
+
+    fqsReqPayload.type = type;
+    fqsReqPayload.errorSummary = fQSErrorSummary;
+    fqsReqPayload.instance = instance;
+    fqsReqPayload.errors = fqsErrors;
+    return fqsReqPayload;
+  },
+
+  /**
+   * Save error log file to blob storage and calling Document Index APIs move
+   * @param errors
+   * @param fileName
+   * @param fileId
+   * @returns on success return Error file Download Link else empty
+   */
+  saveErrorLogFile: async function (
+    fileErrors: Array<any>,
+    fileName,
+    fileId
+  ): Promise<string> {
+    // Upload loading to blob storage first
+    const _blobServiceClient = blobHelper.getBlobServiceClient();
+    let fileContent = `File name: ${fileName}\nError count: ${fileErrors.length}\n`;
+    for (const error of fileErrors) {
+      fileContent = `${fileContent}Line ${error.lineNumber}. ${error.onlineErrorMessageTxt}\n`;
+    }
+    const isUploadToBlob = await blobHelper.uploadBlobFileContent(
+      fileId,
+      _blobServiceClient,
+      fileContent
+    );
+    if (isUploadToBlob) {
+      console.log(`Call Document Index API..!`);
+      return "";
+    }
+    return "";
+  },
 };
 
 export default commonContributionDetails;
@@ -736,4 +848,5 @@ export {
   EnumRowHColumns,
   EnumRowTColumns,
   EnumScheduleMemberStatusCD,
+  Type2SaveResult,
 };

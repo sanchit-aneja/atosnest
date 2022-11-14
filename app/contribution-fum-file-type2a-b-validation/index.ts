@@ -15,22 +15,25 @@ const eventGridTrigger: AzureFunction = async function (
   );
   const fileName = eventGridEvent.data.fileName;
   const correlationId = eventGridEvent.data.correlationId;
+  const fqsId = eventGridEvent.data.fqsId;
+
   const fqsHelper = new FQSHelper(context);
-  const fileId = uuidv4();
   try {
-    context.log(`Started vaildation for correlation Id ${correlationId}`);
+    context.log(
+      `Started vaildation for correlation Id ${correlationId} fqsId: ${fqsId}`
+    );
 
     // initialization of errors and update FQS
     const errors = await CommonContributionDetails.getAllErrors();
 
     const fqsBody = fqsHelper.getFQSBody(
-      correlationId,
+      fqsId,
       fileName,
       fqsStage.HEADER,
       fqsStatus.INPROGRESS
     );
 
-    await fqsHelper.updateFQSProcessingStatus(correlationId, fqsBody);
+    await fqsHelper.updateFQSProcessingStatus(fqsId, fqsBody);
 
     // Step 1: get data from blob file
     const _blobServiceClient = blobHelper.getBlobServiceClient();
@@ -57,29 +60,35 @@ const eventGridTrigger: AzureFunction = async function (
       dataVersion: "1.0",
       eventType: "csv-validated",
       data: {
-        message: "contribution fum file type3 validate",
+        message: "contribution fum file type2C and D validate",
         correlationId: correlationId,
         contributionHeaderId: result.header_id,
-        fileId: fileId,
         fileName: fileName,
+        fqsId: fqsId,
       },
       eventTime: timeStamp,
     };
 
-    context.log(`Validation done for correlation Id ${correlationId}`);
+    context.log(
+      `Validation done for correlation Id ${correlationId} fqsId:${fqsId}`
+    );
   } catch (error) {
     if (!Array.isArray(error)) {
       context.log(
         `Something went wrong, error ${JSON.stringify(error.message)}`
       );
-      error = [
-        {
-          code: "ID9999",
-          message: "Something went wrong",
-        },
-      ];
+      const somethingError =
+        CommonContributionDetails.getSomethingWentWrongError("2C", "CC");
+      error = [somethingError];
     }
     // Send error to FQS
+    const reqPayload = CommonContributionDetails.getFQSPayloadForErrors(
+      "contrib-index-sched-file-upload",
+      error,
+      "Type 2",
+      "",
+      "contribution-fum-file-type2a-b-validation"
+    );
     const errorPayload = [
       {
         ...LOADING_DATA_ERROR_CODES.FILE_HEADER_VALIDATION,
@@ -89,18 +98,20 @@ const eventGridTrigger: AzureFunction = async function (
       },
     ];
     const fqsBody = fqsHelper.getFQSBody(
-      correlationId,
+      fqsId,
       fileName,
       fqsStage.HEADER,
       fqsStatus.ERROR,
       errorPayload
     );
 
-    await fqsHelper.updateFQSFinishedStatus(correlationId, fqsBody);
+    await fqsHelper.updateFQSFinishedStatus(fqsId, fqsBody);
 
     context.log("Sending Error data to FQS", JSON.stringify(errorPayload));
   }
-  context.log(`Vaildation done for correlation Id ${correlationId}`);
+  context.log(
+    `Vaildation done for correlation Id ${correlationId} fqsId: ${fqsId}`
+  );
 };
 
 export default eventGridTrigger;
