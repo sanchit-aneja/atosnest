@@ -160,8 +160,8 @@ const Type2CValidations = {
           rdErrorTypes,
           errorCode
         );
-        validationErrors.lineNumber = rowIndex;
-        errors.push(validationErrors);
+        validationErrors.lineNumber = rowIndex + 1; // Adding one H row
+        errors.push({ ...validationErrors });
       }
     }
     return errors;
@@ -194,7 +194,7 @@ const Type2CValidations = {
         // Start updating one by one with transcation
         for (const row of dRows) {
           context.log(
-            `Rows updating for current D row ${currentDRowIndex} contributionHeaderId: ${contributionHeaderId}`
+            `Type 2C: Rows updating for current D row ${currentDRowIndex} contributionHeaderId: ${contributionHeaderId}`
           );
           // Pass empty value for actual values here we no need that
           const customRow =

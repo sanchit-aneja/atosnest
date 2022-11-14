@@ -5,6 +5,7 @@ import {
   default as CommonContributionDetails,
   EnumRowDColumns,
   EnumScheduleMemberStatusCD,
+  Type2SaveResult,
 } from "./commonContributionDetails";
 
 const saveContributionDetails = {
@@ -19,8 +20,8 @@ const saveContributionDetails = {
     context: Context,
     contributionHeaderId,
     currentDRowIndex,
-    rderrorTypes
-  ) {
+    updateResult: Type2SaveResult
+  ): Promise<Type2SaveResult> {
     const nino = CommonContributionDetails.getRowColumn(
       row,
       EnumRowDColumns.NINO
@@ -62,17 +63,8 @@ const saveContributionDetails = {
       context.log(
         `Current D row index ${currentDRowIndex} : This member is already submitted or paid and will show on the submitted or paid tabs`
       );
-      const id24Error = CommonContributionDetails.getRdErrorType(
-        rderrorTypes,
-        "ID24"
-      );
-      id24Error.lineNumber = currentDRowIndex + 1;
-      await CommonContributionDetails.saveFileErrorDetails(
-        [id24Error],
-        null,
-        memDetailsRow.membContribDetlId
-      );
-      return;
+      updateResult.paidMembers = updateResult.paidMembers + 1;
+      return updateResult;
     }
 
     if (memDetailsRow) {
@@ -81,9 +73,12 @@ const saveContributionDetails = {
           row,
           memDetailsRow
         );
+
+      // Update recordChangedFlag to Y
       const effectRows = (await ContributionDetails.update(
         {
           ...currentMemberDetails,
+          recordChangedFlag: "Y",
         },
         {
           where: whereCondition,
@@ -100,7 +95,9 @@ const saveContributionDetails = {
       await StgFileMemberDetails.create({
         ...fileMemberDetails,
       });
+      updateResult.newMembers = updateResult.newMembers + 1;
     }
+    return updateResult;
   },
 
   /**
@@ -112,11 +109,15 @@ const saveContributionDetails = {
   updateMemberDetails: async function (
     readStream: NodeJS.ReadableStream,
     context: Context,
-    contributionHeaderId,
-    rderrorTypes
-  ): Promise<boolean> {
+    contributionHeaderId
+  ): Promise<Type2SaveResult> {
     const transaction = await sequelize.transaction();
     let currentDRowIndex = 0;
+    let updateResult: Type2SaveResult = {
+      paidMembers: 0,
+      newMembers: 0,
+      isFailed: false,
+    };
     try {
       // Get D rows first from CSV parse
       const dRows = await CommonContributionDetails.getOnlyDRows(
@@ -126,22 +127,23 @@ const saveContributionDetails = {
       // Start updating one by one with transcation
       for (const row of dRows) {
         context.log(`Rows updating for current D row ${currentDRowIndex}`);
-        await saveContributionDetails.InsertOrUpdateRow(
+        updateResult = await saveContributionDetails.InsertOrUpdateRow(
           row,
           transaction,
           context,
           contributionHeaderId,
           currentDRowIndex,
-          rderrorTypes
+          updateResult
         );
         currentDRowIndex++;
       }
       await transaction.commit();
-      return true;
+      return updateResult;
     } catch (e) {
       context.log(`Something went wrong : ${e.message}`);
       await transaction.rollback();
-      return false;
+      updateResult.isFailed = true;
+      return updateResult;
     }
   },
 };
