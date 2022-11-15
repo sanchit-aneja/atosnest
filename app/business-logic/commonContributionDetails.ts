@@ -9,6 +9,7 @@ import {
   FQSRequestPayload,
 } from "./fqsRequestPayload";
 import { blobHelper } from "../utils";
+import DocumentIndexHelper from "../utils/documentIndexHelper";
 
 interface FileError {
   membContribDetlId?: string;
@@ -815,27 +816,38 @@ const commonContributionDetails = {
    * @param errors
    * @param fileName
    * @param fileId
+   * @param content
    * @returns on success return Error file Download Link else empty
    */
   saveErrorLogFile: async function (
     fileErrors: Array<any>,
     fileName,
-    fileId
+    fileId,
+    context: Context
   ): Promise<string> {
-    // Upload loading to blob storage first
-    const _blobServiceClient = blobHelper.getBlobServiceClient();
-    let fileContent = `File name: ${fileName}\nError count: ${fileErrors.length}\n`;
-    for (const error of fileErrors) {
-      fileContent = `${fileContent}Line ${error.lineNumber}. ${error.onlineErrorMessageTxt}\n`;
-    }
-    const isUploadToBlob = await blobHelper.uploadBlobFileContent(
-      fileId,
-      _blobServiceClient,
-      fileContent
-    );
-    if (isUploadToBlob) {
-      console.log(`Call Document Index API..!`);
-      return "";
+    try {
+      // Upload loading to blob storage first
+      const _blobServiceClient = blobHelper.getBlobServiceClient();
+      let fileContent = `File name: ${fileName}\nError count: ${fileErrors.length}\n`;
+      for (const error of fileErrors) {
+        fileContent = `${fileContent}Line ${error.lineNumber}. ${error.onlineErrorMessageTxt}\n`;
+      }
+      const isUploadToBlob = await blobHelper.uploadBlobFileContent(
+        fileId,
+        _blobServiceClient,
+        fileContent
+      );
+      if (isUploadToBlob) {
+        const documentDownloadLink = await new DocumentIndexHelper(
+          context
+        ).moveFile(fileId, "move");
+        context.log(`documentDownloadLink: ${documentDownloadLink}`);
+        return documentDownloadLink;
+      }
+    } catch (error) {
+      context.log(
+        `Something went wrong at: saveErrorLogFile - Reason ${error.message}`
+      );
     }
     return "";
   },

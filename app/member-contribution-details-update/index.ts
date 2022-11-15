@@ -23,7 +23,7 @@ const httpTrigger: AzureFunction = async function (
     Status.FAILURE_MSG,
     ""
   );
-  let resp = await app.errorResponse(Status.FAILURE, errorRespData);
+  let resp;
 
   // Check input payload is empty or not
   if (app.isNullEmpty(payload)) {
