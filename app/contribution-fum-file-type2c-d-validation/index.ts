@@ -6,11 +6,11 @@ import {
   Type2CValidations,
   Type2DValidations,
   CommonContributionDetails,
+  Type2SaveResult,
 } from "../business-logic";
 import { FQSHelper } from "../utils";
 import { fqsStage, fqsStatus } from "../utils/fqsBody";
 import { v4 as uuidv4 } from "uuid";
-import { Type2SaveResult } from "../business-logic";
 
 const eventGridTrigger: AzureFunction = async function (
   context: Context,
@@ -125,7 +125,12 @@ const eventGridTrigger: AzureFunction = async function (
     await CommonContributionDetails.saveFileErrorDetails(error, fileId);
 
     const errorFileDownloadLink =
-      await CommonContributionDetails.saveErrorLogFile(error, fileName, fileId);
+      await CommonContributionDetails.saveErrorLogFile(
+        error,
+        fileName,
+        fileId,
+        context
+      );
 
     // Send to FQS
     const reqPayload = CommonContributionDetails.getFQSPayloadForErrors(
@@ -135,28 +140,14 @@ const eventGridTrigger: AzureFunction = async function (
       errorFileDownloadLink,
       "contribution-fum-file-type2c-d-validation"
     );
-    console.log(JSON.stringify(reqPayload));
-    const errorPayload = [
-      {
-        ...LOADING_DATA_ERROR_CODES.FILE_HEADER_VALIDATION,
-        File_Name: fileName,
-        Time_Of_Processing: new Date().toUTCString(),
-        Error_Details: error,
-      },
-    ];
-    const fqsBody = fqsHelper.getFQSBody(
-      correlationId,
-      fileName,
-      fqsStage.HEADER,
-      fqsStatus.ERROR,
-      errorPayload
-    );
 
-    await fqsHelper.updateFQSFinishedStatus(correlationId, fqsBody);
+    await fqsHelper.updateFQSFinishedStatus(correlationId, reqPayload);
 
-    context.log("Sending Error data to FQS", JSON.stringify(errorPayload));
+    context.log("Sending Error data to FQS", JSON.stringify(reqPayload));
   }
-  context.log(`Vaildation done for correlation Id ${correlationId}`);
+  context.log(
+    `Type 2C & D Vaildation done for correlation Id ${correlationId}`
+  );
 };
 
 export default eventGridTrigger;

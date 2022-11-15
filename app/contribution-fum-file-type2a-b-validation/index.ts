@@ -89,25 +89,10 @@ const eventGridTrigger: AzureFunction = async function (
       "",
       "contribution-fum-file-type2a-b-validation"
     );
-    const errorPayload = [
-      {
-        ...LOADING_DATA_ERROR_CODES.FILE_HEADER_VALIDATION,
-        File_Name: fileName,
-        Time_Of_Processing: new Date().toUTCString(),
-        Error_Details: error,
-      },
-    ];
-    const fqsBody = fqsHelper.getFQSBody(
-      fqsId,
-      fileName,
-      fqsStage.HEADER,
-      fqsStatus.ERROR,
-      errorPayload
-    );
 
-    await fqsHelper.updateFQSFinishedStatus(fqsId, fqsBody);
+    await fqsHelper.updateFQSFinishedStatus(fqsId, reqPayload);
 
-    context.log("Sending Error data to FQS", JSON.stringify(errorPayload));
+    context.log("Sending Error data to FQS", JSON.stringify(reqPayload));
   }
   context.log(
     `Vaildation done for correlation Id ${correlationId} fqsId: ${fqsId}`

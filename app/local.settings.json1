@@ -31,7 +31,9 @@
       "contribution_LoadStagingSubject": "load-staging",
       "contribution_LoadNormalisationSubject": "load-normalisation",
       "contribution_ValidateFUMType3Suject": "validate-contribution-fum-file-type3",
-      "contribution_ValidateFUMType2CDSuject": "validate-contribution-fum-file-type2c-d"
+      "contribution_ValidateFUMType2CDSuject": "validate-contribution-fum-file-type2c-d",
+      "contribution_DocumentIndexBaseURL": "https://documentIndex.com/12345",
+      "contribution_DocumentIndexSource": "Public"
     },
     "Host": {
       "CORS": "*"
