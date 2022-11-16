@@ -32,13 +32,13 @@ export interface ContributionMemberDetails {
   membPaymentDueDate?: Date;
   recordStartDate?: Date;
   recordEndDate?: Date;
-  emplContriPct: number;
-  membContriPct: number;
+  emplContriPct?: number;
+  membContriPct?: number;
   newGroupEmplContriPct?: number;
   recordChangedFlag?: string;
   memTaxReliefEligibility?: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
 }
 
 /**
