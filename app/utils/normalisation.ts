@@ -193,7 +193,9 @@ const normalisation = {
     switch (value._previousDataValues?.reasonCode) {
       case "CON02":
         params.pensEarnings = value._previousDataValues?.pensionableSalary;
-        params.memberLeaveEarnings = value._previousDataValues?.newSalary;
+        params.memberLeaveEarnings = value._previousDataValues?.newSalary
+          ? value._previousDataValues?.newSalary
+          : 0;
         params.membNonPayReason = "CON02";
         params.emplContriAmt = 0;
         params.membContriAmt = 0;

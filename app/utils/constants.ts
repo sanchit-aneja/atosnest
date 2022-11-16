@@ -19,10 +19,12 @@ export const headerColumns = [
   "scheduleReference",
   "groupSchemeID",
   "subSchemeId",
+  "subSchemeName",
   "effectiveDate",
   "scheduleType",
   "paymentPlanNo",
   "payReference",
+  "paymentSourceName",
   "paymentDueDate",
   "startDate",
   "endDate",
@@ -75,6 +77,8 @@ export const memberColumns = [
   "membershipStatusDesc",
   "category",
   "categoryName",
+  "newCategory",
+  "newCategoryName",
   "pensionableSalary",
   "reasonCode",
   "currentEmployerContribution",
@@ -88,7 +92,7 @@ export const memberColumnFormats = [
   ["recordId", "VARCHAR", false, 2],
   ["scheduleReference", "VARCHAR", false, 32],
   ["cmPartyId", "NUMBER", false, 8],
-  ["crmPartyId", "VARCHAR", false, 10],
+  ["crmPartyId", "VARCHAR", false, 36],
   ["planReference", "VARCHAR", false, 16],
   ["membershipId", "VARCHAR", false, 16],
   ["schemePayrollReference", "VARCHAR", false, 16],
@@ -100,6 +104,8 @@ export const memberColumnFormats = [
   ["membershipStatusDesc", "VARCHAR", false, 20],
   ["category", "NUMBER", false, 6],
   ["categoryName", "VARCHAR", false, 75],
+  ["newCategory", "NUMBER", false, 6],
+  ["newCategoryName", "VARCHAR", false, 75],
   ["pensionableSalary", "DECIMAL", false, [10, 2]],
   ["reasonCode", "VARCHAR", false, 5],
   ["currentEmployerContribution", "DECIMAL", false, [10, 2]],
@@ -151,10 +157,12 @@ export type headerColumnsType = {
   scheduleReference: string;
   groupSchemeID: string;
   subSchemeId: string;
+  subSchemeName: string;
   effectiveDate: Date;
   scheduleType: string;
   paymentPlanNo: string;
   payReference: string;
+  paymentSourceName: string;
   paymentDueDate: Date;
   startDate: Date;
   endDate: Date;
@@ -169,8 +177,7 @@ export type headerColumnsType = {
 export const regexPattern = {
   alphaNumPattern: /^([a-zA-Z0-9 .-]+)$/,
   numPattern: /^([0-9 ]+)$/,
-  datePattern:
-    /^(([\d])|([0-2][\d])|([3][0-1]))\-(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\-\d{2}$/,
+  datePattern: /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/,
 };
 
 export const CSV_FILES: {
@@ -184,10 +191,12 @@ export const CSV_FILES: {
       "schedule_reference",
       "group_scheme_id",
       "sub_scheme_id",
+      "sub_scheme_name",
       "effective_date",
       "schedule_type",
       "payment_plan_no",
       "pay_reference",
+      "payment_source_name",
       "payment_due_date",
       "start_date",
       "end_date",
@@ -218,6 +227,8 @@ export const CSV_FILES: {
       "membership_status_desc",
       "category",
       "category_name",
+      "new_category",
+      "new_category_name",
       "pensionable_salary",
       "reason_code",
       "current_employer_contribution",

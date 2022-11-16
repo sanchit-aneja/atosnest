@@ -467,7 +467,7 @@ class fieldVal {
   }
 
   isNumeric(digits) {
-    if (!this.errors && this.val != undefined) {
+    if (!this.errors && this.val != undefined && this.val != "") {
       if (
         !regexPattern.numPattern.test(this.val) &&
         this.val.length <= digits

@@ -5,7 +5,7 @@ import sequelize from "../utils/database";
 import * as moment from "moment";
 import app from "../utils/app";
 
-class StgContrMember extends Model { }
+class StgContrMember extends Model {}
 
 StgContrMember.init(
   {
@@ -27,43 +27,43 @@ StgContrMember.init(
     },
     recordId: {
       type: DataTypes.STRING(2),
-      field: "record_id"
+      field: "record_id",
     },
     scheduleReference: {
       type: DataTypes.STRING(32),
-      field: "schedule_reference"
+      field: "schedule_reference",
     },
     cmPartyId: {
       type: DataTypes.NUMBER,
-      field: "cm_party_id"
+      field: "cm_party_id",
     },
     crmPartyId: {
-      type: DataTypes.STRING(10),
-      field: "crm_party_id"
+      type: DataTypes.STRING(36),
+      field: "crm_party_id",
     },
     planReference: {
       type: DataTypes.STRING(16),
-      field: "plan_reference"
+      field: "plan_reference",
     },
     membershipId: {
       type: DataTypes.STRING(16),
-      field: "membership_id"
+      field: "membership_id",
     },
     schemePayrollReference: {
       type: DataTypes.STRING(16),
-      field: "scheme_payroll_reference"
+      field: "scheme_payroll_reference",
     },
     nino: {
       type: DataTypes.STRING(12),
-      field: "nino"
+      field: "nino",
     },
     forename: {
       type: DataTypes.STRING(30),
-      field: "forename"
+      field: "forename",
     },
     surname: {
       type: DataTypes.STRING(40),
-      field: "surname"
+      field: "surname",
     },
     membershipEffectiveDate: {
       type: DataTypes.DATEONLY,
@@ -71,52 +71,62 @@ StgContrMember.init(
     },
     membershipStatus: {
       type: DataTypes.STRING(1),
-      field: "membership_status"
+      field: "membership_status",
     },
     membershipStatusDesc: {
       type: DataTypes.STRING(20),
-      field: "membership_status_desc"
+      field: "membership_status_desc",
     },
     category: {
       type: DataTypes.NUMBER,
-      field: "category"
+      field: "category",
     },
     categoryName: {
       type: DataTypes.STRING(75),
-      field: "category_name"
+      field: "category_name",
+    },
+    newCategory: {
+      type: DataTypes.NUMBER,
+      field: "new_category",
+    },
+    newCategoryName: {
+      type: DataTypes.STRING(75),
+      field: "new_category_name",
     },
     pensionableSalary: {
       type: DataTypes.DECIMAL,
-      field: "pensionable_salary"
+      field: "pensionable_salary",
     },
     reasonCode: {
       type: DataTypes.STRING(5),
-      field: "reason_code"
+      field: "reason_code",
     },
     currentEmployerContribution: {
       type: DataTypes.DECIMAL,
-      field: "current_employer_contribution"
+      field: "current_employer_contribution",
     },
     currentMemberContribution: {
       type: DataTypes.DECIMAL,
-      field: "current_member_contribution"
+      field: "current_member_contribution",
     },
     newEmployerContribution: {
       type: DataTypes.DECIMAL,
-      field: "new_employer_contribution"
+      field: "new_employer_contribution",
     },
     newMemberContribution: {
       type: DataTypes.DECIMAL,
-      field: "new_member_contribution"
+      field: "new_member_contribution",
     },
     newSalary: {
       type: DataTypes.DECIMAL,
-      field: "new_salary"
+      field: "new_salary",
     },
     recordStartDate: {
       type: DataTypes.DATEONLY,
       field: "record_start_date",
-      defaultValue: Joi.date().iso().default(() => moment().format(app.DEFAULT_DATE_FORMAT))
+      defaultValue: Joi.date()
+        .iso()
+        .default(() => moment().format(app.DEFAULT_DATE_FORMAT)),
     },
     recordEndDate: {
       type: DataTypes.DATE,
@@ -125,18 +135,18 @@ StgContrMember.init(
     createdBy: {
       type: DataTypes.STRING(50),
       field: "created_by",
-    }
+    },
   },
   {
     sequelize,
     tableName: "Stg_Contr_Mem",
-    timestamps: false
+    timestamps: false,
   }
 );
 
 StgContrMember.beforeCreate(async (stgcontrmember, _options) => {
   const schema = Joi.object({
-    contrMemberId: Joi.number().required()
+    contrMemberId: Joi.number().required(),
   });
   const { error } = schema.validate(stgcontrmember, joiOption);
   if (error) throw error;
