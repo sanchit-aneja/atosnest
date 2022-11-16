@@ -1,9 +1,5 @@
 import { Type3Validations } from "./type3Validations";
-import {
-  ContributionDetails,
-  ContributionHeader,
-  errorDetails,
-} from "../models";
+import { ContributionDetails, ContributionHeader } from "../models";
 import { Context } from "@azure/functions";
 import { id31_0Response } from "../__test__/mock/validations/type3Responses/id31_0Response";
 import { id31_1Response } from "../__test__/mock/validations/type3Responses/id31_1Response";
@@ -37,7 +33,6 @@ import { id34_01Response } from "../__test__/mock/validations/type3Responses/id3
 import { id34_02Response1 } from "../__test__/mock/validations/type3Responses/id34_02Response1";
 import { id34_02Response2 } from "../__test__/mock/validations/type3Responses/id34_02Response2";
 import {
-  type3DataResponse,
   ContributionDetailsResponse,
   ContributionHeaderResponse,
   customerIndexResponse,

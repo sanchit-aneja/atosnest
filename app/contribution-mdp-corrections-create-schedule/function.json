@@ -1,0 +1,18 @@
+{
+  "bindings": [
+    {
+      "authLevel": "anonymous",
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "req",
+      "methods": ["put"],
+      "route": "contribution/contribution-mdp-corrections-create-schedule/{contribHeaderId}/scheduleType/{scheduleType}"
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "res"
+    }
+  ],
+  "scriptFile": "../dist/contribution-mdp-corrections-create-schedule/index.js"
+}
