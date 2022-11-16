@@ -5,7 +5,7 @@ import sequelize from "../utils/database";
 import * as moment from "moment";
 import app from "../utils/app";
 
-class StgContrSchedule extends Model { }
+class StgContrSchedule extends Model {}
 
 StgContrSchedule.init(
   {
@@ -51,54 +51,54 @@ StgContrSchedule.init(
     },
     effectiveDate: {
       type: DataTypes.DATEONLY,
-      field: "effective_date"
+      field: "effective_date",
     },
     scheduleType: {
       type: DataTypes.STRING(1),
-      field: "schedule_type"
+      field: "schedule_type",
     },
     paymentPlanNo: {
       type: DataTypes.STRING(11),
-      field: "payment_plan_no"
+      field: "payment_plan_no",
     },
     payReference: {
       type: DataTypes.STRING(35),
-      field: "pay_reference"
+      field: "pay_reference",
     },
     paymentSourceName: {
       type: DataTypes.STRING(40),
-      field: "payment_source_name"
+      field: "payment_source_name",
     },
     paymentDueDate: {
       type: DataTypes.DATEONLY,
       field: "payment_due_date",
-      allowNull: true
+      allowNull: true,
     },
     startDate: {
       type: DataTypes.DATEONLY,
       field: "start_date",
-      allowNull: true
+      allowNull: true,
     },
     endDate: {
       type: DataTypes.DATEONLY,
       field: "end_date",
-      allowNull: true
+      allowNull: true,
     },
     mopType: {
       type: DataTypes.STRING(2),
-      field: "mop_type"
+      field: "mop_type",
     },
     mopTypeDesc: {
       type: DataTypes.STRING(20),
-      field: "mop_type_desc"
+      field: "mop_type_desc",
     },
     premFrequency: {
       type: DataTypes.STRING(2),
-      field: "prem_frequency"
+      field: "prem_frequency",
     },
     premFrequencyDesc: {
       type: DataTypes.STRING(15),
-      field: "prem_frequency_desc"
+      field: "prem_frequency_desc",
     },
     taxPeriodFreqInd: {
       type: DataTypes.STRING(1),
@@ -111,7 +111,9 @@ StgContrSchedule.init(
     recordStartDate: {
       type: DataTypes.DATEONLY,
       field: "record_start_date",
-      defaultValue: Joi.date().iso().default(() => moment().format(app.DEFAULT_DATE_FORMAT))
+      defaultValue: Joi.date()
+        .iso()
+        .default(() => moment().format(app.DEFAULT_DATE_FORMAT)),
     },
     recordEndDate: {
       type: DataTypes.DATE,
@@ -123,12 +125,12 @@ StgContrSchedule.init(
     createdBy: {
       type: DataTypes.STRING(50),
       field: "created_by",
-    }
+    },
   },
   {
     sequelize,
     tableName: "Stg_Contr_Sch",
-    timestamps: false
+    timestamps: false,
   }
 );
 
@@ -136,7 +138,6 @@ StgContrSchedule.beforeCreate(async (stgcontrschedule, _options) => {
   const schema = Joi.object({
     scheduleId: Joi.number().required(),
     scheduleReference: Joi.string().alphanum().max(32).trim(true).required(),
-
   });
   const { error } = schema.validate(stgcontrschedule, joiOption);
   if (error) throw error;
