@@ -1,0 +1,12 @@
+{
+  "bindings": [
+    {
+      "name": "myBlob",
+      "type": "blobTrigger",
+      "direction": "in",
+      "path": "contribution_BlobContainerName/{name}",
+      "connection": "contribution_BlobConnectString"
+    }
+  ],
+  "scriptFile": "../dist/BlobTrigger1/index.js"
+}

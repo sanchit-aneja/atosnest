@@ -670,7 +670,6 @@ export const Type3Validations = {
         });
 
         await Type3Validations.updateDB(
-          contribHeaderId,
           errorIds,
           sucessIds,
           allIds,
@@ -683,13 +682,7 @@ export const Type3Validations = {
       }
     });
   },
-  updateDB: async function (
-    contribHeaderId,
-    errorIds,
-    sucessIds,
-    allIds,
-    Type3Errors
-  ) {
+  updateDB: async function (errorIds, sucessIds, allIds, Type3Errors) {
     let transaction;
     try {
       transaction = await sequelize.transaction();
@@ -731,16 +724,6 @@ export const Type3Validations = {
           },
         },
       });
-      if (errorIds.length == 0) {
-        await ContributionHeader.update(
-          { schedule_status_cd: "CS3" },
-          {
-            where: {
-              contribHeaderId: contribHeaderId,
-            },
-          }
-        );
-      }
 
       await errorDetails.bulkCreate(Type3Errors, {
         validate: true,

@@ -327,6 +327,7 @@ FileHeaderMap.belongsTo(ContributionHeader, {
 
 ContributionHeader.addHook("beforeValidate", (contributionheader, _options) => {
   const schema = Joi.object({
+    contribHeaderId: Joi.string().optional().allow(null, ""),
     nestScheduleRef: Joi.string()
       .alphanum()
       .max(14)
@@ -334,10 +335,10 @@ ContributionHeader.addHook("beforeValidate", (contributionheader, _options) => {
       .optional()
       .allow(null, ""),
     externalScheduleRef: Joi.string()
-      .alphanum()
       .max(32)
       .trim(true)
       .optional()
+
       .allow(null, ""),
     scheduleType: Joi.string()
       .alphanum()
@@ -386,7 +387,6 @@ ContributionHeader.addHook("beforeValidate", (contributionheader, _options) => {
       .allow(null, ""),
     paymentMethod: Joi.string().alphanum().max(2).trim(true).optional(),
     paymentMethodDesc: Joi.string()
-      .alphanum()
       .max(30)
       .trim(true)
       .optional()
@@ -450,7 +450,8 @@ ContributionHeader.beforeCreate(async (contributionheader, _options) => {
     paymentFrequency: Joi.string().alphanum().max(2).trim(true).required(),
     paymentFrequencyDesc: Joi.string().alphanum().max(30).trim(true).required(),
     paymentMethod: Joi.string().alphanum().max(2).trim(true).required(),
-    paymentMethodDesc: Joi.string().alphanum().max(30).trim(true).required(),
+
+    paymentMethodDesc: Joi.string().max(30).trim(true).required(),
     paymentDueDate: Joi.date().iso().required(),
   });
   const { error } = schema.validate(contributionheader, joiOption);
