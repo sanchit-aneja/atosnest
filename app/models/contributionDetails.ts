@@ -493,8 +493,41 @@ export const contributionDetailsUpdateHelper = async function (
       errorDetail: errorDetails.CIA0601[1],
     });
   } else {
+    const schdlMembStatusCd: any = await ContributionDetails.findOne({
+      attributes: ["schdlMembStatusCd"],
+      where: {
+        membContribDetlId: membContribDetlId,
+      },
+    });
+
+    if (schdlMembStatusCd) {
+      if (
+        schdlMembStatusCd["dataValues"]["schdlMembStatusCd"] != "MCS0" &&
+        schdlMembStatusCd["dataValues"]["schdlMembStatusCd"] != "MCS1" &&
+        schdlMembStatusCd["dataValues"]["schdlMembStatusCd"] != "MCS2" &&
+        schdlMembStatusCd["dataValues"]["schdlMembStatusCd"] != "MCS3"
+      ) {
+        context.log(
+          `schdlMembStatusCd is not draft or To be reviewed or Ready to submit or Attention needed`
+        );
+        allErrors.push({
+          statusCode: Status.NOT_FOUND,
+          errorCode: errorDetails.CIA0604[0],
+          errorDetail: errorDetails.CIA0604[1],
+        });
+        return allErrors;
+      }
+    }
+
     currentMemberDetails["updatedBy"] = "SYSTEM"; // This need be changed once we confirm
     currentMemberDetails["recordChangedFlag"] = "Y";
+
+    if (schdlMembStatusCd) {
+      if (schdlMembStatusCd["dataValues"]["schdlMembStatusCd"] === "MCS0") {
+        currentMemberDetails["schdlMembStatusCd"] = "MCS1";
+      }
+    }
+
     const effectRows = (await ContributionDetails.update(
       {
         ...currentMemberDetails,
@@ -508,7 +541,7 @@ export const contributionDetailsUpdateHelper = async function (
 
     // Expecting effect rows may be zero when same value passed, but find row will present
     // If zero rows effected the not found
-    if (effectRows[1]?.length === 0) {
+    if (effectRows && effectRows[1]?.length === 0) {
       context.log(
         `Update of membContribDetlId:${membContribDetlId} is failed..! ${effectRows}`
       );
