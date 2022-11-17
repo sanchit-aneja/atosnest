@@ -10,10 +10,10 @@ const blobHelper = {
    * This helper method returns Blob service client
    * @returns BlobServiceClient based on default connection string
    */
-  getBlobServiceClient(): BlobServiceClient {
-    return BlobServiceClient.fromConnectionString(
-      process.env.contribution_BlobConnectString
-    );
+  getBlobServiceClient(
+    blobConnectString: string = process.env.contribution_BlobConnectString
+  ): BlobServiceClient {
+    return BlobServiceClient.fromConnectionString(blobConnectString);
   },
   /**
    * get blob data in stream format
@@ -104,11 +104,11 @@ const blobHelper = {
   async uploadBlobFileContent(
     blobName: string,
     blobServiceClient: BlobServiceClient,
-    fileContent: string
+    fileContent: string,
+    containerName: string = process.env.contribution_BlobContainerName
   ): Promise<boolean> {
     try {
       // Get container name and blob client ready
-      const containerName = process.env.contribution_BlobContainerName;
       const client = blobServiceClient.getContainerClient(containerName);
       const blobClient = client.getBlockBlobClient(blobName);
 

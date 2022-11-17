@@ -118,7 +118,7 @@ const eventGridTrigger: AzureFunction = async function (
         `Something went wrong, error ${JSON.stringify(error.message)}`
       );
       const somethingError =
-        CommonContributionDetails.getSomethingWentWrongError("2C", "CC");
+        CommonContributionDetails.getSomethingWentWrongError("2C", "CS");
       error = [somethingError];
     }
     // Write errors to DB and Error log file only when Type 2B passed
