@@ -4,7 +4,7 @@
       "name": "myBlob",
       "type": "blobTrigger",
       "direction": "in",
-      "path": "inboundcontributions/{name}",
+      "path": "%contribution_BlobContainerName%/Contribution_Header_File_{name}.csv",
       "connection": "contribution_BlobConnectString"
     }
   ],
