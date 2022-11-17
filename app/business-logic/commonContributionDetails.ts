@@ -541,7 +541,7 @@ const commonContributionDetails = {
             context.log(`commonContributionDetails: Error Type : ${e.message}`);
             const error = commonContributionDetails.getSomethingWentWrongError(
               "2C",
-              "CC"
+              "CS"
             );
             errorMessages.push(error);
             reject(errorMessages);
@@ -664,7 +664,7 @@ const commonContributionDetails = {
     return {
       errorNumber: byErrorCode,
       errorType: "UK", //UNKNOWN
-      processType: "CC",
+      processType: "CS",
       onlineErrorMessageTxt: "Something went wrong",
       detailedErrorMessageTxt: null,
       errorTypeId: -1,
@@ -827,20 +827,23 @@ const commonContributionDetails = {
   ): Promise<string> {
     try {
       // Upload loading to blob storage first
-      const _blobServiceClient = blobHelper.getBlobServiceClient();
+      const _blobServiceClient = blobHelper.getBlobServiceClient(
+        process.env.contribution_DocumentIndexBlobConnectString
+      );
       let fileContent = `File name: ${fileName}\nError count: ${fileErrors.length}\n`;
       for (const error of fileErrors) {
         fileContent = `${fileContent}Line ${error.lineNumber}. ${error.onlineErrorMessageTxt}\n`;
       }
       const isUploadToBlob = await blobHelper.uploadBlobFileContent(
-        fileId,
+        `${fileId}.txt`,
         _blobServiceClient,
-        fileContent
+        fileContent,
+        process.env.contribution_DocumentIndexBlobContainerName
       );
       if (isUploadToBlob) {
         const documentDownloadLink = await new DocumentIndexHelper(
           context
-        ).moveFile(fileId, "move");
+        ).moveFile(`${fileId}.txt`, "move");
         context.log(`documentDownloadLink: ${documentDownloadLink}`);
         return documentDownloadLink;
       }

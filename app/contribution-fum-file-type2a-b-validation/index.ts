@@ -78,7 +78,7 @@ const eventGridTrigger: AzureFunction = async function (
         `Something went wrong, error ${JSON.stringify(error.message)}`
       );
       const somethingError =
-        CommonContributionDetails.getSomethingWentWrongError("2C", "CC");
+        CommonContributionDetails.getSomethingWentWrongError("2B", "CS");
       error = [somethingError];
     }
     // Send error to FQS

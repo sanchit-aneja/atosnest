@@ -32,8 +32,10 @@
       "contribution_LoadNormalisationSubject": "load-normalisation",
       "contribution_ValidateFUMType3Suject": "validate-contribution-fum-file-type3",
       "contribution_ValidateFUMType2CDSuject": "validate-contribution-fum-file-type2c-d",
-      "contribution_DocumentIndexBaseURL": "https://documentIndex.com/12345",
-      "contribution_DocumentIndexSource": "Public"
+      "contribution_DocumentIndexBaseURL": "http://localhost:7072/api",
+      "contribution_DocumentIndexSource": "Public",
+      "contribution_DocumentIndexBlobContainerName": "public",
+      "contribution_DocumentIndexBlobConnectString": "DefaultEndpointsProtocol=https;AccountName=documentindexstorage;AccountKey=hFLdEQ3DZ0OzDZDl/nQzifvKVt8UoFzCowBTBAxbO2ERrnT1ZfP/27GToNIKT5dBS+PCl6cHLUTQ+AStupQ7xQ==;EndpointSuffix=core.windows.net"
     },
     "Host": {
       "CORS": "*"
