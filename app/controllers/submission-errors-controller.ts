@@ -4,7 +4,8 @@ import app from "../utils/app";
 import { ContributionHeaderSubmission } from "../models";
 import FileHeaderMap from "../models/fileheadermap";
 import ErrorDetails from "../models/errorDetails";
-import { MemberContributionDetailsController } from "./member-contribution-details-controller";
+import { MemberContributionDetailsController } from './member-contribution-details-controller';
+import { SubmissionErrorRequest } from "../schemas/request-schema";
 
 @Route("/contribution")
 export class ContributionSubmissionErrorsController {
@@ -48,7 +49,7 @@ export class ContributionSubmissionErrorsController {
   /**
    * 5406 API Catalogue Number
    * Add external error
-   * @param contribSubmissionId is the Contribution Submission Header id
+   * @param params contain the submission error details
    * @return Returns OK status.
    */
   @Security("api_key")
@@ -57,7 +58,7 @@ export class ContributionSubmissionErrorsController {
   @Response("400", Status.BAD_REQUEST_MSG)
   @Response("404", Status.NOT_FOUND_MSG)
   @Response("500", Status.FAILURE_MSG)
-  async createSubmissionError(params: any): Promise<any> {
+  async createSubmissionError(params: SubmissionErrorRequest): Promise<any> {
     try {
       let errorDetails = [];
 

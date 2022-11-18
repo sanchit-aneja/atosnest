@@ -24,7 +24,9 @@ export interface ContributionHeaderRequest
 export interface MemberContributionDetailsRequest
   extends Omit<MemberContributionDetailsResponse, ''> { }
 
-export interface ContributionCorrectionAddMemberRequest {
-  contribHeaderId: string;
-  contributionDetail: Array<ContributionCorrectionAddMemberDetails>;
+export interface SubmissionErrorRequest { 
+  contributionSubmissionId: string,
+  errorCode: string,
+  payload: string,
+  payloadType: string
 }

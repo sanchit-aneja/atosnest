@@ -12,8 +12,8 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     const result = await controller.createSubmissionError(req.body);
 
     context.res = {
-        // status: 200, /* Defaults to 200 */
-        body: result
+        status: result, /* Defaults to 200 */
+        // body: result
     };
 
 };

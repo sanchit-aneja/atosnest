@@ -519,10 +519,14 @@ export interface SearchMemberContributionResultResponse<T> {
   results: T[];
 }
 
-export interface ContributionCorrectionAddMemberDetails {
-  membContribDetlId: string;
+export interface ContributionSubmissionUpdateResponse {
+  countSubmitted: number,
+  countMembersInSchedule: number,
+  countUnsubmitted: number
 }
 
-export interface ClearScheduleStatusResponse {
-  clearSuccess: string;
+export interface ContributionXmlResponse { 
+  isStreaming: boolean,
+  docs: {}[],
+  totalRecordCount: number
 }
