@@ -37,6 +37,7 @@ export interface ContributionMemberDetails {
   newGroupEmplContriPct?: number;
   recordChangedFlag?: string;
   memTaxReliefEligibility?: string;
+  origMembNonPayReason?: string;
   firstName?: string;
   lastName?: string;
 }

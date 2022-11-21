@@ -351,6 +351,10 @@ ContributionDetails.init(
       type: DataTypes.STRING(1),
       field: "mem_tax_relief_eligibility",
     },
+    origMembNonPayReason: {
+      type: DataTypes.STRING(5),
+      field: "orig_memb_non_pay_reason",
+    },
   },
   {
     sequelize,

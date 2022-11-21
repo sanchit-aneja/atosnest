@@ -21,14 +21,6 @@ ContributionHeader.init(
       primaryKey: true,
       defaultValue: Sequelize.literal("uuid_generate_v4()"),
       field: "contrib_header_id",
-      validate: {
-        notEmpty: {
-          msg: "contribHeaderId field cannot be empty",
-        },
-        notNull: {
-          msg: "contribHeaderId field cannot be null",
-        },
-      },
     },
     origContribHeaderId: {
       type: DataTypes.UUID,
@@ -327,7 +319,6 @@ FileHeaderMap.belongsTo(ContributionHeader, {
 
 ContributionHeader.addHook("beforeValidate", (contributionheader, _options) => {
   const schema = Joi.object({
-    contribHeaderId: Joi.string().optional().allow(null, ""),
     nestScheduleRef: Joi.string()
       .alphanum()
       .max(14)

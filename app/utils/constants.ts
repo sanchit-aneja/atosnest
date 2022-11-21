@@ -376,4 +376,5 @@ export const CONTR_MEMBER_DETAILS = [
   "newGroupMembContriPct",
   "recordChangedFlag",
   "memTaxReliefEligibility",
+  "origMembNonPayReason",
 ];

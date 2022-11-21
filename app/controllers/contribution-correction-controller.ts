@@ -51,8 +51,9 @@ export class ContributionCorrectionController {
             scheduleType: "CS",
             [Op.or]: [
               { scheduleStatusCd: "CS1" },
-              { scheduleStatusCd: "CS2" },
               { scheduleStatusCd: "CS3" },
+              { scheduleStatusCd: "CS4" },
+              { scheduleStatusCd: "CS13" },
             ],
           },
           attributes: ["origContribHeaderId"],
@@ -73,7 +74,7 @@ export class ContributionCorrectionController {
             const whereCdn = {
               membContribDetlId: element.membContribDetlId,
               contribHeaderId: origContribHeaderId,
-              schdlMembStatusCd: "MCS6",
+              schdlMembStatusCd: "MCS13",
             };
             const item = await ContributionDetails.findOne({
               where: whereCdn,
@@ -105,6 +106,7 @@ export class ContributionCorrectionController {
                 "firstName",
                 "lastName",
                 "memTaxReliefEligibility",
+                "origMembNonPayReason",
               ],
               include: [
                 {
@@ -112,10 +114,10 @@ export class ContributionCorrectionController {
                   where: {
                     contribHeaderId: origContribHeaderId,
                     [Op.and]: [
-                      { scheduleStatusCd: { [Op.ne]: "CS4" } },
                       { scheduleStatusCd: { [Op.ne]: "CS5" } },
                       { scheduleStatusCd: { [Op.ne]: "CS6" } },
                       { scheduleStatusCd: { [Op.ne]: "CS7" } },
+                      { scheduleStatusCd: { [Op.ne]: "CS8" } },
                     ],
                   },
                 },
@@ -179,6 +181,7 @@ export class ContributionCorrectionController {
         firstName: item["dataValues"]["firstName"],
         lastName: item["dataValues"]["lastName"],
         memTaxReliefEligibility: item["dataValues"]["memTaxReliefEligibility"],
+        origMembNonPayReason: item["dataValues"]["origMembNonPayReason"],
       };
       membArr.push(finalObj);
       return membArr;

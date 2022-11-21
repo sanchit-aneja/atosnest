@@ -282,7 +282,9 @@ const normalisation = {
             membContriPct: 0.0,
             pensEarnings: parseFloat(paramsObj.pensEarnings),
             membLeaveEarnings: parseFloat(paramsObj.memberLeaveEarnings),
-            membNonPayReason: paramsObj.membNonPayReason,
+            membNonPayReason: paramsObj.membNonPayReason
+              ? paramsObj.membNonPayReason
+              : null,
             emplContriAmt: parseFloat(paramsObj.emplContriAmt),
             membContriAmt: parseFloat(paramsObj.membContriAmt),
           };
