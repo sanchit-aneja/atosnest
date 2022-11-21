@@ -298,6 +298,7 @@ export interface MemberContributionDetailsResponse {
   newGroupMembContriPct?: number;
   recordChangedFlag?: string;
   memTaxReliefEligibility?: string;
+  origMembNonPayReason?: string;
 }
 
 export interface ErrorDetailsResponse {
@@ -501,6 +502,7 @@ export interface RetriveContributionDetailsResponse {
    */
   newGroupMembContriPct?: number;
   recordChangedFlag?: string;
+  origMembNonPayReason?: string;
   memTaxReliefEligibility?: string;
   errorDetails: ErrorDetailsResponse;
   rdschedulememberstatus: RDScheduleMemberStatusResponse;
@@ -520,13 +522,27 @@ export interface SearchMemberContributionResultResponse<T> {
 }
 
 export interface ContributionSubmissionUpdateResponse {
-  countSubmitted: number,
-  countMembersInSchedule: number,
-  countUnsubmitted: number
+  countSubmitted: number;
+  countMembersInSchedule: number;
+  countUnsubmitted: number;
 }
 
-export interface ContributionXmlResponse { 
-  isStreaming: boolean,
-  docs: {}[],
-  totalRecordCount: number
+export interface ContributionCorrectionAddMemberDetails {
+  membContribDetlId: string;
+}
+
+export interface ClearScheduleStatusResponse {
+  clearSuccess: string;
+}
+
+export interface ContributionSubmissionUpdateResponse {
+  countSubmitted: number;
+  countMembersInSchedule: number;
+  countUnsubmitted: number;
+}
+
+export interface ContributionXmlResponse {
+  isStreaming: boolean;
+  docs: {}[];
+  totalRecordCount: number;
 }

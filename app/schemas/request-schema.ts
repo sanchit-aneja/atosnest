@@ -4,29 +4,34 @@ import {
   ContributionStgPolicyResponse,
   ContributionHeaderResponse,
   MemberContributionDetailsResponse,
-  ContributionCorrectionAddMemberDetails
+  ContributionCorrectionAddMemberDetails,
 } from "./response-schema";
 
 type commonFields = "createdBy" | "updatedBy" | "updatedAt";
 
 export interface ContributionStgScheduleRequest
-  extends Omit<ContributionStgScheduleResponse, ''> { }
+  extends Omit<ContributionStgScheduleResponse, ""> {}
 
 export interface ContributionStgMemberRequest
-  extends Omit<ContributionStgMemberResponse, ''> { }
+  extends Omit<ContributionStgMemberResponse, ""> {}
 
 export interface ContributionStgPolicyRequest
-  extends Omit<ContributionStgPolicyResponse, ''> { }
+  extends Omit<ContributionStgPolicyResponse, ""> {}
 
 export interface ContributionHeaderRequest
-  extends Omit<ContributionHeaderResponse, ''> { }
+  extends Omit<ContributionHeaderResponse, ""> {}
 
 export interface MemberContributionDetailsRequest
-  extends Omit<MemberContributionDetailsResponse, ''> { }
+  extends Omit<MemberContributionDetailsResponse, ""> {}
 
-export interface SubmissionErrorRequest { 
-  contributionSubmissionId: string,
-  errorCode: string,
-  payload: string,
-  payloadType: string
+export interface ContributionCorrectionAddMemberRequest {
+  contribHeaderId: string;
+  contributionDetail: Array<ContributionCorrectionAddMemberDetails>;
+}
+
+export interface SubmissionErrorRequest {
+  contributionSubmissionId: string;
+  errorCode: string;
+  payload: string;
+  payloadType: string;
 }

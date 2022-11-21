@@ -16,7 +16,7 @@ export const correctionsCreateSchedule = {
       const dertailCount = await ContributionDetails.count({
         where: {
           contrib_header_id: contribHeaderId,
-          schdl_memb_status_cd: "MS6",
+          schdl_memb_status_cd: "MCS13",
         },
       });
 
@@ -27,10 +27,7 @@ export const correctionsCreateSchedule = {
       return null;
     }
   },
-  CreateSchedule: async function (
-    dataHeaderRow: ContributionHeader,
-    scheduleType
-  ) {
+  CreateSchedule: async function (dataHeaderRow: any, scheduleType) {
     return new Promise(async (resolve, reject) => {
       let nextscheduleReference =
         "CC" + dataHeaderRow.dataValues.paymentFrequency;

@@ -1,5 +1,4 @@
-export const memberSubmissionGetSuccessResponse =
-{
+export const memberSubmissionGetSuccessResponse = {
   totalRecordCount: 1,
   results: [
     {
@@ -46,14 +45,15 @@ export const memberSubmissionGetSuccessResponse =
       newGroupMembContriPct: null,
       recordChangedFlag: null,
       memTaxReliefEligibility: null,
+      origMembNonPayReason: null,
       createdBy: "System",
       createdDate: "2022-10-17T07:08:09.000Z",
       contribSubmissionRef: "2de64d14-d384-48d5-a903-3981306fd765",
       membContribDetlId: "0b42de19-1cf0-4993-9fcf-d734b13dd2af",
-      membSubmId: "5"
-    }
-  ]
-}
+      membSubmId: "5",
+    },
+  ],
+};
 
 export const memberSubmissionGetInvalid404Response = {
   type: "",
@@ -61,10 +61,11 @@ export const memberSubmissionGetInvalid404Response = {
   errors: [
     {
       errorCode: "CIA-0503",
-      errorDetail: "Unique reference does not exists Submission Reference Number b8b0a5bc-bfec-478f-8fb0-97f0d1dac718"
-    }
-  ]
-}
+      errorDetail:
+        "Unique reference does not exists Submission Reference Number b8b0a5bc-bfec-478f-8fb0-97f0d1dac718",
+    },
+  ],
+};
 export const memberSubmissionGetInvalid500response = {
   name: "SequelizeConnectionError",
   message: "Unexpected Server Error",

@@ -52,7 +52,7 @@ export class ContributionScheduleController {
             pensEarnings: null,
             emplContriAmt: null,
             membContriAmt: null,
-            // membNonPayReason: "NA",
+            membNonPayReason: null,
             membLeaveEarnings: null,
             newEmpGroupId: null,
             newGroupName: null,

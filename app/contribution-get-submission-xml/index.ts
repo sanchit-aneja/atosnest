@@ -30,45 +30,17 @@ async function uploadBlob(filename: string, buffer: any) {
 }
 
 /**
-* 5401 API Catalogue Number
-* Get XML of contribution in either return body or file 
-*/
-const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
-
-    const contribHeaderId = req.params.contribHeaderId;
-    const controller = new ContributionSubmissionsXmlController();
-    const result = await controller.generateXml(contribHeaderId);
-    if (result.docs.length === 0) {
-        context.res = {
-            // status: 200, /* Defaults to 200 */
-            status: 404,
-            body: { error: 'No record found' },
-            headers: {
-                "Content-Type": "application/json",
-            },
-        };
-        return;
-    }
-
-    let builder = new xml2js.Builder();
-    const headerXml = builder.buildObject(result.docs[0]);
-    // const headerXml = doc;
-
-    let body = {};
-    if (result.isStreaming) {
-        body = {
-            totalRecordCount: result.totalRecordCount,
-            responseType: ResponseType.Body,
-            results: headerXml
-        };
-    } else {
-        const url = await uploadBlob(contribHeaderId + '.xml', headerXml);
-        body = {
-            totalRecordCount: result.totalRecordCount,
-            responseType: ResponseType.File,
-            results: url
-        };
-    }
+ * 5401 API Catalogue Number
+ * Get XML of contribution in either return body or file
+ */
+const httpTrigger: AzureFunction = async function (
+  context: Context,
+  req: HttpRequest
+): Promise<void> {
+  const contribHeaderId = req.params.contribHeaderId;
+  const controller = new ContributionSubmissionsXmlController();
+  const result = await controller.generateXml(contribHeaderId);
+  if (result.docs.length === 0) {
     context.res = {
       // status: 200, /* Defaults to 200 */
       status: 404,
@@ -81,26 +53,26 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
   }
 
   let builder = new xml2js.Builder();
-  const headerXml = builder.buildObject(doc.doc);
+  const headerXml = builder.buildObject(result.docs[0]);
 
   let body = {};
-  if (doc.isStreaming) {
+  if (result.isStreaming) {
     body = {
-      totalRecordCount: doc.totalRecordCount,
+      totalRecordCount: result.totalRecordCount,
       responseType: ResponseType.Body,
       results: headerXml,
     };
   } else {
     const url = await uploadBlob(contribHeaderId + ".xml", headerXml);
     body = {
-      totalRecordCount: doc.totalRecordCount,
+      totalRecordCount: result.totalRecordCount,
       responseType: ResponseType.File,
       results: url,
     };
   }
   context.res = {
     // status: 200, /* Defaults to 200 */
-    status: 200,
+    status: 404,
     body: body,
     headers: {
       "Content-Type": "application/json",
