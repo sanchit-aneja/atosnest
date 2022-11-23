@@ -51,7 +51,7 @@ class DataImportHelper {
       await this.cleanAllTables();
       this._blobServiceClient = blobHelper.getBlobServiceClient();
       for (let file of data) {
-        const blobName = `${file.namePrefix}${fileTimestamp}`;
+        const blobName = `${file.namePrefix}${fileTimestamp}.csv`;
         await this.importCSV(blobName, file.tableName, file.columns.join(","));
         this.context.log("LoadDataFromCSVs :: next after" + blobName);
       }

@@ -260,8 +260,8 @@ const app = {
   },
 
   getFileTimeStamp(time: string) {
-    let str = time;
-    return time.split("_")[3].substring(0, str.length - 4);
+    let str = time.split("_")[3];
+    return str.substring(0, str.length - 4);
   },
 
   errorHandler(err): Promise<any> {
