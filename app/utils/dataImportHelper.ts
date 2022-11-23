@@ -44,7 +44,7 @@ class DataImportHelper {
     if (!fileTimestamp) {
       throw new CustomError(
         "NO_TIMESTAMP",
-        "Timestamp is missing in event grid message"
+        "Timestamp is missing in the payload"
       );
     }
     try {
@@ -59,7 +59,7 @@ class DataImportHelper {
       this.context.log("LoadDataFromCSVs :: Failed" + error.message);
       throw new CustomError(
         "LOAD_CSV_FILES_FAILED",
-        "Timestamp is missing in event grid message, details " + error.message
+        "Unknown error " + error.message
       );
     }
     return true;
