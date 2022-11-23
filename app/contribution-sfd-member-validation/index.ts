@@ -1,5 +1,4 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions";
-import { v4 as uuidv4 } from "uuid";
 import { CustomError } from "../Errors";
 import app from "../utils/app";
 import blobHelper from "../utils/blobHelper";
@@ -8,7 +7,6 @@ import {
   memberColumns,
   LOADING_DATA_ERROR_CODES,
 } from "../utils/constants";
-import { KafkaHelper } from "../utils";
 
 const httpTrigger: AzureFunction = async function (
   context: Context,
