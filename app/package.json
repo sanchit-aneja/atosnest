@@ -1,6 +1,6 @@
 {
   "name": "contribution-index-apis",
-  "version": "1.64.0",
+  "version": "1.65.0",
   "description": "",
   "scripts": {
     "build": "tsc",
