@@ -25,7 +25,7 @@ import {
   errorDetails,
   READONLY_CONTRIBUTION_HEADER_COLUMNS_FOR_UPDATE,
 } from "../utils/constants";
-import { Op } from "sequelize";
+import { Op, Sequelize } from "sequelize";
 import * as moment from "moment";
 import { Context } from "@azure/functions";
 import {
@@ -446,6 +446,69 @@ export class ContributionHeaderController {
         ""
       );
       return app.errorResponse(allErrorsObj[0].statusCode, data);
+    }
+  }
+
+  /**
+   * 5909 API Catalogue Number
+   * Retrieves the Group Name list based on contribHeaderId passed.
+   * @param contribHeaderId of the Contribution Header record to be fetched
+   * @return Member Details list with Array<GroupName> based on contribHeaderId
+   */
+  @Security("api_key")
+  @Get("Submission/GetGroupsInSelection/{contribHeaderId}")
+  @SuccessResponse("200", Status.SUCCESS_MSG)
+  @Response("400", Status.BAD_REQUEST_MSG)
+  @Response("404", Status.NOT_FOUND_MSG)
+  @Response("500", Status.FAILURE_MSG)
+  async getContributionGroupName(
+    contribHeaderId: string
+  ): Promise<ContributionHeaderResponse | any> {
+    try {
+      let whereCdtn = {
+        [Op.and]: [
+          {
+            contrib_header_id: contribHeaderId,
+          },
+          {
+            [Op.or]: {
+              schedule_type: ["EC", "LE"],
+            },
+          },
+          {
+            [Op.or]: {
+              schedule_status_cd: ["CS2", "CS3", "CS4"],
+            },
+          },
+        ],
+      };
+      return await sequelize.transaction(async (t) => {
+        const items = await ContributionHeader.findOne({
+          where: whereCdtn,
+          transaction: t,
+        });
+        if (items) {
+          const { rows } = await ContributionDetails.findAndCountAll({
+            attributes: ["groupName", "empGroupId"],
+            group: ["groupName", "empGroupId"],
+            distinct: true,
+            where: {
+              contrib_header_id: contribHeaderId,
+            },
+            transaction: t,
+          });
+          return {
+            totalRecordCount: rows.length,
+            results: rows,
+          };
+        } else {
+          return Status.BAD_REQUEST;
+        }
+      });
+    } catch (err) {
+      if (err) {
+        return app.errorHandler(err);
+      }
     }
   }
 }
