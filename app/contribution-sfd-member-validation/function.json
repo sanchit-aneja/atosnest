@@ -6,7 +6,7 @@
       "direction": "in",
       "name": "req",
       "methods": ["post"],
-      "route": "contribution/schedfileload/member-validation"
+      "route": "contribution/schedfileload/memberValidation"
     },
 
     {
