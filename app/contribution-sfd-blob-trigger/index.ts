@@ -27,7 +27,7 @@ const blobTrigger: AzureFunction = async function (
   };
   const kafkaHelper = new KafkaHelper(context);
   await kafkaHelper.sendMessageToTopic(
-    process.env.contribution_KafkaBlobTestTopic,
+    process.env.contribution_KafkaSuccessTopic,
     kafkaMessage
   );
 };
