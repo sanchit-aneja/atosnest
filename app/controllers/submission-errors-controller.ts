@@ -58,7 +58,9 @@ export class ContributionSubmissionErrorsController {
   @Response("400", Status.BAD_REQUEST_MSG)
   @Response("404", Status.NOT_FOUND_MSG)
   @Response("500", Status.FAILURE_MSG)
-  async createSubmissionError(params: SubmissionErrorRequest): Promise<any> {
+  async createSubmissionError(
+    @Body() params: SubmissionErrorRequest
+  ): Promise<any> {
     try {
       let errorDetails = [];
 

@@ -33,6 +33,14 @@ const app = {
     return splittxt1[0] + count + splittxt2[1];
   },
 
+  isValidDate(input) {
+    if (moment(input, "YYYY-MM-DD", true).isValid()) {
+      return false;
+    } else {
+      return true;
+    }
+  },
+
   isEmptyString(input) {
     if (input == null || input == undefined || input == "") {
       return true;

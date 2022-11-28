@@ -3,9 +3,7 @@
     {
       "name": "myBlob",
       "type": "blobTrigger",
-      "direction": "in",
-      "path": "%contribution_BlobContainerName%/Contribution_Header_File_{name}.csv",
-      "connection": "contribution_BlobConnectString"
+      "direction": "in"
     }
   ],
   "scriptFile": "../dist/contribution-sfd-blob-trigger/index.js"
