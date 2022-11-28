@@ -56,18 +56,18 @@ const saveContributionDetails = {
       EnumScheduleMemberStatusCD.TO_BE_REVIEWED,
     ];
 
-    // Checking is already processing or not. If yes, write type error ID24
-    if (
-      awaitingForSubmitStatuses.indexOf(memDetailsRow.schdlMembStatusCd) == -1
-    ) {
-      context.log(
-        `Current D row index ${currentDRowIndex} : This member is already submitted or paid and will show on the submitted or paid tabs`
-      );
-      updateResult.paidMembers = updateResult.paidMembers + 1;
-      return updateResult;
-    }
-
     if (memDetailsRow) {
+      // Checking is already processing or not. If yes, write type error ID24
+      if (
+        awaitingForSubmitStatuses.indexOf(memDetailsRow.schdlMembStatusCd) == -1
+      ) {
+        context.log(
+          `Current D row index ${currentDRowIndex} : This member is already submitted or paid and will show on the submitted or paid tabs`
+        );
+        updateResult.paidMembers = updateResult.paidMembers + 1;
+        return updateResult;
+      }
+
       const currentMemberDetails =
         CommonContributionDetails.convertToContributionDetails(
           row,

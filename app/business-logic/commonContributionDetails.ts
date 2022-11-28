@@ -475,7 +475,7 @@ const commonContributionDetails = {
    */
   isVaildNumber(value: string, isEmptyAllowed: boolean) {
     // When value is empty re
-    if (commonContributionDetails.isNullOrEmpty(value)) {
+    if (commonContributionDetails.isNullOrEmpty(value) && isEmptyAllowed) {
       return true;
     }
     const pattern = /^\d+(\.\d+)?$/;

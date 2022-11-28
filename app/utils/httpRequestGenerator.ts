@@ -3,7 +3,8 @@ import * as https from "https";
 export function httpRequestGenerator(
   requestType: "GET" | "POST" | "PATCH" | "PUT" | "DELETE",
   url: string,
-  data?: any
+  data?: any,
+  headers: any = {}
 ): AxiosPromise<any> {
   const instance: AxiosInstance = Axios.create({
     httpsAgent: new https.Agent({ rejectUnauthorized: false }),
@@ -16,6 +17,7 @@ export function httpRequestGenerator(
       "Content-Type": "application/json",
       Accept: "application/json",
       "api-key": process.env.api_key,
+      ...headers,
     },
     data,
   });
