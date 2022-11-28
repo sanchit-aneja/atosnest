@@ -16,6 +16,8 @@ import {
   SearchResultsetResponse,
   HeaderFilterElements,
   CreateContributionResponse,
+  SearchMemberContributionResultResponse,
+  GetGroupNamesResponse,
 } from "../schemas/response-schema";
 import Status from "../utils/config";
 import app from "../utils/app";
@@ -463,7 +465,9 @@ export class ContributionHeaderController {
   @Response("500", Status.FAILURE_MSG)
   async getContributionGroupName(
     contribHeaderId: string
-  ): Promise<ContributionHeaderResponse | any> {
+  ): Promise<
+    SearchMemberContributionResultResponse<GetGroupNamesResponse> | any
+  > {
     try {
       let whereCdtn = {
         [Op.and]: [

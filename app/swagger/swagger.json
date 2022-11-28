@@ -516,6 +516,73 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"GetGroupNamesResponse": {
+				"properties": {
+					"groupId": {
+						"type": "string"
+					},
+					"groupName": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"groupId",
+					"groupName"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"SearchMemberContributionResultResponse_GetGroupNamesResponse_": {
+				"properties": {
+					"totalRecordCount": {
+						"type": "number",
+						"format": "double"
+					},
+					"results": {
+						"items": {
+							"$ref": "#/components/schemas/GetGroupNamesResponse"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"totalRecordCount",
+					"results"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ContributionUpdateIndividualDetails": {
+				"properties": {
+					"contribScheduleId": {
+						"type": "string"
+					},
+					"schdlMembStatusCd": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"contribScheduleId",
+					"schdlMembStatusCd"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ContributionUpdateIneligibilityResponse": {
+				"properties": {
+					"IneligibleSchedules": {
+						"items": {
+							"$ref": "#/components/schemas/ContributionUpdateIndividualDetails"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"IneligibleSchedules"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ClearScheduleStatusResponse": {
 				"properties": {
 					"clearSuccess": {
@@ -1350,7 +1417,7 @@
 	},
 	"info": {
 		"title": "Contribution Index APIs",
-		"version": "1.63.0",
+		"version": "1.73.0",
 		"description": "REST APIs for Contribution Index",
 		"contact": {}
 	},
@@ -1592,6 +1659,120 @@
 						}
 					}
 				}
+			}
+		},
+		"/contribution/Submission/GetGroupsInSelection/{contribHeaderId}": {
+			"get": {
+				"operationId": "GetContributionGroupName",
+				"responses": {
+					"200": {
+						"description": "Success Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/SearchMemberContributionResultResponse_GetGroupNamesResponse_"
+										},
+										{}
+									]
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid Request"
+					},
+					"404": {
+						"description": "Record does not exist"
+					},
+					"500": {
+						"description": "Internal Server Error"
+					}
+				},
+				"description": "5909 API Catalogue Number\r\nRetrieves the Group Name list based on contribHeaderId passed.",
+				"security": [
+					{
+						"api_key": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "of the Contribution Header record to be fetched",
+						"in": "path",
+						"name": "contribHeaderId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/contribution/updateIneligibility/membEnrolRef={membEnrolmentRef}&IneligibilityReason={ineligibilityReason}&EffectiveDate={effectiveDate}": {
+			"put": {
+				"operationId": "UpdateIneligibility",
+				"responses": {
+					"200": {
+						"description": "Success Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ContributionUpdateIneligibilityResponse"
+										},
+										{}
+									]
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid Request"
+					},
+					"404": {
+						"description": "Record does not exist"
+					},
+					"500": {
+						"description": "Internal Server Error"
+					}
+				},
+				"description": "5803 API Catalogue Number\r\nUpdate Ineligibility",
+				"security": [
+					{
+						"api_key": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "membEnrolmentRef of the Member Contribution Details record to be fetched",
+						"in": "path",
+						"name": "membEnrolmentRef",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"description": "ineligibilityReason “opt out”,“leaver”, “member exited”, “de enroled” and “member changed”",
+						"in": "path",
+						"name": "ineligibilityReason",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"description": "effective date parameter is less than the corresponding contribution_header.earning_period_start_date",
+						"in": "path",
+						"name": "effectiveDate",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
 			}
 		},
 		"/contribution/clearSchedule/{contribHeaderId}": {

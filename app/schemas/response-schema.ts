@@ -535,14 +535,22 @@ export interface ClearScheduleStatusResponse {
   clearSuccess: string;
 }
 
-export interface ContributionSubmissionUpdateResponse {
-  countSubmitted: number;
-  countMembersInSchedule: number;
-  countUnsubmitted: number;
-}
-
 export interface ContributionXmlResponse {
   isStreaming: boolean;
   docs: {}[];
   totalRecordCount: number;
+}
+
+export interface ContributionUpdateIndividualDetails {
+  contribScheduleId: string;
+  schdlMembStatusCd: string;
+}
+
+export interface ContributionUpdateIneligibilityResponse {
+  IneligibleSchedules: Array<ContributionUpdateIndividualDetails>;
+}
+
+export interface GetGroupNamesResponse {
+  groupId: string;
+  groupName: string;
 }
