@@ -22,6 +22,7 @@ describe("FQS Implementation  Testing", () => {
     try {
       const response = (await fqsHelper.updateFQSProcessingStatus(
         "test",
+        "payload.correlationId",
         putProcessingRequest
       )) as AxiosResponse;
       expect(response.status).toBe(200);
@@ -44,6 +45,7 @@ describe("FQS Implementation  Testing", () => {
     try {
       const response = (await fqsHelper.updateFQSProcessingStatus(
         "test",
+        "payload.correlationId",
         putFinishedRequest
       )) as AxiosResponse;
       expect(response.status).toBe(200);
@@ -64,7 +66,8 @@ describe("FQS Implementation  Testing", () => {
     const fqsHelper = new FQSHelper();
     try {
       const response = (await fqsHelper.getFQSStatusViews(
-        "test"
+        "test",
+        "payload.correlationId"
       )) as AxiosResponse;
       expect(response.status).toBe(202);
     } catch (error) {}
@@ -83,7 +86,8 @@ describe("FQS Implementation  Testing", () => {
     const fqsHelper = new FQSHelper();
     try {
       const response = (await fqsHelper.getFQSStatusViews(
-        "test"
+        "test",
+        "payload.correlationId"
       )) as AxiosResponse;
       expect(response.status).toBe(200);
     } catch (error) {}
@@ -97,7 +101,11 @@ describe("FQS Service Error Testing", () => {
       .mockRejectedValueOnce({ status: 500, err });
     const fqsHelper = new FQSHelper();
     try {
-      await fqsHelper.updateFQSProcessingStatus("test", "");
+      await fqsHelper.updateFQSProcessingStatus(
+        "test",
+        "payload.correlationId",
+        ""
+      );
     } catch (error) {
       expect(error.status).toBe(500);
     }
@@ -108,7 +116,11 @@ describe("FQS Service Error Testing", () => {
       .mockRejectedValueOnce({ status: 500, err });
     const fqsHelper = new FQSHelper();
     try {
-      await fqsHelper.updateFQSFinishedStatus("test", "");
+      await fqsHelper.updateFQSFinishedStatus(
+        "test",
+        "payload.correlationId",
+        ""
+      );
     } catch (error) {
       expect(error.status).toBe(500);
     }
@@ -119,7 +131,7 @@ describe("FQS Service Error Testing", () => {
       .mockRejectedValueOnce({ status: 500, err });
     const fqsHelper = new FQSHelper();
     try {
-      await fqsHelper.getFQSStatusViews("test");
+      await fqsHelper.getFQSStatusViews("test", "payload.correlationId");
     } catch (error) {
       expect(error.status).toBe(500);
     }

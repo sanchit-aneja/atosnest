@@ -1,44 +1,73 @@
-import { AzureFunction, Context } from "@azure/functions";
+import { AzureFunction, Context, HttpRequest } from "@azure/functions";
 import blobHelper from "../utils/blobHelper";
-import { LOADING_DATA_ERROR_CODES } from "../utils/constants";
 import { Type2Validations, CommonContributionDetails } from "../business-logic";
 import { FQSHelper } from "../utils";
 import { fqsStage, fqsStatus } from "../utils/fqsBody";
-import { v4 as uuidv4 } from "uuid";
+import * as Joi from "joi";
 
-const eventGridTrigger: AzureFunction = async function (
+const httpTrigger: AzureFunction = async function (
   context: Context,
-  eventGridEvent: any
+  req: HttpRequest
 ): Promise<void> {
   context.log(
-    "File Upload validation started: " + JSON.stringify(eventGridEvent)
+    `Inside contribution-fum-file-type2a-b-validation function with trigger data: ${JSON.stringify(
+      req.body
+    )}`
   );
-  const fileName = eventGridEvent.data.fileName;
-  const correlationId = eventGridEvent.data.correlationId;
-  const fqsId = eventGridEvent.data.fqsId;
+
+  const payload = req.body;
 
   const fqsHelper = new FQSHelper(context);
   try {
+    // Request body validation for Type 2A anb 2B
+    let requestSchema = Joi.object().keys({
+      correlationId: Joi.string().guid({ version: "uuidv4" }).required(),
+      blobName: Joi.string().required(),
+      fqsId: Joi.string().guid({ version: "uuidv4" }).required(),
+      processType: Joi.string().required().valid("CS", "CC"),
+    });
+    const reqValidationResult = requestSchema.validate(payload);
+
+    if (reqValidationResult.error) {
+      context.log(`Bad request ${reqValidationResult.error}`);
+      context.res = {
+        status: 400 /* Defaults to 200 */,
+        body: {
+          errors: [
+            {
+              errorCode: "CoI-0006",
+              errorDetail: `Bad request: for contribution-fum-file-type2a-b-validation error details ${reqValidationResult.error}`,
+            },
+          ],
+        },
+      };
+      return; // Break here. No need go furthermore
+    }
+
     context.log(
-      `Started vaildation for correlation Id ${correlationId} fqsId: ${fqsId}`
+      `Started vaildation for correlation Id ${payload.correlationId} fqsId: ${payload.fqsId}`
     );
 
     // initialization of errors and update FQS
     const errors = await CommonContributionDetails.getAllErrors();
 
     const fqsBody = fqsHelper.getFQSBody(
-      fqsId,
-      fileName,
+      payload.fqsId,
+      payload.blobName,
       fqsStage.HEADER,
       fqsStatus.INPROGRESS
     );
 
-    await fqsHelper.updateFQSProcessingStatus(fqsId, fqsBody);
+    await fqsHelper.updateFQSProcessingStatus(
+      payload.fqsId,
+      payload.correlationId,
+      fqsBody
+    );
 
     // Step 1: get data from blob file
     const _blobServiceClient = blobHelper.getBlobServiceClient();
     const readStream = await blobHelper.getBlobStream(
-      fileName,
+      payload.blobName,
       _blobServiceClient
     );
     const fileData = await blobHelper.streamToString(readStream);
@@ -51,26 +80,15 @@ const eventGridTrigger: AzureFunction = async function (
     );
 
     // Sending message to Type 2C & D
-    const timeStamp = new Date().toUTCString();
-    context.bindings.outputEvent = {
-      id: uuidv4(),
-      subject:
-        process.env.contribution_ValidateFUMType2CDSuject ||
-        "validate-contribution-fum-file-type2c-d",
-      dataVersion: "1.0",
-      eventType: "csv-validated",
-      data: {
-        message: "contribution fum file type2C and D validate",
-        correlationId: correlationId,
+    context.res = {
+      status: 200 /* Defaults to 200 */,
+      body: {
+        initatorApp: "contriIndex",
         contributionHeaderId: result.header_id,
-        fileName: fileName,
-        fqsId: fqsId,
       },
-      eventTime: timeStamp,
     };
-
     context.log(
-      `Validation done for correlation Id ${correlationId} fqsId:${fqsId}`
+      `Validation done for correlation Id ${payload.correlationId} fqsId:${payload.fqsId}`
     );
   } catch (error) {
     if (!Array.isArray(error)) {
@@ -90,13 +108,30 @@ const eventGridTrigger: AzureFunction = async function (
       "contribution-fum-file-type2a-b-validation"
     );
 
-    await fqsHelper.updateFQSFinishedStatus(fqsId, reqPayload);
+    await fqsHelper.updateFQSFinishedStatus(
+      payload.fqsId,
+      payload.correlationId,
+      reqPayload
+    );
 
     context.log("Sending Error data to FQS", JSON.stringify(reqPayload));
+
+    // Send Error response
+    context.res = {
+      status: 400 /* Defaults to 200 */,
+      body: {
+        errors: [
+          {
+            errorCode: "CoI-0007",
+            errorDetail: `Please check more details in FQS with ID ${payload.fqsId}`,
+          },
+        ],
+      },
+    };
   }
   context.log(
-    `Vaildation done for correlation Id ${correlationId} fqsId: ${fqsId}`
+    `Vaildation done for correlation Id ${payload.correlationId} fqsId: ${payload.fqsId}`
   );
 };
 
-export default eventGridTrigger;
+export default httpTrigger;

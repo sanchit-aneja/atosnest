@@ -23,11 +23,11 @@ const blobHelper = {
    */
   async getBlobStream(
     blobName: string,
-    blobServiceClient: BlobServiceClient
+    blobServiceClient: BlobServiceClient,
+    containerName: string = process.env.contribution_BlobContainerName
   ): Promise<NodeJS.ReadableStream | null> {
     try {
       // Get container name and blob client ready
-      const containerName = process.env.contribution_BlobContainerName;
       const client = blobServiceClient.getContainerClient(containerName);
       const blobClient = client.getBlobClient(blobName);
 

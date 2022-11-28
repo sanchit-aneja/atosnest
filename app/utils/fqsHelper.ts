@@ -32,14 +32,18 @@ class FQSHelper {
   }
   /**
    * get FQS Status Views
-   * @param correlationId
+   * @param fqsId
    *  @returns response
    */
-  getFQSStatusViews(correlationId: string) {
+  getFQSStatusViews(fqsId: string, correlationId: string) {
     return new Promise((resolve, reject) => {
       httpRequestGenerator(
         "GET",
-        `${ROOT_ENDPOINT}/statusviews/${correlationId}`
+        `${ROOT_ENDPOINT}/statusviews/${fqsId}`,
+        null,
+        {
+          "Correlation-ID": correlationId,
+        }
       )
         .then((response: AxiosResponse) => {
           resolve(response);
@@ -52,15 +56,23 @@ class FQSHelper {
   }
   /**
    * update FQS  processing Status
+   * @param fqsId
    * @param correlationId
    *  @returns response
    */
-  updateFQSProcessingStatus(correlationId: string, payload: any) {
+  updateFQSProcessingStatus(
+    fqsId: string,
+    correlationId: string,
+    payload: any
+  ) {
     return new Promise((resolve, reject) => {
       httpRequestGenerator(
         "PUT",
-        `${ROOT_ENDPOINT}/statusviews/${correlationId}/processingstatus`,
-        payload
+        `${ROOT_ENDPOINT}/statusviews/${fqsId}/processingstatus`,
+        payload,
+        {
+          "Correlation-ID": correlationId,
+        }
       )
         .then((response: AxiosResponse) => {
           resolve(response);
@@ -73,15 +85,20 @@ class FQSHelper {
   }
   /**
    * update FQS  finished Status
+   * @param fqsId
    * @param correlationId
-   *  @returns response
+   * @param payload
+   * @returns response
    */
-  updateFQSFinishedStatus(correlationId: string, payload: any) {
+  updateFQSFinishedStatus(fqsId: string, correlationId: string, payload: any) {
     return new Promise((resolve, reject) => {
       httpRequestGenerator(
         "PUT",
-        `${ROOT_ENDPOINT}/statusviews/${correlationId}/finishedstatus`,
-        payload
+        `${ROOT_ENDPOINT}/statusviews/${fqsId}/finishedstatus`,
+        payload,
+        {
+          "Correlation-ID": correlationId,
+        }
       )
         .then((response: AxiosResponse) => {
           resolve(response);
