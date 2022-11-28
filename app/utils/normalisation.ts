@@ -105,6 +105,25 @@ const normalisation = {
     }
   },
 
+  getScheduleList: async function (context): Promise<any> {
+    try {
+      return await sequelize.transaction(async (t) => {
+        // const { rows } = await StgContrSchedule.findAndCountAll();
+        // const finalData = this.mappingContributionHeader(rows);
+        const rows = await ContributionHeader.findAll();
+        if (rows) {
+          return this.formatScheduleList(rows);
+        }
+      });
+    } catch (error) {
+      context.log("normalisation::moveDataToContributionHeader::", error);
+      throw new CustomError(
+        "BULK_INSERT_CONTRIBUTION_HEADER_FAILED",
+        `${error?.name - error?.message - error?.moreDetails}`
+      );
+    }
+  },
+
   mappingContributionHeader(request, fileObj): any {
     try {
       let results = [];
@@ -295,6 +314,28 @@ const normalisation = {
     } catch (e) {
       throw new CustomError("MAPPING_MEMBER_CONTRIBUTION_DETAILS_FAILED", e);
     }
+  },
+
+  formatScheduleList(rows: any): any {
+    let scheduleList = [];
+    for (let index = 0; index < rows.length; index++) {
+      const element = rows[index];
+      const schedule = {
+        "paymentReference": element.paymentRef,
+        "paymentFrequency": element.paymentFrequency,
+        "numOfMembersInSchedule": element.noOfMembs,
+        "paymentDueDate": element.paymentDueDate,
+        "contributionScheduleRefNumber": element.nestScheduleRef,
+        "employerNestId": element.employerNestId,
+        "subSchemeId": element.subSchemeId,
+        "Contrib_Header_Id": element.contribHeaderId,
+        "paymentMethod": element.paymentMethod,
+        "earningsPeriodStartDate": element.earningPeriodStartDate,
+        "earningsPeriodEndDate": element.earningPeriodEndDate,
+      };
+      scheduleList.push(schedule);
+    }
+    return scheduleList;
   },
 };
 

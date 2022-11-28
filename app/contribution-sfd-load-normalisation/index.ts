@@ -26,6 +26,7 @@ const httpTrigger: AzureFunction = async function (
   let fileName = "";
   let fileTime = "";
   let transaction;
+  let scheduleList;
   try {
     if (!payload.blobName) {
       throw new CustomError(
@@ -70,6 +71,8 @@ const httpTrigger: AzureFunction = async function (
     await normalisation.createContributionDetails(context);
     //Step 5: All success commit
     await transaction.commit();
+    //Step 6: Return schedule list
+    scheduleList = await normalisation.getScheduleList(context);
   } catch (error) {
     context.log("normalisation failed : ", error.message);
     //FailedStep: Rollback changes
@@ -116,6 +119,7 @@ const httpTrigger: AzureFunction = async function (
         payloadForNextAction: {
           correlationId: correlationId,
           blobName: `Contribution_Header_File_${fileTime}.csv`,
+          contributionScheduleList: scheduleList
         },
       },
     };
