@@ -15,7 +15,7 @@ const httpTrigger: AzureFunction = async function (
   context.log(
     `Inside contribution-sfd-header-validation function with trigger data: ${JSON.stringify(
       req.body
-    )}`
+    )}, headers: ${JSON.stringify(req.headers)}`
   );
   const payload = req.body;
   const correlationId = payload.correlationId;
