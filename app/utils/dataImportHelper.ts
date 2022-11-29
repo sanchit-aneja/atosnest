@@ -100,15 +100,15 @@ class DataImportHelper {
    */
   private async cleanAllTables() {
     try {
-      await StgContrMember.truncate({
+      await StgContrMember.destroy({
         restartIdentity: true,
         where: {},
       });
-      await StgContrPolicy.truncate({
+      await StgContrPolicy.destroy({
         restartIdentity: true,
         where: {},
       });
-      await StgContrSchedule.truncate({
+      await StgContrSchedule.destroy({
         restartIdentity: true,
         where: {},
       });
