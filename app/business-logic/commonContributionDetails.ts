@@ -523,7 +523,8 @@ const commonContributionDetails = {
    */
   getOnlyDRows: async function (
     readStream: NodeJS.ReadableStream,
-    context: Context
+    context: Context, 
+    processType
   ): Promise<Array<any>> {
     let errorMessages = [];
     let dRows = [];
@@ -538,10 +539,10 @@ const commonContributionDetails = {
           )
           .on("error", async (e) => {
             // This will not happen, safer side added this
-            context.log(`commonContributionDetails: Error Type : ${e.message}`);
+            context.log(`commonContributionDeails: Error Type : ${e.message}`);
             const error = commonContributionDetails.getSomethingWentWrongError(
               "2C",
-              "CS"
+              processType
             );
             errorMessages.push(error);
             reject(errorMessages);
@@ -664,7 +665,7 @@ const commonContributionDetails = {
     return {
       errorNumber: byErrorCode,
       errorType: "UK", //UNKNOWN
-      processType: "CS",
+      processType: rderrorTypes.processType,
       onlineErrorMessageTxt: "Something went wrong",
       detailedErrorMessageTxt: null,
       errorTypeId: -1,

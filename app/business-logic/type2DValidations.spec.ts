@@ -316,6 +316,7 @@ describe("Test: Business logic common Contribution details functions", () => {
         context,
         "fbb13972-1527-47de-8c36-7d1a2a469ee8",
         "84c91266-026d-4041-902f-01f4c3fbda93",
+        'CS',
         {} // rdErrorTypes
       )
     ).rejects.toThrow(Error);
@@ -347,7 +348,7 @@ describe("Test: Business logic common Contribution details functions", () => {
 
     //Assert
     await expect(
-      Type2DValidations.start(stream, context, fileId, contributionHeaderId, {})
+      Type2DValidations.start(stream, context, fileId, contributionHeaderId, 'CS', {})
     ).rejects.toBe(mockErrors);
 
     Type2DValidations.executeRulesOneByOne = executeRulesOneByOne;
@@ -370,6 +371,7 @@ describe("Test: Business logic common Contribution details functions", () => {
         context,
         "fbb13972-1527-47de-8c36-7d1a2a469ee8",
         "84c91266-026d-4041-902f-01f4c3fbda93",
+        'CS',
         {}
       )
     ).resolves.toBe(true);

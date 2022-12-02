@@ -86,6 +86,7 @@ const eventGridTrigger: AzureFunction = async function (
       context,
       fileId,
       payload.contributionHeaderId,
+      payload.processType,
       errors
     );
 
@@ -95,6 +96,7 @@ const eventGridTrigger: AzureFunction = async function (
       context,
       fileId,
       payload.contributionHeaderId, //"be0d57c4-0a8c-4d7b-8af5-1cba12a9f16a",
+      payload.processType,
       errors
     );
 
@@ -103,7 +105,7 @@ const eventGridTrigger: AzureFunction = async function (
       await SaveContributionDetails.updateMemberDetails(
         blobHelper.stringToStream(fileData),
         context,
-        payload.contributionHeaderId
+        payload
       );
 
     if (updateResult.isFailed) {
@@ -134,7 +136,7 @@ const eventGridTrigger: AzureFunction = async function (
         )}`
       );
       const somethingError =
-        CommonContributionDetails.getSomethingWentWrongError("2C", "CS");
+        CommonContributionDetails.getSomethingWentWrongError("2C", payload.processType);
       error = [somethingError];
     }
     // Write errors to DB and Error log file only when Type 2B passed

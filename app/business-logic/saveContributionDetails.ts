@@ -20,7 +20,8 @@ const saveContributionDetails = {
     context: Context,
     contributionHeaderId,
     currentDRowIndex,
-    updateResult: Type2SaveResult
+    updateResult: Type2SaveResult,
+    processType
   ): Promise<Type2SaveResult> {
     const nino = CommonContributionDetails.getRowColumn(
       row,
@@ -56,6 +57,7 @@ const saveContributionDetails = {
       EnumScheduleMemberStatusCD.TO_BE_REVIEWED,
     ];
 
+
     if (memDetailsRow) {
       // Checking is already processing or not. If yes, write type error ID24
       if (
@@ -89,7 +91,8 @@ const saveContributionDetails = {
       context.log(
         `Rows updated, number of row effected : ${effectRows[1]?.length}`
       );
-    } else {
+    } else if(processType==='CS') {
+  
       const fileMemberDetails =
         CommonContributionDetails.convertToSTGMemberDetails(row);
       await StgFileMemberDetails.create({
@@ -109,8 +112,10 @@ const saveContributionDetails = {
   updateMemberDetails: async function (
     readStream: NodeJS.ReadableStream,
     context: Context,
-    contributionHeaderId
+    payload, 
   ): Promise<Type2SaveResult> {
+    const contributionHeaderId = payload.contributionHeaderId;
+    const processType = payload.processType;
     const transaction = await sequelize.transaction();
     let currentDRowIndex = 0;
     let updateResult: Type2SaveResult = {
@@ -122,9 +127,11 @@ const saveContributionDetails = {
       // Get D rows first from CSV parse
       const dRows = await CommonContributionDetails.getOnlyDRows(
         readStream,
-        context
+        context, 
+        processType
       );
       // Start updating one by one with transcation
+
       for (const row of dRows) {
         context.log(`Rows updating for current D row ${currentDRowIndex}`);
         updateResult = await saveContributionDetails.InsertOrUpdateRow(
@@ -133,7 +140,8 @@ const saveContributionDetails = {
           context,
           contributionHeaderId,
           currentDRowIndex,
-          updateResult
+          updateResult, 
+          processType
         );
         currentDRowIndex++;
       }

@@ -463,7 +463,7 @@ describe("Test: Business logic common Contribution details functions", () => {
 
     // Assert
     await expect(
-      CommonContributionDetails.getOnlyDRows(stream, context)
+      CommonContributionDetails.getOnlyDRows(stream, context, 'CS' )
     ).rejects.toThrow(TypeError);
   });
 
@@ -473,7 +473,7 @@ describe("Test: Business logic common Contribution details functions", () => {
       `H,column1\nD,column_row1\nD,column_row2\nT,2,3`
     );
     // Act
-    const rows = await CommonContributionDetails.getOnlyDRows(stream, context);
+    const rows = await CommonContributionDetails.getOnlyDRows(stream, context, 'CS');
     // Assert
     expect(rows.length).toBe(2);
     expect(rows[1][1]).toBe("column_row2");

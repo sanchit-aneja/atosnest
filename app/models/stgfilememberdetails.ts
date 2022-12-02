@@ -24,19 +24,12 @@ StgFileMemberDetails.init(
         },
         fileScheduleMemberId: {
             type: DataTypes.BIGINT,
-            allowNull: false,
+            // allowNull: false,
             primaryKey: true,
             autoIncrement: true,
             autoIncrementIdentity: true,
             field: "file_schedule_member_id",
-            validate: {
-                notEmpty: {
-                    msg: "fileScheduleMemberId field cannot be empty",
-                },
-                notNull: {
-                    msg: "fileScheduleMemberId field cannot be null",
-                },
-            },
+            
         },
         forename: {
             type: DataTypes.STRING(30),
