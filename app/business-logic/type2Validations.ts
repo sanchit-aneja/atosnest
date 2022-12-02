@@ -9,6 +9,9 @@ import {
 } from ".";
 
 const Type2Validations = {
+  
+  processType: 'CS',
+
   /**
    * This is validate H row (first row of the file)
    * @param row
@@ -111,7 +114,7 @@ const Type2Validations = {
         if (CommonContributionDetails.isNullOrEmpty(processType)) {
           return validationError;
         }
-        if (processType !== "CS") {
+        if (!(processType == "CS" || processType=='CC')) {
           return "ID13.1";
         }
         return null;
@@ -283,7 +286,7 @@ const Type2Validations = {
       const validationError = "ID12.2";
       const filterRow = actualRows.filter(
         (data: any) =>
-          data.earningPeriodEndDate == row.EPED &&
+          data.earningPeriodEndDate == row.earningPeriodEndDate &&
           data.paymentSourceName == row.paymentSource
       );
       if (filterRow.length == 0) {
@@ -305,7 +308,7 @@ const Type2Validations = {
       const validationError = "ID12.3";
       const filterRow = actualRows.filter(
         (data: any) =>
-          data.earningPeriodEndDate == row.EPED &&
+          data.earningPeriodEndDate == row.earningPeriodEndDate &&
           data.paymentSourceName == row.paymentSource &&
           data.paymentFrequencyDesc.toLowerCase() ==
             row.payPeriodFrequency.toLowerCase()
@@ -481,7 +484,8 @@ const Type2Validations = {
     row,
     actualRows,
     context: Context,
-    errors: Array<any>
+    errors: Array<any>, 
+    rdErrorTypes
   ) {
     // errors present already, no need DB verification
     if (errors.length > 0) {
@@ -491,9 +495,14 @@ const Type2Validations = {
     // Run Data verification checks
     for (const key in Type2Validations.actualDataChecks) {
       const validationFunc = Type2Validations.actualDataChecks[key];
-      const validationErrors = await validationFunc(row, context, actualRows);
-      if (validationErrors) {
-        errors.push(validationErrors);
+      const errorCode = await validationFunc(row, context, actualRows);
+      if (errorCode) {
+        let validationError = CommonContributionDetails.getRdErrorType(
+          rdErrorTypes,
+          errorCode, 
+        );
+        validationError.lineNumber = 0;
+        errors.push(validationError);
       }
     }
     return errors;
@@ -502,7 +511,8 @@ const Type2Validations = {
   start: async function (
     readStream: NodeJS.ReadableStream,
     context: Context, 
-    rdErrorTypes
+    rdErrorTypes, 
+    reqProcessType
   ): Promise<any> {
     let trailerFound = false;
     let headers;
@@ -510,7 +520,7 @@ const Type2Validations = {
     let results = [];
     let countDRows = 0;
     let currentRowIndex = -1; // when process start it will increament
-    let errorMessage = { code: "", message: "" };
+    // let errorMessage = { code: "", message: "" };
     let errorMessages = [];
     let totalRecordsInTRow = 0;
     let header_id;
@@ -554,6 +564,10 @@ const Type2Validations = {
                   return cb(null, true, null);
                 }
                 headerObject = CommonContributionDetails.getHeaderObject(row);
+                if(headerObject.processType!= reqProcessType){
+                  const errorMessage ="Process type in file doesn't match the request process type";
+                  return cb(new Error(errorMessage), false, errorMessage)
+                }
                 // Type 2B
                 Type2Validations.executeRulesOneByOne(
                   Type2Validations.rulesType2B,
@@ -565,7 +579,7 @@ const Type2Validations = {
                   context, 
                   cb
                 );
-                return;
+                return  cb(null, true, null);
               }
               trailerFound = Type2Validations.isRowTValidation(row);
               if (!trailerFound) {
@@ -639,7 +653,8 @@ const Type2Validations = {
             );
           })
           .on("error", (e) => {
-            context.log("error", e);
+            reject(e);
+            // context.log("error", e);
           })
           .on("end", async (_e) => {
             if (!trailerFound) {
@@ -655,14 +670,21 @@ const Type2Validations = {
               let records = await Type2Validations.getHeaderRecords(
                 headerObject
               );
-              if (records.length) {
-                header_id = records[0]["contribHeaderId"];
+              if (!records.length) {
+                let errorMessage = CommonContributionDetails.getRdErrorType(
+                  rdErrorTypes,
+                  "ID16.0"
+                );
+                errorMessages.push(errorMessage);
               }
+
+              header_id = records[0]["contribHeaderId"];
               await Type2Validations.actualDataVerifications(
                 headerObject,
                 records,
                 context,
-                errorMessages
+                errorMessages, 
+                rdErrorTypes
               );
             }
 

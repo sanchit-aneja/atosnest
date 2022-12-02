@@ -53,12 +53,6 @@ const Type2CValidations = {
           return "ID19";
         }
 
-        if (!isNinoEmpty) {
-          Type2CValidations.ninos.push(nino);
-        }
-        if (!isAltEmpty) {
-          Type2CValidations.alts.push(alt);
-        }
         return null;
       } catch (error) {
         context.log(`Nino and Alt id failed :  error message ${error.message}`);
@@ -82,8 +76,16 @@ const Type2CValidations = {
           !isNinoEmpty && Type2CValidations.ninos.indexOf(nino) > -1;
         let isAltExist =
           !isAltEmpty && Type2CValidations.alts.indexOf(alt) > -1;
+        
         if (isNinoExist || isAltExist) {
           return "ID20.0";
+        } 
+
+        if (!isNinoEmpty) {
+          Type2CValidations.ninos.push(nino);
+        }
+        if (!isAltEmpty) {
+          Type2CValidations.alts.push(alt);
         }
 
         const members = await FileUploadHelper.checkRecordValid({
@@ -95,8 +97,10 @@ const Type2CValidations = {
         if (members.length > 1) {
           return "ID20.1";
         }
-        if (members[0]["nino"] != nino || members[0]["alternativeId"] != alt) {
-          return "ID20.1";
+        if(members.length==1){
+          if (members[0]["nino"] != nino || members[0]["alternativeId"] != alt) {
+            return "ID20.1";
+          }
         }
         return null;
       } catch (error) {
@@ -180,16 +184,20 @@ const Type2CValidations = {
     context: Context,
     fileId,
     contributionHeaderId,
+    processType,
     rderrorTypes
   ): Promise<any> {
     let currentDRowIndex = 0;
     let errorMessages = [];
+    Type2CValidations.ninos=[];
+    Type2CValidations.alts =[];
     return new Promise(async function (resolve, reject) {
       try {
         // Get D rows first from CSV parse - Reusing from saveContribution
         const dRows = await CommonContributionDetails.getOnlyDRows(
           readStream,
-          context
+          context,
+          processType
         );
         // Start updating one by one with transcation
         for (const row of dRows) {
@@ -198,11 +206,7 @@ const Type2CValidations = {
           );
           // Pass empty value for actual values here we no need that
           const customRow =
-            CommonContributionDetails.convertToContributionDetails(
-              row,
-              {},
-              true
-            );
+            CommonContributionDetails.getDetailObject(row);
           errorMessages = await Type2CValidations.executeRulesOneByOne(
             customRow,
             context,

@@ -254,6 +254,7 @@ const Type2DValidations = {
     context: Context,
     fileId,
     contributionHeaderId,
+    processType,
     rderrorTypes
   ): Promise<any> {
     let currentDRowIndex = 0;
@@ -263,7 +264,8 @@ const Type2DValidations = {
         // Get D rows first from CSV parse - Reusing from saveContribution
         const dRows = await CommonContributionDetails.getOnlyDRows(
           readStream,
-          context
+          context, 
+          processType
         );
         // Start updating one by one with transcation
         for (const row of dRows) {

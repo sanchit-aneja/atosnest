@@ -76,7 +76,8 @@ const httpTrigger: AzureFunction = async function (
     const result = await Type2Validations.start(
       blobHelper.stringToStream(fileData),
       context,
-      errors
+      errors, 
+      payload.processType
     );
 
     // Sending message to Type 2C & D
@@ -96,7 +97,7 @@ const httpTrigger: AzureFunction = async function (
         `Something went wrong, error ${JSON.stringify(error.message)}`
       );
       const somethingError =
-        CommonContributionDetails.getSomethingWentWrongError("2B", "CS");
+        CommonContributionDetails.getSomethingWentWrongError("2B", payload.processType);
       error = [somethingError];
     }
     // Send error to FQS

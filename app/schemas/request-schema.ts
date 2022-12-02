@@ -26,6 +26,7 @@ export interface MemberContributionDetailsRequest
 
 export interface ContributionCorrectionAddMemberRequest {
   contribHeaderId: string;
+  processType: string;
   contributionDetail: Array<ContributionCorrectionAddMemberDetails>;
 }
 
