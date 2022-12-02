@@ -35,3 +35,15 @@ export interface SubmissionErrorRequest {
   payload: string;
   payloadType: string;
 }
+
+export interface FileUploadRequest {
+  key: string,
+  documentName: string,
+  path: string,
+  FQSId: string,
+  correlationId: string,
+  callerId: string,
+  kafkaTopicFailure: string,
+  kafkaTopicSuccess: string,
+  Payload: {}
+}
