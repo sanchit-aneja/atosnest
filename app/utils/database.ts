@@ -10,7 +10,7 @@ const sequelize = new Sequelize(
   dbConfig.password,
   {
     dialect: dbConfig.dialect as Dialect,
-    host: "d",
+    host: dbConfig.host,
     port: parseInt(dbConfig.port),
     pool: dbConfig.pool,
     logging: dbConfig.logging,
