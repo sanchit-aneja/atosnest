@@ -29,7 +29,7 @@ const db_config = {
       acquire: 30000,
       idle: 10000,
     },
-    logging: false,
+    logging: true,
     ssl: process.env.contribution_DBSSL,
     schema: process.env.contribution_DBSchema
   },
