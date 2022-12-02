@@ -595,6 +595,21 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"RemoveContributionScheduleRequest": {
+				"properties": {
+					"contributionDetail": {
+						"items": {
+							"$ref": "#/components/schemas/ContributionCorrectionAddMemberDetails"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"contributionDetail"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ContributionXmlResponse": {
 				"properties": {
 					"isStreaming": {
@@ -1417,7 +1432,7 @@
 	},
 	"info": {
 		"title": "Contribution Index APIs",
-		"version": "1.73.0",
+		"version": "1.76.0",
 		"description": "REST APIs for Contribution Index",
 		"contact": {}
 	},
@@ -1821,6 +1836,48 @@
 						}
 					}
 				]
+			}
+		},
+		"/contribution/schedule/removeMembers": {
+			"put": {
+				"operationId": "RemoveContributionSchedule",
+				"responses": {
+					"200": {
+						"description": "Success Response",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid Request"
+					},
+					"404": {
+						"description": "Record does not exist"
+					},
+					"500": {
+						"description": "Internal Server Error"
+					}
+				},
+				"description": "5907 API Catalogue Number\r\nremove members from schedule - correction",
+				"security": [
+					{
+						"api_key": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"description": "Array of the Member Contribution Details Id Array<Contribution_Details>",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RemoveContributionScheduleRequest"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/contribution/submission/getxml/{contributionHeaderId}": {
