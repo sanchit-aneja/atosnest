@@ -235,7 +235,15 @@ components:
         employerNestId:
           type: string
         scheduleStatusCd:
+          type: array
+          items:
+            type: string
+        endDate: 
           type: string
+          format: date
+        startDate:
+          type: string
+          format: date
       type: object
       additionalProperties: false
     HeaderFilterElements:
