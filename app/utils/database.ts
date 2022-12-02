@@ -2,13 +2,16 @@ import { Dialect, Sequelize } from "sequelize";
 import db_config from "../config/db.config";
 
 const dbConfig = db_config.testing;
+console.log("dbConfig");
+console.log(dbConfig);
+
 const sequelize = new Sequelize(
   dbConfig.database,
   dbConfig.username,
   dbConfig.password,
   {
     dialect: dbConfig.dialect as Dialect,
-    host: dbConfig.host,
+    host: "d",
     port: parseInt(dbConfig.port),
     pool: dbConfig.pool,
     logging: dbConfig.logging,
@@ -16,7 +19,7 @@ const sequelize = new Sequelize(
       ssl: dbConfig.ssl == "false",
     },
     ssl: dbConfig.ssl == "false",
-    schema: dbConfig.schema
+    schema: dbConfig.schema,
   }
 );
 
