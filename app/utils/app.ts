@@ -66,6 +66,10 @@ const app = {
     return input instanceof Array || input instanceof Object ? true : false;
   },
 
+  allEqual(arr) {
+    return arr.every((val) => val === arr[0]);
+  },
+
   mapUpdateObj(item) {
     return {
       ...item,

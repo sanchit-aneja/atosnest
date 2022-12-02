@@ -29,6 +29,10 @@ export interface ContributionCorrectionAddMemberRequest {
   contributionDetail: Array<ContributionCorrectionAddMemberDetails>;
 }
 
+export interface RemoveContributionScheduleRequest {
+  contributionDetail: Array<ContributionCorrectionAddMemberDetails>;
+}
+
 export interface SubmissionErrorRequest {
   contributionSubmissionId: string;
   errorCode: string;
