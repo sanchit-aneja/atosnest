@@ -191,6 +191,7 @@ const app = {
       return null;
     }
   },
+  
   mapFilterSorting(value, defFilter) {
     try {
       let sortArr = [];

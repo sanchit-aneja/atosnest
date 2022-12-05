@@ -2,8 +2,6 @@ import { Context } from "@azure/functions";
 import _ from "lodash";
 import { Type2Validations } from ".";
 import { ContributionHeader } from "../models";
-const { Readable } = require("stream");
-import { headerGetSuccessResponse } from "../__test__/mock/headerSearchResponse";
 import { headerResponse } from "../__test__/mock/validations/type2Responses/headerResponse";
 
 jest.mock('sequelize');
@@ -13,14 +11,7 @@ const contributionHeaderResponseMock: any = Promise.resolve(
   );
 
 describe("Test: Business logic for validation of type 2A and 2b", () => {
-    let context: Context;
-    const executeRulesOneByOne = Type2Validations.executeRulesOneByOne;
-
     
-    beforeEach(() => {
-        context = { log: jest.fn() } as unknown as Context;
-    });
-
     afterAll(async () => {
         jest.restoreAllMocks();
         jest.clearAllMocks();

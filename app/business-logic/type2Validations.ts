@@ -271,7 +271,7 @@ const Type2Validations = {
       );
       if (filterRow.length == 0) {
         context.log(
-          "Actul data check  failed for Earnings Period End Date, No records found"
+          "Actual data check  failed for Earnings Period End Date, No records found"
         );
         return validationError;
       }
@@ -291,7 +291,7 @@ const Type2Validations = {
       );
       if (filterRow.length == 0) {
         context.log(
-          "Actul data check  failed for Earnings Period End Date & Payment Source, No records found"
+          "Actual data check  failed for Earnings Period End Date & Payment Source, No records found"
         );
         return validationError;
       }
@@ -421,7 +421,6 @@ const Type2Validations = {
     rdErrorTypes,
     contributionHeaderId,
     context, 
-    callback: Function
   ) {
     try {
       for (const key in rules) {
@@ -435,8 +434,6 @@ const Type2Validations = {
           validationErrors.lineNumber = rowNumber;
           errors.push(validationErrors);
         }
-
-
       }
       return;
     } catch (error) {
@@ -480,6 +477,7 @@ const Type2Validations = {
    * @param callback
    * @returns
    */
+
   actualDataVerifications: async function (
     row,
     actualRows,
@@ -576,8 +574,7 @@ const Type2Validations = {
                   errorMessages, 
                   rdErrorTypes,
                   contributionHeaderId, 
-                  context, 
-                  cb
+                  context,
                 );
                 return  cb(null, true, null);
               }
