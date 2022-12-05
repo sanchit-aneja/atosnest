@@ -141,7 +141,7 @@ export class MemberContributionDetailsController {
               attributes: [
                 "errorLogId",
                 "errorFileId",
-                "errorType",
+                "errorTypeId",
                 "errorSequenceNum",
                 "sourceRecordId",
                 "errorCode",
