@@ -15,6 +15,14 @@ const httpTrigger: AzureFunction = async function (
 ): Promise<void> {
   try {
     const queryReq = await req.body;
+    const rangeParams={};
+    if(queryReq.params.startDate){
+      rangeParams['startDate']  = queryReq.params.startDate;
+    }
+    if(queryReq.params.endDate){
+      rangeParams['endDate'] = queryReq.params.endDate;
+    }
+     
     const filterParams = app.validateFilterParams(
       queryReq,
       headerFilterParams
@@ -34,7 +42,7 @@ const httpTrigger: AzureFunction = async function (
 
     queryReq.params = filterParams;
     const ctrl = new ContributionHeaderController();
-    const item = await ctrl.getHeaderByFilter(queryReq);
+    const item = await ctrl.getHeaderByFilter(queryReq, rangeParams);
     if (item.results) {
       const resp = await app.successResponse(item);
       context.res = resp;

@@ -292,6 +292,19 @@ export const headerFilterParams = {
   nestScheduleRef: "ContributionHeader.nest_schedule_ref",
   employerNestId: "ContributionHeader.employer_nest_id",
   earningPeriodEndDate: "ContributionHeader.earning_period_end_date",
+  scheduleType: "ContributionHeader.schedule_type" , 
+  subSchemeId: "ContributionHeader.sub_scheme_id", 
+  paymentPlanNo: "ContributionHeader.payment_plan_no",
+  paymentRef: "ContributionHeader.payment_ref", 
+  nestPaymentRef: "ContributionHeader.nest_payment_ref",
+  paymentSourceName: "ContributionHeader.payment_source_name", 
+  paymentMethod: "ContributionHeader.payment_method", 
+  paymentMethodDesc: "ContributionHeader.payment_method_desc", 
+  paymentFrequency: "ContributionHeader.payment_frequency", 
+  paymentFrequencyDesc: "ContributionHeader.payment_frequency_desc", 
+  taxPayFrequencyInd: "ContributionHeader.tax_pay_frequency_ind", 
+  pegaCaseRef: "ContributionHeader.pega_case_ref", 
+  scheduleStatusCd: "ContributionHeader.schedule_status_cd",
 };
 
 export const memberFilterParams = {

@@ -39,6 +39,7 @@ import {
   ContributionHeaderUpdateError,
 } from "../models";
 import errorHandler from "../utils/errorHandler";
+import { date } from "joi";
 
 @Route("/contribution")
 export class ContributionHeaderController {
@@ -108,7 +109,9 @@ export class ContributionHeaderController {
   @Response("404", Status.NOT_FOUND_MSG)
   @Response("500", Status.FAILURE_MSG)
   async getHeaderByFilter(
-    @Body() requestObj: HeaderFilterElements
+    @Body() requestObj: HeaderFilterElements,
+    rangeParams
+
   ): Promise<SearchResultsetResponse<ContributionHeaderResponse> | any> {
     try {
       const element = app.mapHeaderFilterElements(
@@ -119,6 +122,20 @@ export class ContributionHeaderController {
       let whereCdtn = {
         ...element.params,
       };
+
+      if(rangeParams.startDate){
+        whereCdtn['$ContributionHeader.earning_period_start_date$'] = {
+          [Op.gte]: rangeParams.startDate
+        }
+        delete whereCdtn.startDate;
+      }
+      if(rangeParams.end_date){
+        whereCdtn['$ContributionHeader.earning_period_end_date$'] = {
+          [Op.lt]: rangeParams.endDate
+        }
+        delete whereCdtn.endDate;
+      }
+
       return await sequelize.transaction(async (t) => {
         const { rows, count } = await ContributionHeader.findAndCountAll({
           limit: element.options.limit,
