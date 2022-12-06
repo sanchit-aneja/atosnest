@@ -15,9 +15,9 @@ const sequelize = new Sequelize(
     pool: dbConfig.pool,
     logging: dbConfig.logging,
     dialectOptions: {
-      ssl: dbConfig.ssl == "false",
+      ssl: dbConfig.ssl == "true",
     },
-    ssl: dbConfig.ssl == "false",
+    ssl: dbConfig.ssl == "true",
     schema: dbConfig.schema,
   }
 );
