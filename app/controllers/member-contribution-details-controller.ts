@@ -241,9 +241,10 @@ export class MemberContributionDetailsController {
       );
       allErrors.push(errorResp);
     }
-
+ 
     if (allErrors.length === 0) {
       this.log("Success: No Error present, updates are commiting.");
+      await transaction.commit();
       return {
         status: Status.SUCCESS /* Defaults to 200 */,
         body: { message: "Contribution Details are updated." },
