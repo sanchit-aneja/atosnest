@@ -4,6 +4,7 @@ import * as csvf from "fast-csv";
 import { regexPattern } from "./constants";
 import Status from "../utils/config";
 import {
+  DetailsEligibleFilterElements,
   DetailsFilterElements,
   HeaderFilterElements,
 } from "../schemas/response-schema";
@@ -101,6 +102,13 @@ const app = {
           defFilter,
           type
         );
+      } else if (type == "EMCD") {
+        options = this.mapEligibleDetailsFilterOptions(
+          request.options,
+          defOptions,
+          defFilter,
+          type
+        );
       } else {
         options = this.mapDetailsFilterOptions(
           request.options,
@@ -123,6 +131,18 @@ const app = {
   },
 
   mapDetailsFilterElements(request: DetailsFilterElements, defFilter, type) {
+    try {
+      return this.mapFilterElements(request, defFilter, type);
+    } catch (e) {
+      return null;
+    }
+  },
+
+  mapEligibleDetailsFilterElements(
+    request: DetailsEligibleFilterElements,
+    defFilter,
+    type
+  ) {
     try {
       return this.mapFilterElements(request, defFilter, type);
     } catch (e) {
@@ -169,6 +189,18 @@ const app = {
   },
   mapHeaderFilterOptions(
     reqOptions: HeaderFilterElements["options"],
+    optionsObj,
+    defFilter,
+    type
+  ) {
+    try {
+      return this.mapFilterOptions(reqOptions, optionsObj, defFilter, type);
+    } catch (e) {
+      return null;
+    }
+  },
+  mapEligibleDetailsFilterOptions(
+    reqOptions: DetailsEligibleFilterElements["options"],
     optionsObj,
     defFilter,
     type

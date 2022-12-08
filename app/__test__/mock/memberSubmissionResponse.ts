@@ -2,7 +2,7 @@ export const memberSubmissionGetSuccessResponse = {
   totalRecordCount: 1,
   results: [
     {
-      schdlMembStatusCd: "MS4",
+      schdlMembStatusCd: "MCS4",
       employerNestId: "A127",
       membEnrolmentRef: "N6681775",
       membContriDueDate: "2022-02-20",

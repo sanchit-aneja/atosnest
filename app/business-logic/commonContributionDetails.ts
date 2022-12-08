@@ -68,7 +68,7 @@ enum EnumRowTColumns {
 enum EnumScheduleMemberStatusCD {
   TO_BE_REVIEWED = "MCS1",
   ATTENTION_NEEDED = "CS2",
-  READY_TO_SUBMIT = "MS2",
+  READY_TO_SUBMIT = "MCS2",
 }
 
 interface Type2SaveResult {

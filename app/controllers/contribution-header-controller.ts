@@ -182,7 +182,7 @@ export class ContributionHeaderController {
     try {
       return await sequelize.transaction(async (t) => {
         const contrDetails = await ContributionDetails.findAndCountAll({
-          where: { schdl_memb_status_cd: "MS2" },
+          where: { schdl_memb_status_cd: "MCS2" },
           attributes: [
             "membContribDetlId",
             "employerNestId",
@@ -287,7 +287,7 @@ export class ContributionHeaderController {
     try {
       return await sequelize.transaction(async (t) => {
         const objParams = {
-          schdlMembStatusCd: "MS4",
+          schdlMembStatusCd: "MCS4",
           updatedBy: "System",
         };
         const items = await ContributionDetails.update(objParams, {
@@ -296,7 +296,7 @@ export class ContributionHeaderController {
               {
                 nest_schedule_ref: reqObj ? reqObj.nestScheduleRef : null,
                 employer_nest_id: reqObj ? reqObj.employerNestId : null,
-                schdl_memb_status_cd: "MS2",
+                schdl_memb_status_cd: "MCS2",
               },
             ],
           },
