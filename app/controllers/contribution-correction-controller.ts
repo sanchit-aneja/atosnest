@@ -1,4 +1,12 @@
-import { Body, Put, Response, Route, Security, SuccessResponse } from "tsoa";
+import {
+  Body,
+  Post,
+  Put,
+  Response,
+  Route,
+  Security,
+  SuccessResponse,
+} from "tsoa";
 import { ContributionCorrectionAddMemberRequest } from "../schemas/request-schema";
 import Status from "../utils/config";
 import app from "../utils/app";
@@ -6,6 +14,15 @@ import sequelize from "../utils/database";
 import { Op } from "sequelize";
 import { Context } from "@azure/functions";
 import { ContributionDetails, ContributionHeader } from "../models";
+import {
+  DetailsEligibleFilterElements,
+  RetriveEligibleContributionDetailsResponse,
+  SearchMemberContributionResultResponse,
+} from "../schemas/response-schema";
+import {
+  headerEligibleFilterParams,
+  memberFilterParams,
+} from "../utils/constants";
 
 @Route("/contribution")
 export class ContributionCorrectionController {
@@ -142,6 +159,149 @@ export class ContributionCorrectionController {
       if (err) {
         return app.errorHandler(err);
       }
+    }
+  }
+
+  /**
+   * 5903 API Catalogue Number
+   * Fetch List of Correction Eligible Contribution details with filter criterias
+   * @return Contribution Details list with Array<Contribution_Details>
+   */
+  @Security("api_key")
+  @Post("correction/retrieveCorrectionEligibleContributionDetails")
+  @SuccessResponse("200", Status.SUCCESS_MSG)
+  @Response("400", Status.BAD_REQUEST_MSG)
+  @Response("404", Status.NOT_FOUND_MSG)
+  @Response("500", Status.FAILURE_MSG)
+  async getCorrectionEligibleDetailsByFilter(
+    @Body() requestObj: DetailsEligibleFilterElements,
+    headerId
+  ): Promise<
+    | SearchMemberContributionResultResponse<RetriveEligibleContributionDetailsResponse>
+    | any
+  > {
+    try {
+      const element = app.mapEligibleDetailsFilterElements(
+        requestObj,
+        headerEligibleFilterParams,
+        "EMCD"
+      );
+      let whereCdtn = {
+        [Op.and]: [
+          {
+            ...element.params,
+          },
+          {
+            [Op.or]: {
+              schedule_type: ["CC", "EC"],
+            },
+          },
+          {
+            [Op.or]: {
+              schedule_status_cd: ["CS1", "CS3", "CS4"],
+            },
+          },
+        ],
+      };
+      return await sequelize.transaction(async (t) => {
+        const headerData = await ContributionHeader.findOne({
+          where: whereCdtn,
+          attributes: ["origContribHeaderId"],
+        });
+        if (headerData) {
+          const { rows, count } = await ContributionDetails.findAndCountAll({
+            limit: element.options.limit,
+            offset: element.options.offset,
+            order: element.options.sort,
+            distinct: true,
+            include: [
+              {
+                association: "rdschedulememberstatus",
+                attributes: ["schdlMembStatusDesc"],
+              },
+              {
+                association: "rdpartcontribreason",
+                attributes: ["reasonDescription"],
+              },
+              {
+                association: "errorDetails",
+                attributes: [
+                  "errorLogId",
+                  "errorFileId",
+                  "errorTypeId",
+                  "errorSequenceNum",
+                  "sourceRecordId",
+                  "errorCode",
+                  "errorMessage",
+                ],
+              },
+            ],
+            where: {
+              contrib_header_id:
+                headerData["dataValues"]["origContribHeaderId"],
+              schdl_memb_status_cd: "MCS13",
+            },
+            subQuery: false,
+            transaction: t,
+          });
+
+          const membData = await ContributionDetails.findAll({
+            where: {
+              contrib_header_id: headerId,
+            },
+          });
+          if (rows && membData) {
+            const updatedRows = await this.mapEligibleMembers(rows, membData);
+            if (updatedRows?.length > 0) {
+              return {
+                totalRecordCount: updatedRows.length,
+                results: updatedRows,
+              };
+            } else {
+              return Status.NOT_FOUND;
+            }
+          } else {
+            return Status.NOT_FOUND;
+          }
+        } else {
+          return Status.NOT_FOUND;
+        }
+      });
+    } catch (err) {
+      if (err) {
+        return app.errorHandler(err);
+      }
+    }
+  }
+
+  async mapEligibleMembers(arr1, arr2): Promise<any> {
+    try {
+      const intersection = arr1.filter(({ nestScheduleRef: id1 }) =>
+        arr2.some(({ nestScheduleRef: id2 }) => id2 === id1)
+      );
+
+      for (let r = 0; r < arr1.length; r++) {
+        arr1[r]["dataValues"]["IncludedInCorrection"] = {
+          IncludedInCorrection: "",
+        };
+        for (let t = 0; t < intersection.length; t++) {
+          if (
+            intersection[t]["dataValues"]["nestScheduleRef"] ==
+            arr1[r]["dataValues"]["nestScheduleRef"]
+          ) {
+            arr1[r]["dataValues"]["IncludedInCorrection"][
+              "IncludedInCorrection"
+            ] = "True";
+          } else {
+            arr1[r]["dataValues"]["IncludedInCorrection"][
+              "IncludedInCorrection"
+            ] = "False";
+          }
+        }
+      }
+      return arr1;
+    } catch (e) {
+      console.log(e);
     }
   }
 

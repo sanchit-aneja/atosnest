@@ -315,6 +315,10 @@ export const memberFilterParams = {
   lastName: "ContributionDetails.last_name",
 };
 
+export const headerEligibleFilterParams = {
+  contribHeaderId: "ContributionHeader.contrib_header_id",
+};
+
 export const READONLY_CONTRIBUTION_DETAILS_COLUMNS_FOR_UPDATE = [
   "membContribDetlId",
   "nestScheduleRef",
@@ -325,7 +329,7 @@ export const READONLY_CONTRIBUTION_DETAILS_COLUMNS_FOR_UPDATE = [
   "updatedBy",
   "lastUpdatedTimestamp",
   "membPlanRef",
-  "schdlMembStatusCd",
+  // "schdlMembStatusCd",
 ];
 
 export const READONLY_CONTRIBUTION_HEADER_COLUMNS_FOR_UPDATE = [

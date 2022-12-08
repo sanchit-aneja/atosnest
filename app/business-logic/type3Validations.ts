@@ -698,7 +698,7 @@ export const Type3Validations = {
         }
       );
       await ContributionDetails.update(
-        { schdlMembStatusCd: "MS3" },
+        { schdlMembStatusCd: "MCS3" },
         {
           where: {
             membContribDetlId: {
@@ -708,7 +708,7 @@ export const Type3Validations = {
         }
       );
       await ContributionDetails.update(
-        { schdlMembStatusCd: "MS2" },
+        { schdlMembStatusCd: "MCS2" },
         {
           where: {
             membContribDetlId: {

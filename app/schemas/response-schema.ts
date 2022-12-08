@@ -348,9 +348,18 @@ interface DetailsFilterParams {
   lastName: string;
 }
 
+interface DetailsEligibleFilterParams {
+  contribHeaderId: string;
+}
+
 export interface DetailsFilterElements {
   options?: FilterOptions;
   params: DetailsFilterParams;
+}
+
+export interface DetailsEligibleFilterElements {
+  options?: FilterOptions;
+  params: DetailsEligibleFilterParams;
 }
 
 export interface SearchResultsetResponse<T> {
@@ -363,6 +372,155 @@ export interface CreateContributionResponse {
   scheduleSubmissionSeq: number;
   countSubmitted: number;
   countRowsSubmitted: number;
+}
+
+export interface RetriveEligibleContributionDetailsResponse {
+  contribHeaderId?: string;
+  origScheduleRef?: string;
+
+  employerNestId?: string;
+  updatedBy?: string;
+  /**
+   * @isDate
+   */
+  membPaymentDueDate?: Date;
+
+  /**
+   * @isDate
+   */
+
+  recordEndDate?: Date;
+  createdBy?: string;
+  /**
+   * @isInt
+   */
+  newEmpGroupId?: number;
+
+  recordStartDate?: Date;
+  /**
+   * @isDate
+   */
+
+  memberExcludedFlag?: string;
+  nestScheduleRef: string;
+  membEnrolmentRef: string;
+
+  membContribDetlId: string;
+
+  membPlanRef?: string;
+  /**
+   * @isDate
+   */
+
+  membContriDueDate: Date;
+  /**
+   * @isInt
+   */
+  empGroupId: number;
+
+  groupName: string;
+
+  schdlMembStatusCd: string;
+
+  membPartyId: string;
+
+  scmPartyId?: string;
+
+  nino?: string;
+  alternativeId?: string;
+  autoCalcFlag?: string;
+  /**
+   * @isFloat
+   */
+  emplContriAmt?: number;
+  /**
+   * @isFloat
+   */
+  pensEarnings?: number;
+
+  /**
+   * @isFloat
+   */
+  membContriAmt?: number;
+  /**
+   * @isFloat
+   */
+  membLeaveEarnings?: number;
+
+  membNonPayReason: string;
+  /**
+   * @isFloat
+   */
+  newGroupPensEarnings?: number;
+  /**
+   * @isFloat
+   */
+  newGroupName?: string;
+  /**
+   * @isFloat
+   */
+
+  optoutDeclarationFlag?: string;
+
+  newGroupEmplContriAmt?: number;
+  optoutRefNum?: string;
+
+  /**
+   * @isFloat
+   */
+  newGroupMembContriAmt?: number;
+
+  newPaymentPlanNo?: string;
+  /**
+   * @isFloat
+   */
+  secEnrolMembContriAmt?: number;
+
+  newPaymentSourceName?: string;
+  /**
+   * @isDate
+   */
+  membNonPayEffDate?: Date;
+  /**
+   * @isFloat
+   */
+  secEnrolPensEarnings?: number;
+  /**
+   * @isFloat
+   */
+  channelType?: string;
+  enrolmentType?: string;
+  /**
+   * @isFloat
+   */
+  emplContriPct: number;
+  /**
+   * @isFloat
+   */
+  membContriPct: number;
+  /**
+   * @isFloat
+   */
+  newGroupEmplContriPct?: number;
+  secEnrolEmplContriAmt?: number;
+  firstName: string;
+  secEnrolmentType?: string;
+  lastName: string;
+  /**
+   * @isFloat
+   */
+  newGroupMembContriPct?: number;
+  recordChangedFlag?: string;
+  origMembNonPayReason?: string;
+  memTaxReliefEligibility?: string;
+  errorDetails: ErrorDetailsResponse;
+  rdschedulememberstatus: RDScheduleMemberStatusResponse;
+  rdpartcontribreason: RDPartContribReasonResponse;
+  includedInCorrection: IncludedInCorrectionResponse;
+}
+
+export interface IncludedInCorrectionResponse {
+  includedInCorrection: string;
 }
 
 export interface RetriveContributionDetailsResponse {
