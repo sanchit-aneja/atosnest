@@ -1,16 +1,12 @@
 import { Body, Put, Response, Route, Security, SuccessResponse } from "tsoa";
 import ContributionHeader from "../models/contributionheader";
 import ContributionDetails from "../models/contributionDetails";
-import {
-  ClearScheduleStatusResponse,
-  DetailsFilterElements,
-} from "../schemas/response-schema";
+import { ClearScheduleStatusResponse } from "../schemas/response-schema";
 import Status from "../utils/config";
 import app from "../utils/app";
 import sequelize from "../utils/database";
 import { Op } from "sequelize";
 import { RemoveContributionScheduleRequest } from "../schemas/request-schema";
-import { FileHeaderMap, StgFileMemberDetails } from "../models";
 
 @Route("/contribution")
 export class ContributionScheduleController {

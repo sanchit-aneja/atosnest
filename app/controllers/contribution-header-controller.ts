@@ -27,7 +27,7 @@ import {
   errorDetails,
   READONLY_CONTRIBUTION_HEADER_COLUMNS_FOR_UPDATE,
 } from "../utils/constants";
-import { Op, Sequelize } from "sequelize";
+import { Op } from "sequelize";
 import * as moment from "moment";
 import { Context } from "@azure/functions";
 import {
@@ -39,7 +39,6 @@ import {
   ContributionHeaderUpdateError,
 } from "../models";
 import errorHandler from "../utils/errorHandler";
-import { date } from "joi";
 
 @Route("/contribution")
 export class ContributionHeaderController {
@@ -111,7 +110,6 @@ export class ContributionHeaderController {
   async getHeaderByFilter(
     @Body() requestObj: HeaderFilterElements,
     rangeParams
-
   ): Promise<SearchResultsetResponse<ContributionHeaderResponse> | any> {
     try {
       const element = app.mapHeaderFilterElements(
@@ -123,16 +121,16 @@ export class ContributionHeaderController {
         ...element.params,
       };
 
-      if(rangeParams.startDate){
-        whereCdtn['$ContributionHeader.earning_period_start_date$'] = {
-          [Op.gte]: rangeParams.startDate
-        }
+      if (rangeParams.startDate) {
+        whereCdtn["$ContributionHeader.earning_period_start_date$"] = {
+          [Op.gte]: rangeParams.startDate,
+        };
         delete whereCdtn.startDate;
       }
-      if(rangeParams.end_date){
-        whereCdtn['$ContributionHeader.earning_period_end_date$'] = {
-          [Op.lt]: rangeParams.endDate
-        }
+      if (rangeParams.end_date) {
+        whereCdtn["$ContributionHeader.earning_period_end_date$"] = {
+          [Op.lt]: rangeParams.endDate,
+        };
         delete whereCdtn.endDate;
       }
 
