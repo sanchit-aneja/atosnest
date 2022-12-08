@@ -19,10 +19,7 @@ import {
   RetriveEligibleContributionDetailsResponse,
   SearchMemberContributionResultResponse,
 } from "../schemas/response-schema";
-import {
-  headerEligibleFilterParams,
-  memberFilterParams,
-} from "../utils/constants";
+import { headerEligibleFilterParams } from "../utils/constants";
 
 @Route("/contribution")
 export class ContributionCorrectionController {
