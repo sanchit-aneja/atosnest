@@ -355,6 +355,22 @@ ContributionDetails.init(
       type: DataTypes.STRING(5),
       field: "orig_memb_non_pay_reason",
     },
+    currMembPlanStatusCd: {
+      type: DataTypes.STRING(2),
+      field: "curr_memb_plan_status_cd",
+    },
+    currPensEarnings: {
+      type: DataTypes.DECIMAL,
+      field: "curr_pens_earnings",
+    },
+    currEmplContriAmt: {
+      type: DataTypes.DECIMAL,
+      field: "curr_empl_contri_amt",
+    },
+    currMembContriAmt: {
+      type: DataTypes.DECIMAL,
+      field: "curr_memb_contri_amt",
+    },
   },
   {
     sequelize,

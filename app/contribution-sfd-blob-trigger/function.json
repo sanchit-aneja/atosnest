@@ -6,7 +6,6 @@
       "direction": "in",
       "path": "%contribution_BlobContainerName%/Contribution_Header_File_{name}.csv",
       "connection": "contribution_BlobConnectString"
-
     }
   ],
   "scriptFile": "../dist/contribution-sfd-blob-trigger/index.js"
