@@ -54,7 +54,7 @@ StgContrSchedule.init(
       field: "effective_date",
     },
     scheduleType: {
-      type: DataTypes.STRING(1),
+      type: DataTypes.STRING(2),
       field: "schedule_type",
     },
     paymentPlanNo: {
