@@ -279,7 +279,7 @@ export class ContributionCorrectionController {
 
       for (let r = 0; r < arr1.length; r++) {
         arr1[r]["dataValues"]["IncludedInCorrection"] = {
-          IncludedInCorrection: "",
+          IncludedInCorrection: "False",
         };
         for (let t = 0; t < intersection.length; t++) {
           if (

@@ -59,43 +59,6 @@ export class MemberContributionDetailsController {
   }
 
   /**
-   * 5202 API Catalogue Number
-   * Retrieves the Member Contribution Details list based on scheduleReference passed.
-   * @param nestScheduleRef scheduleReference of the Member Contribution Details record to be fetched
-   * @return Member Contribution Details list with Array< MemberContributionDetails> based on scheduleReference
-   */
-  @Security("api_key")
-  @Get("{nestScheduleRef}")
-  @SuccessResponse("200", Status.SUCCESS_MSG)
-  @Response("400", Status.BAD_REQUEST_MSG)
-  @Response("404", Status.NOT_FOUND_MSG)
-  @Response("500", Status.FAILURE_MSG)
-  async getMemberContributionDetails(
-    nestScheduleRef: string
-  ): Promise<MemberContributionDetailsResponse | any> {
-    try {
-      let whereCdtn = {
-        nest_schedule_ref: nestScheduleRef,
-      };
-      return await sequelize.transaction(async (t) => {
-        const items = await ContributionDetails.findOne({
-          where: whereCdtn,
-          transaction: t,
-        });
-        if (items) {
-          return { ContributionDetail: items.toJSON() };
-        } else {
-          return Status.BAD_REQUEST;
-        }
-      });
-    } catch (err) {
-      if (err) {
-        return app.errorHandler(err);
-      }
-    }
-  }
-
-  /**
    * 5205 API Catalogue Number
    * Retrieves a list of details with filter criterias
    * @return Contribution Details list with Array<Contribution_Details>
@@ -241,7 +204,7 @@ export class MemberContributionDetailsController {
       );
       allErrors.push(errorResp);
     }
- 
+
     if (allErrors.length === 0) {
       this.log("Success: No Error present, updates are commiting.");
       await transaction.commit();

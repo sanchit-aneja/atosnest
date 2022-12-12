@@ -15,14 +15,30 @@ describe("Success", () => {
     .mockResolvedValue(responseheaderGetSuccessMock);
 
   it("test response", async () => {
-    const externalScheduleRef = "2022-23-02-05.35.45.302656.6621";
+    const requestObj = {
+      options: {
+        limit: 50,
+        offset: 0,
+        sort: ["earningPeriodEndDate.desc"],
+      },
+      params: {
+        employerNestId: "SCHEMEDATA",
+        startDate: "",
+        endDate: "",
+      },
+    };
+    const rangeParams = {
+      startDate: requestObj.params.startDate,
+      endDate: requestObj.params.endDate,
+    };
+
     const ctrl = new ContributionHeaderController();
-    const ctrlSpy = jest.spyOn(ctrl, "getContributionHeader");
-    const response = await ctrl.getContributionHeader(externalScheduleRef);
+    const ctrlSpy = jest.spyOn(ctrl, "getHeaderByFilter");
+    const response = await ctrl.getHeaderByFilter(requestObj, rangeParams);
     //Check Interactions
     expect(seqTransactions).toHaveBeenCalledTimes(1);
-    expect(typeof ctrl.getContributionHeader).toBe("function");
-    expect(ctrlSpy).toHaveBeenCalledWith(externalScheduleRef);
+    expect(typeof ctrl.getHeaderByFilter).toBe("function");
+    expect(ctrlSpy).toHaveBeenCalledWith(requestObj, rangeParams);
     //Check Response
     expect(response).toEqual(headerGetSuccessResponse);
   });
