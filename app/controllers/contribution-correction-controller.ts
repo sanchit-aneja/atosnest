@@ -62,7 +62,7 @@ export class ContributionCorrectionController {
         let origContribHeaderId = await ContributionHeader.findOne({
           where: {
             contribHeaderId: mapContribHeaderId,
-            scheduleType: "CS",
+            scheduleType: "CC",
             [Op.or]: [
               { scheduleStatusCd: "CS1" },
               { scheduleStatusCd: "CS3" },
