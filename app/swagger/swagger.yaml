@@ -13,6 +13,17 @@ components:
         - membContribDetlId
       type: object
       additionalProperties: false
+    UpdateMemberStatusDetails:
+      properties:
+        membContribDetlId:
+          type: string
+        schdlMembStatusCd:
+          type: string
+      required:
+        - membContribDetlId
+        - schdlMembStatusCd
+      type: object
+      additionalProperties: false
     ContributionCorrectionAddMemberRequest:
       properties:
         contribHeaderId:
@@ -739,7 +750,7 @@ components:
       additionalProperties: false
     IncludedInCorrectionResponse:
       properties:
-        IncludedInCorrection:
+        includedInCorrection:
           type: string
       required:
         - IncludedInCorrection
@@ -1030,7 +1041,7 @@ components:
           $ref: "#/components/schemas/RDScheduleMemberStatusResponse"
         rdpartcontribreason:
           $ref: "#/components/schemas/RDPartContribReasonResponse"
-        IncludedInCorrection:
+        includedInCorrection:
           $ref: "#/components/schemas/IncludedInCorrectionResponse"
       required:
         - nestScheduleRef
@@ -1207,6 +1218,16 @@ components:
         contributionDetail:
           items:
             $ref: "#/components/schemas/ContributionCorrectionAddMemberDetails"
+          type: array
+      required:
+        - contributionDetail
+      type: object
+      additionalProperties: false
+    UpdateMemberStatusRequest:
+      properties:
+        contributionDetail:
+          items:
+            $ref: "#/components/schemas/UpdateMemberStatusDetails"
           type: array
       required:
         - contributionDetail
@@ -1469,7 +1490,6 @@ components:
         - countUnsubmitted
       type: object
       additionalProperties: false
-
     FileUploadRequest:
       properties:
         key:
@@ -1492,7 +1512,6 @@ components:
           type: object
       type: object
       additionalProperties: false
-
   securitySchemes:
     api_key:
       type: apiKey
@@ -1542,8 +1561,7 @@ paths:
             application/json:
               schema:
                 anyOf:
-                  - $ref: >-
-                      #/components/schemas/SearchResultsetResponse_ContributionHeaderResponse_
+                  - $ref: "#/components/schemas/SearchResultsetResponse_ContributionHeaderResponse_"
                   - {}
         "400":
           description: Invalid Request
@@ -1639,9 +1657,7 @@ paths:
       security:
         - api_key: []
       parameters:
-        - description: >-
-            contribHeaderId of the Member Contribution Details record to be
-            fetched
+        - description: contribHeaderId of the Member Contribution Details record to be fetched
           in: path
           name: contribHeaderId
           required: true
@@ -1715,8 +1731,7 @@ paths:
             application/json:
               schema:
                 anyOf:
-                  - $ref: >-
-                      #/components/schemas/SearchMemberContributionResultResponse_RetriveContributionDetailsResponse_
+                  - $ref: "#/components/schemas/SearchMemberContributionResultResponse_RetriveContributionDetailsResponse_"
                   - {}
         "400":
           description: Invalid Request
@@ -1772,8 +1787,7 @@ paths:
             application/json:
               schema:
                 anyOf:
-                  - $ref: >-
-                      #/components/schemas/SearchResultsetResponse_MemberContributionDetailsResponse_
+                  - $ref: "#/components/schemas/SearchResultsetResponse_MemberContributionDetailsResponse_"
                   - {}
         "400":
           description: Invalid Request
@@ -1785,9 +1799,7 @@ paths:
       security:
         - api_key: []
       parameters:
-        - description: >-
-            contribSubmissionRef of the Member Contribution Submission record to
-            be fetched
+        - description: contribSubmissionRef of the Member Contribution Submission record to be fetched
           in: path
           name: contribSubmissionRef
           required: true
@@ -1819,7 +1831,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/SubmissionErrorRequest"
-
   /contribution/fileUpload:
     post:
       operationId: FileUploadMonitor
@@ -1842,7 +1853,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/FileUploadRequest"
-
   /contribution/schedfileload/headerValidation:
     post:
       operationId: PostHeaderValidation
@@ -1945,9 +1955,7 @@ paths:
           description: Record does not exist
         "500":
           description: Internal Server Error
-      description: >-
-        5807 API Catalogue Number Load Staging (Copy CSV data into Staging
-        tables)
+      description: 5807 API Catalogue Number Load Staging (Copy CSV data into Staging tables)
       security:
         - api_key: []
       parameters: []
@@ -1975,9 +1983,7 @@ paths:
           description: Record does not exist
         "500":
           description: Internal Server Error
-      description: >-
-        5808 API Catalogue Number Normalisation (Copy staging table data into
-        core tables)
+      description: 5808 API Catalogue Number Normalisation (Copy staging table data into core tables)
       security:
         - api_key: []
       parameters: []
@@ -2023,8 +2029,7 @@ paths:
             application/json:
               schema:
                 anyOf:
-                  - $ref: >-
-                      #/components/schemas/ContributionUpdateIneligibilityResponse
+                  - $ref: "#/components/schemas/ContributionUpdateIneligibilityResponse"
                   - {}
         "400":
           description: Invalid Request
@@ -2036,25 +2041,19 @@ paths:
       security:
         - api_key: []
       parameters:
-        - description: >-
-            membEnrolmentRef of the Member Contribution Details record to be
-            fetched
+        - description: membEnrolmentRef of the Member Contribution Details record to be fetched
           in: path
           name: membEnrolmentRef
           required: true
           schema:
             type: string
-        - description: >-
-            ineligibilityReason “opt out”,“leaver”, “member exited”, “de
-            enroled” and “member changed”
+        - description: ineligibilityReason “opt out”,“leaver”, “member exited”, “de enroled” and “member changed”
           in: path
           name: ineligibilityReason
           required: true
           schema:
             type: string
-        - description: >-
-            effective date parameter is less than the corresponding
-            contribution_header.earning_period_start_date
+        - description: effective date parameter is less than the corresponding contribution_header.earning_period_start_date
           in: path
           name: effectiveDate
           required: true
@@ -2070,8 +2069,7 @@ paths:
             application/json:
               schema:
                 anyOf:
-                  - $ref: >-
-                      #/components/schemas/SearchMemberContributionResultResponse_GetGroupNamesResponse_
+                  - $ref: "#/components/schemas/SearchMemberContributionResultResponse_GetGroupNamesResponse_"
                   - {}
         "400":
           description: Invalid Request
@@ -2109,9 +2107,7 @@ paths:
         - api_key: []
       parameters: []
       requestBody:
-        description: >-
-          Array of the Member Contribution Details Id
-          Array<Contribution_Details>
+        description: Array of the Member Contribution Details Id Array<Contribution_Details>
         required: true
         content:
           application/json:
@@ -2135,8 +2131,7 @@ paths:
           description: Record does not exist
         "500":
           description: Internal Server Error
-      description: >-
-        5903 API Catalogue Number - Retrieve correction eligible members
+      description: 5903 API Catalogue Number - Retrieve correction eligible members
       security:
         - api_key: []
       parameters: []
@@ -2146,5 +2141,31 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/CorrectionEligibleFilterElements"
+  /contribution/updateMemberStatus:
+    put:
+      operationId: UpdateMemberStatus
+      responses:
+        "200":
+          description: Success Response
+          content:
+            application/json:
+              schema: {}
+        "400":
+          description: Invalid Request
+        "404":
+          description: Record does not exist
+        "500":
+          description: Internal Server Error
+      description: "5207 API Catalogue Number Update member status"
+      security:
+        - api_key: []
+      parameters: []
+      requestBody:
+        description: Array of the Member Contribution Details Id & Member Status Array<Contribution_Details>
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateMemberStatusRequest"
 servers:
   - url: http://localhost:7071/api

@@ -93,6 +93,7 @@ export class ContributionCorrectionController {
             const item = await ContributionDetails.findOne({
               where: whereCdn,
               attributes: [
+                "membContribDetlId",
                 "contribHeaderId",
                 "origScheduleRef",
                 "employerNestId",
@@ -139,7 +140,10 @@ export class ContributionCorrectionController {
               transaction: t,
             });
             if (item) {
-              const membReq = await this.mapCompleteObj(item);
+              const membReq = await this.mapCompleteObj(
+                item,
+                mapContribHeaderId
+              );
               const result = await ContributionDetails.bulkCreate(membReq, {
                 transaction: t,
               });
@@ -307,19 +311,41 @@ export class ContributionCorrectionController {
    * @param item
    * @returns
    */
-  async mapCompleteObj(item): Promise<any> {
+  async mapCompleteObj(item, origContribHeaderId): Promise<any> {
     try {
-      let nestScheduleRef = await app.createNestScheduleRef(item);
+      let nextscheduleReference =
+        "CC" + item.dataValues.contributionheader.dataValues.paymentFrequency;
+      const today = new Date();
+      const dd = String(today.getDate()).padStart(2, "0");
+      const mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+      const yyyy = today.getFullYear();
+
+      const nestScheduleRefCount = await ContributionDetails.count({
+        where: {
+          nestScheduleRef: {
+            [Op.like]: `${nextscheduleReference}${dd}${mm}${yyyy}%`,
+          },
+          employerNestId:
+            item.dataValues.contributionheader.dataValues.employerNestId,
+        },
+      });
+
+      const nestScheduleRefNextCount = app.addLeadingZeros(
+        nestScheduleRefCount + 1,
+        3
+      );
+      nextscheduleReference = `${nextscheduleReference}${dd}${mm}${yyyy}${nestScheduleRefNextCount}`;
+
       const membArr = [];
       let finalObj = {
-        contribHeaderId: item["dataValues"]["contribHeaderId"],
+        contribHeaderId: origContribHeaderId,
         employerNestId: item["dataValues"]["employerNestId"],
         updatedBy: item["dataValues"]["updatedBy"],
         membNonPayReason: item["dataValues"]["membNonPayReason"],
         recordEndDate: item["dataValues"]["recordEndDate"],
         createdBy: item["dataValues"]["createdBy"],
         recordStartDate: item["dataValues"]["recordStartDate"],
-        nestScheduleRef: nestScheduleRef,
+        nestScheduleRef: nextscheduleReference,
         membEnrolmentRef: item["dataValues"]["membEnrolmentRef"],
         membPlanRef: item["dataValues"]["membPlanRef"],
         membContriDueDate: item["dataValues"]["membContriDueDate"],
