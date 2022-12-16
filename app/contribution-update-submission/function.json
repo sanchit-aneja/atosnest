@@ -8,7 +8,7 @@
       "methods": [
         "put"
       ],
-      "route": "contribution/submission/update-submission/{submissionRef}"
+      "route": "contribution/submission/update-submission"
     },
     {
       "type": "http",

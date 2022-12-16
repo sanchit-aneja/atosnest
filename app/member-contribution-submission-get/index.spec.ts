@@ -27,12 +27,12 @@ let contxt: Context;
 
 const goodReq = {
   query: {},
-  params: { contribSubmissionRef: "2de64d14-d384-48d5-a903-3981306fd765" },
+  params: { submissionHeaderId: "2de64d14-d384-48d5-a903-3981306fd765" },
 };
 
 const invalidReq = {
   query: {},
-  params: { contribSubmissionRef: "b8b0a5bc-bfec-478f-8fb0-97f0d1dac718" },
+  params: { submissionHeaderId: "b8b0a5bc-bfec-478f-8fb0-97f0d1dac718" },
 };
 
 describe("member submission get Success", () => {

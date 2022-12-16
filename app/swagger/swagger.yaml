@@ -30,7 +30,7 @@ components:
           type: string
         contributionDetail:
           items:
-            $ref: "#/components/schemas/ContributionCorrectionAddMemberDetails"
+            $ref: '#/components/schemas/ContributionCorrectionAddMemberDetails'
           type: array
       required:
         - contribHeaderId
@@ -184,7 +184,7 @@ components:
         updatedBy:
           type: string
         rdschedulestatus:
-          $ref: "#/components/schemas/RDScheduleStatusResponseOption"
+          $ref: '#/components/schemas/RDScheduleStatusResponseOption'
       required:
         - contribHeaderId
         - nestScheduleRef
@@ -216,7 +216,7 @@ components:
           format: double
         results:
           items:
-            $ref: "#/components/schemas/ContributionRetrieveHeaderResponse"
+            $ref: '#/components/schemas/ContributionRetrieveHeaderResponse'
           type: array
       required:
         - totalRecordCount
@@ -266,9 +266,9 @@ components:
     HeaderFilterElements:
       properties:
         options:
-          $ref: "#/components/schemas/FilterOptions"
+          $ref: '#/components/schemas/FilterOptions'
         params:
-          $ref: "#/components/schemas/HeaderFilterParams"
+          $ref: '#/components/schemas/HeaderFilterParams'
       required:
         - params
       type: object
@@ -276,9 +276,9 @@ components:
     CorrectionEligibleFilterElements:
       properties:
         options:
-          $ref: "#/components/schemas/FilterOptions"
+          $ref: '#/components/schemas/FilterOptions'
         params:
-          $ref: "#/components/schemas/CorrectionEligibleFilterParams"
+          $ref: '#/components/schemas/CorrectionEligibleFilterParams'
       required:
         - params
       type: object
@@ -320,7 +320,7 @@ components:
           type: string
         errors:
           items:
-            $ref: "#/components/schemas/ContributionHeaderUpdateError"
+            $ref: '#/components/schemas/ContributionHeaderUpdateError'
           type: array
         type:
           type: string
@@ -490,7 +490,7 @@ components:
       properties:
         contributionHeader:
           items:
-            $ref: "#/components/schemas/ContributionHeaderDetails"
+            $ref: '#/components/schemas/ContributionHeaderDetails'
           type: array
       required:
         - contributionHeader
@@ -511,7 +511,7 @@ components:
       properties:
         IneligibleSchedules:
           items:
-            $ref: "#/components/schemas/ContributionUpdateIndividualDetails"
+            $ref: '#/components/schemas/ContributionUpdateIndividualDetails'
           type: array
       required:
         - IneligibleSchedules
@@ -535,7 +535,7 @@ components:
           format: double
         results:
           items:
-            $ref: "#/components/schemas/GetGroupNamesResponse"
+            $ref: '#/components/schemas/GetGroupNamesResponse'
           type: array
       required:
         - totalRecordCount
@@ -884,11 +884,11 @@ components:
         memTaxReliefEligibility:
           type: string
         errorDetails:
-          $ref: "#/components/schemas/ErrorDetailsResponse"
+          $ref: '#/components/schemas/ErrorDetailsResponse'
         rdschedulememberstatus:
-          $ref: "#/components/schemas/RDScheduleMemberStatusResponse"
+          $ref: '#/components/schemas/RDScheduleMemberStatusResponse'
         rdpartcontribreason:
-          $ref: "#/components/schemas/RDPartContribReasonResponse"
+          $ref: '#/components/schemas/RDPartContribReasonResponse'
       required:
         - nestScheduleRef
         - membEnrolmentRef
@@ -1036,13 +1036,13 @@ components:
         memTaxReliefEligibility:
           type: string
         errorDetails:
-          $ref: "#/components/schemas/ErrorDetailsResponse"
+          $ref: '#/components/schemas/ErrorDetailsResponse'
         rdschedulememberstatus:
-          $ref: "#/components/schemas/RDScheduleMemberStatusResponse"
+          $ref: '#/components/schemas/RDScheduleMemberStatusResponse'
         rdpartcontribreason:
-          $ref: "#/components/schemas/RDPartContribReasonResponse"
+          $ref: '#/components/schemas/RDPartContribReasonResponse'
         includedInCorrection:
-          $ref: "#/components/schemas/IncludedInCorrectionResponse"
+          $ref: '#/components/schemas/IncludedInCorrectionResponse'
       required:
         - nestScheduleRef
         - membEnrolmentRef
@@ -1139,7 +1139,7 @@ components:
           format: double
         results:
           items:
-            $ref: "#/components/schemas/RetriveContributionDetailsResponse"
+            $ref: '#/components/schemas/RetriveContributionDetailsResponse'
           type: array
       required:
         - totalRecordCount
@@ -1153,7 +1153,7 @@ components:
           format: double
         results:
           items:
-            $ref: "#/components/schemas/RetriveEligibleContributionDetailsResponse"
+            $ref: '#/components/schemas/RetriveEligibleContributionDetailsResponse'
           type: array
       required:
         - totalRecordCount
@@ -1181,9 +1181,9 @@ components:
     DetailsFilterElements:
       properties:
         options:
-          $ref: "#/components/schemas/FilterOptions"
+          $ref: '#/components/schemas/FilterOptions'
         params:
-          $ref: "#/components/schemas/DetailsFilterParams"
+          $ref: '#/components/schemas/DetailsFilterParams'
       required:
         - params
       type: object
@@ -1205,7 +1205,7 @@ components:
           type: string
         errors:
           items:
-            $ref: "#/components/schemas/ContributionHeaderUpdateError"
+            $ref: '#/components/schemas/ContributionHeaderUpdateError'
           type: array
         type:
           type: string
@@ -1217,7 +1217,7 @@ components:
       properties:
         contributionDetail:
           items:
-            $ref: "#/components/schemas/ContributionCorrectionAddMemberDetails"
+            $ref: '#/components/schemas/ContributionCorrectionAddMemberDetails'
           type: array
       required:
         - contributionDetail
@@ -1227,7 +1227,7 @@ components:
       properties:
         contributionDetail:
           items:
-            $ref: "#/components/schemas/UpdateMemberStatusDetails"
+            $ref: '#/components/schemas/UpdateMemberStatusDetails'
           type: array
       required:
         - contributionDetail
@@ -1339,7 +1339,7 @@ components:
       properties:
         contributionDetail:
           items:
-            $ref: "#/components/schemas/ContributionMemberDetails"
+            $ref: '#/components/schemas/ContributionMemberDetails'
           type: array
       required:
         - contributionDetail
@@ -1348,21 +1348,21 @@ components:
     ContributionStepFinalResponse:
       properties:
         eventHeaders:
-          $ref: "#/components/schemas/eventHeaders"
+          $ref: '#/components/schemas/eventHeaders'
         eventBody:
-          $ref: "#/components/schemas/eventBody"
+          $ref: '#/components/schemas/eventBody'
       type: object
       additionalProperties: false
     intentAttributes:
       properties:
         contributionsSchedule:
           items:
-            $ref: "#/components/schemas/ContributionsScheduleResponse"
+            $ref: '#/components/schemas/ContributionsScheduleResponse'
           type: array
     eventBody:
       properties:
         intentAttributes:
-          $ref: "#/components/schemas/intentAttributes"
+          $ref: '#/components/schemas/intentAttributes'
       type: object
       additionalProperties: false
     eventHeaders:
@@ -1380,7 +1380,7 @@ components:
           format: double
         results:
           items:
-            $ref: "#/components/schemas/MemberContributionDetailsResponse"
+            $ref: '#/components/schemas/MemberContributionDetailsResponse'
           type: array
       required:
         - totalRecordCount
@@ -1396,7 +1396,7 @@ components:
         nextContriActionTrigger:
           type: string
         payloadForNextAction:
-          $ref: "#/components/schemas/PayloadForNextAction"
+          $ref: '#/components/schemas/PayloadForNextAction'
       required:
         - initatorApp
         - contriActionTrigger
@@ -1528,16 +1528,16 @@ paths:
     put:
       operationId: AddDraftMemberSchedule
       responses:
-        "200":
+        '200':
           description: Success Response
           content:
             application/json:
               schema: {}
-        "400":
+        '400':
           description: Invalid Request
-        "404":
+        '404':
           description: Record does not exist
-        "500":
+        '500':
           description: Internal Server Error
       description: "5905 API Catalogue Number\r\nAdd draft members to schedule"
       security:
@@ -1549,25 +1549,25 @@ paths:
           application/json:
             schema:
               anyOf:
-                - $ref: "#/components/schemas/ContributionCorrectionAddMemberRequest"
+                - $ref: '#/components/schemas/ContributionCorrectionAddMemberRequest'
                 - {}
   /contribution/retrievescheduleheaders:
     post:
       operationId: GetHeaderByFilter
       responses:
-        "200":
+        '200':
           description: Success Response
           content:
             application/json:
               schema:
                 anyOf:
-                  - $ref: "#/components/schemas/SearchResultsetResponse_ContributionHeaderResponse_"
+                  - $ref: '#/components/schemas/SearchResultsetResponse_ContributionHeaderResponse_'
                   - {}
-        "400":
+        '400':
           description: Invalid Request
-        "404":
+        '404':
           description: Record does not exist
-        "500":
+        '500':
           description: Internal Server Error
       description: "5104 API Catalogue Number\r\nRetrieves a list of header with filter criterias"
       security:
@@ -1578,24 +1578,24 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/HeaderFilterElements"
+              $ref: '#/components/schemas/HeaderFilterElements'
   /contribution/submission/createsubmission/{contribHeaderId}:
     put:
       operationId: CreateContributionSubmission
       responses:
-        "200":
+        '200':
           description: Success Response
           content:
             application/json:
               schema:
                 anyOf:
-                  - $ref: "#/components/schemas/CreateContributionResponse"
+                  - $ref: '#/components/schemas/CreateContributionResponse'
                   - {}
-        "400":
+        '400':
           description: Invalid Request
-        "404":
+        '404':
           description: Record does not exist
-        "500":
+        '500':
           description: Internal Server Error
       description: "5402 API Catalogue Number\r\nCreate contribution submission using contribHeaderId passed"
       security:
@@ -1611,19 +1611,19 @@ paths:
     put:
       operationId: UpdateContributionHeader
       responses:
-        "200":
+        '200':
           description: Success Response
           content:
             application/json:
               schema:
                 anyOf:
-                  - $ref: "#/components/schemas/ContributionHeaderResponseDTO"
+                  - $ref: '#/components/schemas/ContributionHeaderResponseDTO'
                   - {}
-        "400":
+        '400':
           description: Invalid Request
-        "404":
+        '404':
           description: Record does not exist
-        "500":
+        '500':
           description: Internal Server Error
       description: "5105 API Catalogue Number\r\nUpdate the Contribution Header"
       security:
@@ -1634,24 +1634,24 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ContributionHeaderRequestDTO"
+              $ref: '#/components/schemas/ContributionHeaderRequestDTO'
   /contribution/clearSchedule/{contribHeaderId}:
     put:
       operationId: ClearContributionSchedule
       responses:
-        "200":
+        '200':
           description: Success Response
           content:
             application/json:
               schema:
                 anyOf:
-                  - $ref: "#/components/schemas/ClearScheduleStatusResponse"
+                  - $ref: '#/components/schemas/ClearScheduleStatusResponse'
                   - {}
-        "400":
+        '400':
           description: Invalid Request
-        "404":
+        '404':
           description: Record does not exist
-        "500":
+        '500':
           description: Internal Server Error
       description: "5702 API Catalogue Number\r\nclear current schedule - manual entry"
       security:
@@ -1667,17 +1667,17 @@ paths:
     get:
       operationId: GenerateXml
       responses:
-        "200":
+        '200':
           description: Success Response
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ContributionXmlResponse"
-        "400":
+                $ref: '#/components/schemas/ContributionXmlResponse'
+        '400':
           description: Invalid Request
-        "404":
+        '404':
           description: Record does not exist
-        "500":
+        '500':
           description: Internal Server Error
       description: "5401 API Catalogue Number\r\nGet XML of contribution in either return body or file"
       security:
@@ -1693,17 +1693,17 @@ paths:
     put:
       operationId: CreateSchedule
       responses:
-        "200":
+        '200':
           description: Success Response
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/RetriveCreateScheduleResponse"
-        "400":
+                $ref: '#/components/schemas/RetriveCreateScheduleResponse'
+        '400':
           description: Invalid Request
-        "404":
+        '404':
           description: Record does not exist
-        "500":
+        '500':
           description: Internal Server Error
       description: "5904 API Catalogue Number\r\ncreates a correction in draft state, copying appropriate details from the specified schedule"
       security:
@@ -1725,19 +1725,19 @@ paths:
     post:
       operationId: GetDetailsByFilter
       responses:
-        "200":
+        '200':
           description: Success Response
           content:
             application/json:
               schema:
                 anyOf:
-                  - $ref: "#/components/schemas/SearchMemberContributionResultResponse_RetriveContributionDetailsResponse_"
+                  - $ref: '#/components/schemas/SearchMemberContributionResultResponse_RetriveContributionDetailsResponse_'
                   - {}
-        "400":
+        '400':
           description: Invalid Request
-        "404":
+        '404':
           description: Record does not exist
-        "500":
+        '500':
           description: Internal Server Error
       description: "5205 API Catalogue Number\r\nRetrieves a list of details with filter criterias"
       security:
@@ -1748,24 +1748,24 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/DetailsFilterElements"
+              $ref: '#/components/schemas/DetailsFilterElements'
   /contribution/contributionDetails:
     put:
       operationId: UpdateMemberContributionDetails
       responses:
-        "200":
+        '200':
           description: Success Response
           content:
             application/json:
               schema:
                 anyOf:
-                  - $ref: "#/components/schemas/ContributionDetailsResponseDTO"
+                  - $ref: '#/components/schemas/ContributionDetailsResponseDTO'
                   - {}
-        "400":
+        '400':
           description: Invalid Request
-        "404":
+        '404':
           description: Record does not exist
-        "500":
+        '500':
           description: Internal Server Error
       description: "5204 API Catalogue Number\r\nUpdate the Contribution Details"
       security:
@@ -1776,32 +1776,32 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ContributionDetailsRequestDTO"
-  /contribution/Submission/MemberContributionSubmissions/{contribSubmissionRef}:
+              $ref: '#/components/schemas/ContributionDetailsRequestDTO'
+  /contribution/Submission/MemberContributionSubmissions/{submissionHeaderId}:
     get:
       operationId: GetMemberContributionSubmission
       responses:
-        "200":
+        '200':
           description: Success Response
           content:
             application/json:
               schema:
                 anyOf:
-                  - $ref: "#/components/schemas/SearchResultsetResponse_MemberContributionDetailsResponse_"
+                  - $ref: '#/components/schemas/SearchResultsetResponse_MemberContributionDetailsResponse_'
                   - {}
-        "400":
+        '400':
           description: Invalid Request
-        "404":
+        '404':
           description: Record does not exist
-        "500":
+        '500':
           description: Internal Server Error
-      description: "5404 API Catalogue Number\r\nRetrieves returns a list of all Member Contribution Submissions based on contribSubmissionRef passed."
+      description: "5404 API Catalogue Number\r\nRetrieves returns a list of all Member Contribution Submissions based on submissionHeaderId passed."
       security:
         - api_key: []
       parameters:
-        - description: contribSubmissionRef of the Member Contribution Submission record to be fetched
+        - description: submissionHeaderId of the Member Contribution Submission record to be fetched
           in: path
-          name: contribSubmissionRef
+          name: submissionHeaderId
           required: true
           schema:
             type: string
@@ -1809,16 +1809,16 @@ paths:
     post:
       operationId: CreateSubmissionError
       responses:
-        "200":
+        '200':
           description: Success Response
           content:
             application/json:
               schema: {}
-        "400":
+        '400':
           description: Invalid Request
-        "404":
+        '404':
           description: Record does not exist
-        "500":
+        '500':
           description: Internal Server Error
       description: "5408 API Catalogue Number\r\nAdd external error"
       security:
@@ -1830,18 +1830,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SubmissionErrorRequest"
+              $ref: '#/components/schemas/SubmissionErrorRequest'
   /contribution/fileUpload:
     post:
       operationId: FileUploadMonitor
       responses:
-        "200":
+        '200':
           description: Success Response
-        "400":
+        '400':
           description: Invalid Request
-        "404":
+        '404':
           description: Record does not exist
-        "500":
+        '500':
           description: Internal Server Error
       description: "5802 API Catalogue Number\r\nFile upload monitor with virus check criterias"
       security:
@@ -1852,24 +1852,24 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/FileUploadRequest"
+              $ref: '#/components/schemas/FileUploadRequest'
   /contribution/schedfileload/headerValidation:
     post:
       operationId: PostHeaderValidation
       responses:
-        "200":
+        '200':
           description: Success Response
           content:
             application/json:
               schema:
                 anyOf:
-                  - $ref: "#/components/schemas/sfdActionResponse_"
+                  - $ref: '#/components/schemas/sfdActionResponse_'
                   - {}
-        "400":
+        '400':
           description: Invalid Request
-        "404":
+        '404':
           description: Record does not exist
-        "500":
+        '500':
           description: Internal Server Error
       description: 5804 API Catalogue Number Add Header Validation
       security:
@@ -1880,24 +1880,24 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/sfdActionRequest"
+              $ref: '#/components/schemas/sfdActionRequest'
   /contribution/schedfileload/memberValidation:
     post:
       operationId: PostMemberValidation
       responses:
-        "200":
+        '200':
           description: Success Response
           content:
             application/json:
               schema:
                 anyOf:
-                  - $ref: "#/components/schemas/sfdActionResponse_"
+                  - $ref: '#/components/schemas/sfdActionResponse_'
                   - {}
-        "400":
+        '400':
           description: Invalid Request
-        "404":
+        '404':
           description: Record does not exist
-        "500":
+        '500':
           description: Internal Server Error
       description: 5805 API Catalogue Number Add Member Validation
       security:
@@ -1908,24 +1908,24 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/sfdActionRequest"
+              $ref: '#/components/schemas/sfdActionRequest'
   /contribution/schedfileload/policyValidation:
     post:
       operationId: PostPolicyValidation
       responses:
-        "200":
+        '200':
           description: Success Response
           content:
             application/json:
               schema:
                 anyOf:
-                  - $ref: "#/components/schemas/sfdActionResponse_"
+                  - $ref: '#/components/schemas/sfdActionResponse_'
                   - {}
-        "400":
+        '400':
           description: Invalid Request
-        "404":
+        '404':
           description: Record does not exist
-        "500":
+        '500':
           description: Internal Server Error
       description: 5806 API Catalogue Number Add Policy Validation
       security:
@@ -1936,24 +1936,24 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/sfdActionRequest"
+              $ref: '#/components/schemas/sfdActionRequest'
   /contribution/schedfileload/loadStaging:
     post:
       operationId: PostLoadStaging
       responses:
-        "200":
+        '200':
           description: Success Response
           content:
             application/json:
               schema:
                 anyOf:
-                  - $ref: "#/components/schemas/sfdActionResponse_"
+                  - $ref: '#/components/schemas/sfdActionResponse_'
                   - {}
-        "400":
+        '400':
           description: Invalid Request
-        "404":
+        '404':
           description: Record does not exist
-        "500":
+        '500':
           description: Internal Server Error
       description: 5807 API Catalogue Number Load Staging (Copy CSV data into Staging tables)
       security:
@@ -1964,24 +1964,24 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/sfdActionRequest"
+              $ref: '#/components/schemas/sfdActionRequest'
   /contribution/schedfileload/finalLoad:
     post:
       operationId: PostLoadNormalisation
       responses:
-        "200":
+        '200':
           description: Success Response
           content:
             application/json:
               schema:
                 anyOf:
-                  - $ref: "#/components/schemas/ContributionStepFinalResponse"
+                  - $ref: '#/components/schemas/ContributionStepFinalResponse'
                   - {}
-        "400":
+        '400':
           description: Invalid Request
-        "404":
+        '404':
           description: Record does not exist
-        "500":
+        '500':
           description: Internal Server Error
       description: 5808 API Catalogue Number Normalisation (Copy staging table data into core tables)
       security:
@@ -1992,50 +1992,56 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/sfdActionRequest"
-  /contribution/submission/update-submission/{submissionHeaderId}:
+              $ref: '#/components/schemas/sfdActionRequest'
+  /contribution/submission/update-submission:
     put:
       operationId: UpdateSubmissionMembers
       responses:
-        "200":
+        '200':
           description: Success Response
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ContributionSubmissionUpdateResponse"
-        "400":
+                $ref: '#/components/schemas/ContributionSubmissionUpdateResponse'
+        '400':
           description: Invalid Request
-        "404":
+        '404':
           description: Record does not exist
-        "500":
+        '500':
           description: Internal Server Error
       description: "5405 API Catalogue Number\r\nUpdate submission members"
       security:
         - api_key: []
       parameters:
         - description: is the Contribution Submission Header id
-          in: path
+          in: query
           name: submissionHeaderId
           required: true
           schema:
+            type: string
+        - description: is the event
+          in: query
+          name: event
+          required: true
+          schema: 
             type: string
   /contribution/updateIneligibility/membEnrolRef={membEnrolmentRef}&IneligibilityReason={ineligibilityReason}&EffectiveDate={effectiveDate}:
     put:
       operationId: UpdateIneligibility
       responses:
-        "200":
+        '200':
           description: Success Response
           content:
             application/json:
               schema:
                 anyOf:
-                  - $ref: "#/components/schemas/ContributionUpdateIneligibilityResponse"
+                  - $ref: '#/components/schemas/ContributionUpdateIneligibilityResponse'
                   - {}
-        "400":
+        '400':
           description: Invalid Request
-        "404":
+        '404':
           description: Record does not exist
-        "500":
+        '500':
           description: Internal Server Error
       description: "5803 API Catalogue Number\r\nUpdate Ineligibility"
       security:
@@ -2063,19 +2069,19 @@ paths:
     get:
       operationId: GetContributionGroupName
       responses:
-        "200":
+        '200':
           description: Success Response
           content:
             application/json:
               schema:
                 anyOf:
-                  - $ref: "#/components/schemas/SearchMemberContributionResultResponse_GetGroupNamesResponse_"
+                  - $ref: '#/components/schemas/SearchMemberContributionResultResponse_GetGroupNamesResponse_'
                   - {}
-        "400":
+        '400':
           description: Invalid Request
-        "404":
+        '404':
           description: Record does not exist
-        "500":
+        '500':
           description: Internal Server Error
       description: "5909 API Catalogue Number\r\nRetrieves the Group Name list based on contribHeaderId passed."
       security:
@@ -2091,16 +2097,16 @@ paths:
     put:
       operationId: RemoveContributionSchedule
       responses:
-        "200":
+        '200':
           description: Success Response
           content:
             application/json:
               schema: {}
-        "400":
+        '400':
           description: Invalid Request
-        "404":
+        '404':
           description: Record does not exist
-        "500":
+        '500':
           description: Internal Server Error
       description: "5907 API Catalogue Number\r\nremove members from schedule - correction"
       security:
@@ -2112,24 +2118,24 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/RemoveContributionScheduleRequest"
+              $ref: '#/components/schemas/RemoveContributionScheduleRequest'
   /contribution/correction/retrieveCorrectionEligibleContributionDetails:
     post:
       operationId: RetrieveCorrectionEligibleMembers
       responses:
-        "200":
+        '200':
           description: Success Response
           content:
             application/json:
               schema:
                 anyOf:
-                  - $ref: "#/components/schemas/SearchEligibleCorrectionMemberContributionResultResponse_RetriveContributionDetailsResponse_"
+                  - $ref: '#/components/schemas/SearchEligibleCorrectionMemberContributionResultResponse_RetriveContributionDetailsResponse_'
                   - {}
-        "400":
+        '400':
           description: Invalid Request
-        "404":
+        '404':
           description: Record does not exist
-        "500":
+        '500':
           description: Internal Server Error
       description: 5903 API Catalogue Number - Retrieve correction eligible members
       security:
@@ -2140,23 +2146,23 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CorrectionEligibleFilterElements"
+              $ref: '#/components/schemas/CorrectionEligibleFilterElements'
   /contribution/updateMemberStatus:
     put:
       operationId: UpdateMemberStatus
       responses:
-        "200":
+        '200':
           description: Success Response
           content:
             application/json:
               schema: {}
-        "400":
+        '400':
           description: Invalid Request
-        "404":
+        '404':
           description: Record does not exist
-        "500":
+        '500':
           description: Internal Server Error
-      description: "5207 API Catalogue Number Update member status"
+      description: 5207 API Catalogue Number Update member status
       security:
         - api_key: []
       parameters: []
@@ -2166,6 +2172,6 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdateMemberStatusRequest"
+              $ref: '#/components/schemas/UpdateMemberStatusRequest'
 servers:
   - url: http://localhost:7071/api

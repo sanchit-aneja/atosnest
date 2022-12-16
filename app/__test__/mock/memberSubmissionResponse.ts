@@ -48,7 +48,7 @@ export const memberSubmissionGetSuccessResponse = {
       origMembNonPayReason: null,
       createdBy: "System",
       createdDate: "2022-10-17T07:08:09.000Z",
-      contribSubmissionRef: "2de64d14-d384-48d5-a903-3981306fd765",
+      submissionHeaderId: "2de64d14-d384-48d5-a903-3981306fd765",
       membContribDetlId: "0b42de19-1cf0-4993-9fcf-d734b13dd2af",
       membSubmId: "5",
     },

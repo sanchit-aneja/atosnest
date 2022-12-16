@@ -403,6 +403,7 @@ const Type2Validations = {
         )
       );
     }
+    
     return -1;
   },
 
@@ -674,15 +675,16 @@ const Type2Validations = {
                 );
                 errorMessages.push(errorMessage);
               }
-
-              header_id = records[0]["contribHeaderId"];
-              await Type2Validations.actualDataVerifications(
+              if(records.length){ 
+               header_id = records[0]["contribHeaderId"];               
+               await Type2Validations.actualDataVerifications(
                 headerObject,
                 records,
                 context,
                 errorMessages, 
                 rdErrorTypes
               );
+              }
             }
 
             if (errorMessages.length) {

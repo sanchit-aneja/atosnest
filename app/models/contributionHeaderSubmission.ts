@@ -117,13 +117,13 @@ ContributionHeader.belongsTo(ContributionHeaderSubmission, {
 
 ContributionHeaderSubmission.hasMany(MemberContributionSubmission, {
   sourceKey: "submissionHeaderId",
-  foreignKey: "contribSubmissionRef",
+  foreignKey: "submissionHeaderId",
   as: "membercontributionsubmission",
 });
 MemberContributionSubmission.belongsTo(ContributionHeaderSubmission, {
   as: "contributionheadersubmission",
   targetKey: "submissionHeaderId",
-  foreignKey: { name: "contribSubmissionRef", allowNull: false },
+  foreignKey: { name: "submissionHeaderId", allowNull: false },
   constraints: true,
   onDelete: "CASCADE",
 });

@@ -8,7 +8,7 @@
       "methods": [
         "get"
       ],
-      "route": "contribution/Submission/MemberContributionSubmissions/{contribSubmissionRef}"
+      "route": "contribution/Submission/MemberContributionSubmissions/{submissionHeaderId}"
     },
     {
       "type": "http",

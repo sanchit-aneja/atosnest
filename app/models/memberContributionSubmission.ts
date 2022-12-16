@@ -24,9 +24,9 @@ MemberContributionSubmission.init(
         },
       }
     },
-    contribSubmissionRef: {
+    submissionHeaderId: {
       type: DataTypes.UUID,
-      field: "contrib_submission_ref",
+      field: "submission_header_id",
       allowNull: false,
       validate: {
         notEmpty: {
@@ -79,7 +79,7 @@ ContributionDetails.belongsTo(MemberContributionSubmission, {
 
 MemberContributionSubmission.addHook("beforeValidate", (membercontributionsubmission, _options) => {
   const schema = Joi.object({
-    contribSubmissionRef: Joi.string().optional().allow(null, ""),
+    submissionHeaderId: Joi.string().optional().allow(null, ""),
     createdDate: Joi.date().iso().optional().allow(null),
     createdBy: Joi.string().alphanum().max(50).trim(true).optional().allow(null, "")
   });

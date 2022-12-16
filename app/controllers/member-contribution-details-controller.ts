@@ -232,22 +232,22 @@ export class MemberContributionDetailsController {
 
   /**
    * 5404 API Catalogue Number
-   * Retrieves returns a list of all Member Contribution Submissions based on contribSubmissionRef passed.
-   * @param contribSubmissionRef contribSubmissionRef of the Member Contribution Submission record to be fetched
-   * @return Member Contribution Submission list with reason code based on contribSubmissionRef
+   * Retrieves returns a list of all Member Contribution Submissions based on submissionHeaderId passed.
+   * @param submissionHeaderId submissionHeaderId of the Member Contribution Submission record to be fetched
+   * @return Member Contribution Submission list with reason code based on submissionHeaderId
    */
   @Security("api_key")
-  @Get("/Submission/MemberContributionSubmissions/{contribSubmissionRef}")
+  @Get("/Submission/MemberContributionSubmissions/{submissionHeaderId}")
   @SuccessResponse("200", Status.SUCCESS_MSG)
   @Response("400", Status.BAD_REQUEST_MSG)
   @Response("404", Status.NOT_FOUND_MSG)
   @Response("500", Status.FAILURE_MSG)
   async getMemberContributionSubmission(
-    contribSubmissionRef: string
+    submissionHeaderId: string
   ): Promise<SearchResultsetResponse<MemberContributionDetailsResponse> | any> {
     try {
       let whereCdtn = {
-        contrib_submission_ref: contribSubmissionRef,
+        submissionHeaderId: submissionHeaderId,
       };
       return await sequelize.transaction(async (t) => {
         const { rows, count } =
@@ -259,6 +259,7 @@ export class MemberContributionDetailsController {
                 attributes: CONTR_MEMBER_DETAILS,
               },
             ],
+            order:[["contributiondetails", "memb_non_pay_reason", 'ASC' ]],
             where: whereCdtn,
             subQuery: false,
             transaction: t,
@@ -358,7 +359,7 @@ export class MemberContributionDetailsController {
             newItem?.dataValues?.contributiondetails?.dataValues;
           let subObj = {
             ...contDetails,
-            contribSubmissionRef: newItem?.dataValues?.contribSubmissionRef,
+            submissionHeaderId: newItem?.dataValues?.submissionHeaderId,
             createdBy: newItem?.dataValues?.createdBy,
             createdDate: newItem?.dataValues?.createdDate,
             membContribDetlId: newItem?.dataValues?.membContribDetlId,
