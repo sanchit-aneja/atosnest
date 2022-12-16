@@ -249,7 +249,7 @@ export class ContributionHeaderController {
     try {
       return await sequelize.transaction(async (t) => {
         const objParams = {
-          schdlMembStatusCd: "MCS4",
+          schdlMembStatusCd: "MCS10",
           updatedBy: "System",
         };
         const items = await ContributionDetails.update(objParams, {

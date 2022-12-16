@@ -10,6 +10,7 @@ import {
 } from "tsoa";
 import ContributionDetails from "../models/contributionDetails";
 import MemberContributionSubmission from "../models/memberContributionSubmission";
+import { Op } from "sequelize";
 import {
   DetailsFilterElements,
   MemberContributionDetailsResponse,
@@ -272,6 +273,69 @@ export class MemberContributionDetailsController {
         } else {
           return Status.NOT_FOUND;
         }
+      });
+    } catch (err) {
+      if (err) {
+        return app.errorHandler(err);
+      }
+    }
+  }
+
+  /**
+   * 5207 API Catalogue Number
+   * Update submission members status
+   * @param requestObj is Member contribution details with membContribDetlId & membContribStatus
+   * @return 200 OK
+   */
+  @Security("api_key")
+  @Put("updateMemberStatus")
+  @SuccessResponse("200", Status.SUCCESS_MSG)
+  @Response("400", Status.BAD_REQUEST_MSG)
+  @Response("404", Status.NOT_FOUND_MSG)
+  @Response("500", Status.FAILURE_MSG)
+  async updateMemberStatus(@Body() requestObj: any): Promise<any> {
+    try {
+      return await sequelize.transaction(async (t) => {
+        let memberArr = [];
+        for (let i of requestObj.contributionDetail) {
+          // find the row from member contribution details
+          const memberData = await ContributionDetails.findOne({
+            where: {
+              [Op.and]: [
+                { memb_contrib_detl_id: i.membContribDetlId },
+                {
+                  [Op.and]: [
+                    { schdl_memb_status_cd: { [Op.ne]: "MCS4" } },
+                    { schdl_memb_status_cd: { [Op.ne]: "MCS5" } },
+                    { schdl_memb_status_cd: { [Op.ne]: "MCS6" } },
+                    { schdl_memb_status_cd: { [Op.ne]: "MCS8" } },
+                    { schdl_memb_status_cd: { [Op.ne]: "MCS13" } },
+                  ],
+                },
+              ],
+            },
+          });
+          if (memberData) memberArr.push(memberData);
+        }
+
+        if (memberArr.length == requestObj.contributionDetail.length) {
+          for (let i = 0; i < requestObj.contributionDetail.length; i++) {
+            const membContribDetlId = memberArr[i].membContribDetlId;
+            await ContributionDetails.update(
+              {
+                schdlMembStatusCd:
+                  requestObj.contributionDetail[i].schdlMembStatusCd,
+              },
+              {
+                where: { membContribDetlId: membContribDetlId },
+                transaction: t,
+              }
+            );
+          }
+        } else {
+          return Status.NOT_FOUND;
+        }
+        return Status.SUCCESS;
       });
     } catch (err) {
       if (err) {
