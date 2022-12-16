@@ -19,6 +19,11 @@ enum NonPayReason {
 
 enum ScheduleMemberStatusCode {
   NoContributionsDue = "MCS9",
+  ProcessingPayment = "MCS12", 
+  AwaitingPayment = "MCS16",
+  PaymentFailed = "MCS15",
+  Paid = "MCS13", 
+  Submitted = "MCS10"
 }
 
 @Route("/contribution")
@@ -74,70 +79,55 @@ export class ContributionSubmissionUpdatesController {
     }
   }
 
-  async updateSubmissionMember(detail: any) {
+
+  getStatusCode(event){
+    switch(event){
+      case "submitted":
+        return ScheduleMemberStatusCode.NoContributionsDue;
+      case "processing payment":
+        return ScheduleMemberStatusCode.ProcessingPayment;
+      case "awaiting payment":
+        return ScheduleMemberStatusCode.AwaitingPayment;
+      case "payment failed":
+        return ScheduleMemberStatusCode.PaymentFailed;
+      case "Paid":
+        return ScheduleMemberStatusCode.Paid;
+      default: 
+        return ScheduleMemberStatusCode.NoContributionsDue;
+    }
+  }
+
+
+  async updateSubmissionMember(detail: any, event) {
     try {
+      
       let record: any = {};
+          
       switch (detail.membNonPayReason) {
-        case NonPayReason.MemberOptOut:
-          record.schdlMembStatusCd =
-            ScheduleMemberStatusCode.NoContributionsDue;
-          await ContributionDetails.update(record, {
-            where: { membContribDetlId: detail.membContribDetlId },
-          });
-          break;
-        case NonPayReason.NoContributionsPayable:
-          if (detail.membContriAmt === "0.00") {
-            record.schdlMembStatusCd =
-              ScheduleMemberStatusCode.NoContributionsDue;
-            await ContributionDetails.update(record, {
-              where: { membContribDetlId: detail.membContribDetlId },
-            });
-          }
-          break;
-        case NonPayReason.InsufficientEarnings:
-          record.schdlMembStatusCd =
-            ScheduleMemberStatusCode.NoContributionsDue;
-          await ContributionDetails.update(record, {
-            where: { membContribDetlId: detail.membContribDetlId },
-          });
-          break;
-        case NonPayReason.TransferPaymentSource:
-          if (detail.membContriAmt === "0.00") {
-            record.schdlMembStatusCd =
-              ScheduleMemberStatusCode.NoContributionsDue;
-            await ContributionDetails.update(record, {
-              where: { membContribDetlId: detail.membContribDetlId },
-            });
-          }
-          break;
-        case NonPayReason.ChangeMemberGroupAndPay:
-          if (detail.membContriAmt === "0.00") {
-            record.schdlMembStatusCd =
-              ScheduleMemberStatusCode.NoContributionsDue;
-            await ContributionDetails.update(record, {
-              where: { membContribDetlId: detail.membContribDetlId },
-            });
-          }
-          break;
+
         case NonPayReason.PayForPreviousAndNewGroup:
           break;
-        case NonPayReason.ChangePaymentSourceAndGroup:
-          if (detail.membContriAmt === "0.00") {
-            record.schdlMembStatusCd =
-              ScheduleMemberStatusCode.NoContributionsDue;
-            await ContributionDetails.update(record, {
-              where: { membContribDetlId: detail.membContribDetlId },
-            });
-          }
+        case NonPayReason.InsufficientEarnings:
+        case NonPayReason.MemberOptOut:
+          record.schdlMembStatusCd = this.getStatusCode(event);          
+          await ContributionDetails.update(record, {
+            where: { membContribDetlId: detail.membContribDetlId },
+          });
           break;
         case NonPayReason.MemberFamilyLeave:
+        case NonPayReason.ChangePaymentSourceAndGroup:
+        case NonPayReason.ChangeMemberGroupAndPay:
+        case NonPayReason.TransferPaymentSource:    
+        case NonPayReason.NoContributionsPayable:
+        default:    
           if (detail.membContriAmt === "0.00") {
-            record.schdlMembStatusCd =
-              ScheduleMemberStatusCode.NoContributionsDue;
-            await ContributionDetails.update(record, {
-              where: { membContribDetlId: detail.membContribDetlId },
-            });
+            record.schdlMembStatusCd = this.getStatusCode("Submitted");
+          }else{
+            record.schdlMembStatusCd = this.getStatusCode(event) 
           }
+          await ContributionDetails.update(record, {
+            where: { membContribDetlId: detail.membContribDetlId },
+          });
           break;
       }
     } catch (err) {
@@ -158,7 +148,8 @@ export class ContributionSubmissionUpdatesController {
   @Response("404", Status.NOT_FOUND_MSG)
   @Response("500", Status.FAILURE_MSG)
   async updateSubmissionMembers(
-    submissionHeaderId: any
+    submissionHeaderId: any, 
+    event: any
   ): Promise<ContributionSubmissionUpdateResponse> {
     try {
       // get the submission
@@ -180,7 +171,7 @@ export class ContributionSubmissionUpdatesController {
         const detail = await this.getContributionDetail(
           membercontributionsubmission.membContribDetlId
         );
-        this.updateSubmissionMember(detail);
+        this.updateSubmissionMember(detail, event);
       }
 
       // get total members

@@ -8,16 +8,16 @@ import errorHandler from "../utils/errorHandler";
 /**
 * 5404 API Catalogue Number
 * returns a list of all Member Contribution Submissions with detailed attributes
-*/
+ */
 const httpTrigger: AzureFunction = async function (
   context: Context,
   req: HttpRequest
 ): Promise<void> {
   try {
-    const contribSubmissionRef = req.params.contribSubmissionRef;
+    const submissionHeaderId = req.params.submissionHeaderId;
     const ctrl = new MemberContributionDetailsController();
-    if (contribSubmissionRef) {
-      const item = await ctrl.getMemberContributionSubmission(contribSubmissionRef);
+    if (submissionHeaderId) {
+      const item = await ctrl.getMemberContributionSubmission(submissionHeaderId);
       if (item && item.totalRecordCount > 0) {
         const resp = await app.successResponse(item);
         context.res = resp;
@@ -36,7 +36,7 @@ const httpTrigger: AzureFunction = async function (
           "",
           "",
           errorDetails.CIA0503[0],
-          errorDetails.CIA0503[1] + " Submission Reference Number " + contribSubmissionRef,
+          errorDetails.CIA0503[1] + " Submission Id " + submissionHeaderId,
           "get"
         );
         const resp = await app.errorResponse(404, data);
@@ -47,7 +47,7 @@ const httpTrigger: AzureFunction = async function (
         "",
         "",
         errorDetails.CIA0500[0],
-        errorDetails.CIA0500[1] + " Submission Reference Number",
+        errorDetails.CIA0500[1] + "Header Submission Id",
         "get"
       );
       const resp = await app.errorResponse(400, data);

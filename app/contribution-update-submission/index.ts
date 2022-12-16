@@ -7,9 +7,15 @@ import { ContributionSubmissionUpdatesController } from "../controllers/submissi
 */
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
     context.log('HTTP trigger function processed a request.');
-    const submissionRef = (req.params.submissionRef);
+    const submissionHeaderId = (req.query.submissionHeaderId);
+    const event = req.query.event;
+    let validEvents = ["submitted", "awaiting payment","processing payment", "payment failed", "Paid"];
+    let isEventValid = validEvents.indexOf(event)=== -1;
+      if(isEventValid){
+       throw new Error("Invalid Event") 
+      }
     const controller = new ContributionSubmissionUpdatesController();
-    const result = await controller.updateSubmissionMembers(submissionRef);
+    const result = await controller.updateSubmissionMembers(submissionHeaderId, event);
 
     context.res = {
         // status: 200, /* Defaults to 200 */
