@@ -66,7 +66,7 @@ export class ContributionSubmissionErrorsController {
 
       // Get submission record for supplied contribution header ID
       const contributionSubmission = await this.getContributionHeaderSubmission(
-        params.submissionHeaderId
+        params.contributionSubmissionId
       );
 
       // Get member contribution detail ID
@@ -74,7 +74,7 @@ export class ContributionSubmissionErrorsController {
         new MemberContributionDetailsController();
       const memberContributionSubmissions =
         await memberContributionSubmissionsController.getMemberContributionSubmission(
-          params.submissionHeaderId
+          params.contributionSubmissionId
         );
       memberContributionSubmissions.results.forEach((result) => {
         errorDetails.push({

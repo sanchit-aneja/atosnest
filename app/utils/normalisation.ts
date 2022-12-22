@@ -73,6 +73,8 @@ const normalisation = {
                 "crmPartyId",
                 "cmPartyId",
                 "nino",
+                "forename",
+                "surname",
                 "schemePayrollReference",
                 "pensionableSalary",
                 "reasonCode",
@@ -272,8 +274,10 @@ const normalisation = {
           params = {
             nestScheduleRef: value._previousDataValues.nestScheduleRef.trim(), //this.addLeadingZeros(parseInt(key) + 1, 2), //
             contribHeaderId: value._previousDataValues.contribHeaderId.trim(),
-            firstName: "NA", //value._previousDataValues.firstName.trim(),
-            lastName: "NA", //value._previousDataValues.lastName.trim(),
+            firstName:
+              value._previousDataValues?.stgcontrmember?._previousDataValues?.forename.trim(),
+            lastName:
+              value._previousDataValues?.stgcontrmember?._previousDataValues?.surname.trim(),
             membEnrolmentRef:
               value._previousDataValues?.stgcontrmember?._previousDataValues?.membershipId.trim(),
             membContriDueDate: value._previousDataValues?.earningPeriodEndDate,
@@ -321,17 +325,17 @@ const normalisation = {
     for (let index = 0; index < rows.length; index++) {
       const element = rows[index];
       const schedule = {
-        "paymentReference": element.paymentRef,
-        "paymentFrequency": element.paymentFrequency,
-        "numOfMembersInSchedule": element.noOfMembs,
-        "paymentDueDate": element.paymentDueDate,
-        "contributionScheduleRefNumber": element.nestScheduleRef,
-        "employerNestId": element.employerNestId,
-        "subSchemeId": element.subSchemeId,
-        "Contrib_Header_Id": element.contribHeaderId,
-        "paymentMethod": element.paymentMethod,
-        "earningsPeriodStartDate": element.earningPeriodStartDate,
-        "earningsPeriodEndDate": element.earningPeriodEndDate,
+        paymentReference: element.paymentRef,
+        paymentFrequency: element.paymentFrequency,
+        numOfMembersInSchedule: element.noOfMembs,
+        paymentDueDate: element.paymentDueDate,
+        contributionScheduleRefNumber: element.nestScheduleRef,
+        employerNestId: element.employerNestId,
+        subSchemeId: element.subSchemeId,
+        Contrib_Header_Id: element.contribHeaderId,
+        paymentMethod: element.paymentMethod,
+        earningsPeriodStartDate: element.earningPeriodStartDate,
+        earningsPeriodEndDate: element.earningPeriodEndDate,
       };
       scheduleList.push(schedule);
     }
