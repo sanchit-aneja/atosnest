@@ -12,9 +12,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "membContribDetlId"
-        ],
+        "required": ["membContribDetlId"],
         "type": "object",
         "additionalProperties": false
       },
@@ -27,10 +25,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "membContribDetlId",
-          "schdlMembStatusCd"
-        ],
+        "required": ["membContribDetlId", "schdlMembStatusCd"],
         "type": "object",
         "additionalProperties": false
       },
@@ -46,10 +41,7 @@
             "type": "array"
           }
         },
-        "required": [
-          "contribHeaderId",
-          "contributionDetail"
-        ],
+        "required": ["contribHeaderId", "contributionDetail"],
         "type": "object",
         "additionalProperties": false
       },
@@ -302,10 +294,7 @@
             "type": "array"
           }
         },
-        "required": [
-          "totalRecordCount",
-          "results"
-        ],
+        "required": ["totalRecordCount", "results"],
         "type": "object",
         "additionalProperties": false
       },
@@ -376,9 +365,7 @@
             "$ref": "#/components/schemas/HeaderFilterParams"
           }
         },
-        "required": [
-          "params"
-        ],
+        "required": ["params"],
         "type": "object",
         "additionalProperties": false
       },
@@ -391,9 +378,7 @@
             "$ref": "#/components/schemas/CorrectionEligibleFilterParams"
           }
         },
-        "required": [
-          "params"
-        ],
+        "required": ["params"],
         "type": "object",
         "additionalProperties": false
       },
@@ -433,10 +418,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "errorCode",
-          "errorDetail"
-        ],
+        "required": ["errorCode", "errorDetail"],
         "type": "object",
         "additionalProperties": false
       },
@@ -684,9 +666,7 @@
             "type": "array"
           }
         },
-        "required": [
-          "contributionHeader"
-        ],
+        "required": ["contributionHeader"],
         "type": "object",
         "additionalProperties": false
       },
@@ -699,10 +679,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "contribScheduleId",
-          "schdlMembStatusCd"
-        ],
+        "required": ["contribScheduleId", "schdlMembStatusCd"],
         "type": "object",
         "additionalProperties": false
       },
@@ -715,9 +692,7 @@
             "type": "array"
           }
         },
-        "required": [
-          "IneligibleSchedules"
-        ],
+        "required": ["IneligibleSchedules"],
         "type": "object",
         "additionalProperties": false
       },
@@ -730,10 +705,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "groupId",
-          "groupName"
-        ],
+        "required": ["groupId", "groupName"],
         "type": "object",
         "additionalProperties": false
       },
@@ -750,10 +722,7 @@
             "type": "array"
           }
         },
-        "required": [
-          "totalRecordCount",
-          "results"
-        ],
+        "required": ["totalRecordCount", "results"],
         "type": "object",
         "additionalProperties": false
       },
@@ -763,9 +732,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "clearSuccess"
-        ],
+        "required": ["clearSuccess"],
         "type": "object",
         "additionalProperties": false
       },
@@ -782,11 +749,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "isStreaming",
-          "docs",
-          "totalRecordCount"
-        ],
+        "required": ["isStreaming", "docs", "totalRecordCount"],
         "type": "object",
         "additionalProperties": false
       },
@@ -1027,9 +990,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "schdlMembStatusDesc"
-        ],
+        "required": ["schdlMembStatusDesc"],
         "type": "object",
         "additionalProperties": false
       },
@@ -1039,9 +1000,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "reasonDescription"
-        ],
+        "required": ["reasonDescription"],
         "type": "object",
         "additionalProperties": false
       },
@@ -1051,9 +1010,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "IncludedInCorrection"
-        ],
+        "required": ["IncludedInCorrection"],
         "type": "object",
         "additionalProperties": false
       },
@@ -1594,10 +1551,7 @@
             "type": "array"
           }
         },
-        "required": [
-          "totalRecordCount",
-          "results"
-        ],
+        "required": ["totalRecordCount", "results"],
         "type": "object",
         "additionalProperties": false
       },
@@ -1614,10 +1568,7 @@
             "type": "array"
           }
         },
-        "required": [
-          "totalRecordCount",
-          "results"
-        ],
+        "required": ["totalRecordCount", "results"],
         "type": "object",
         "additionalProperties": false
       },
@@ -1639,11 +1590,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "nestScheduleRef",
-          "fitstName",
-          "lastName"
-        ],
+        "required": ["nestScheduleRef", "fitstName", "lastName"],
         "type": "object",
         "additionalProperties": false
       },
@@ -1656,9 +1603,7 @@
             "$ref": "#/components/schemas/DetailsFilterParams"
           }
         },
-        "required": [
-          "params"
-        ],
+        "required": ["params"],
         "type": "object",
         "additionalProperties": false
       },
@@ -1671,10 +1616,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "errorCode",
-          "errorDetail"
-        ],
+        "required": ["errorCode", "errorDetail"],
         "type": "object",
         "additionalProperties": false
       },
@@ -1708,9 +1650,7 @@
             "type": "array"
           }
         },
-        "required": [
-          "contributionDetail"
-        ],
+        "required": ["contributionDetail"],
         "type": "object",
         "additionalProperties": false
       },
@@ -1723,9 +1663,7 @@
             "type": "array"
           }
         },
-        "required": [
-          "contributionDetail"
-        ],
+        "required": ["contributionDetail"],
         "type": "object",
         "additionalProperties": false
       },
@@ -1865,9 +1803,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "membContribDetlId"
-        ],
+        "required": ["membContribDetlId"],
         "type": "object",
         "additionalProperties": false
       },
@@ -1881,9 +1817,7 @@
             "type": "array"
           }
         },
-        "required": [
-          "contributionDetail"
-        ],
+        "required": ["contributionDetail"],
         "type": "object",
         "additionalProperties": false
       },
@@ -1943,10 +1877,7 @@
             "type": "array"
           }
         },
-        "required": [
-          "totalRecordCount",
-          "results"
-        ],
+        "required": ["totalRecordCount", "results"],
         "type": "object",
         "additionalProperties": false
       },
@@ -1995,9 +1926,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "params"
-        ],
+        "required": ["params"],
         "type": "object",
         "additionalProperties": false
       },
