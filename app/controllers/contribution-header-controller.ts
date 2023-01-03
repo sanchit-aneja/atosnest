@@ -402,6 +402,15 @@ export class ContributionHeaderController {
           errorDetail: errorDetails.CIA0600[1],
         };
       }
+
+      if (error.name == "SequelizeForeignKeyConstraintError") {
+        errorResp = {
+          statusCode: Status.BAD_REQUEST,
+          errorCode: errorDetails.CIA0605[0],
+          errorDetail: errorDetails.CIA0605[1],
+        };
+      }
+
       this.log(
         `updateContributionHeader is failed. Reason: ${error?.message} - ${error?.name} - ${error?.moreDetails}`
       );

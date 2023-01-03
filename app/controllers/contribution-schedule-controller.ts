@@ -1,12 +1,27 @@
-import { Body, Put, Response, Route, Security, SuccessResponse } from "tsoa";
+import {
+  Body,
+  Post,
+  Put,
+  Response,
+  Route,
+  Security,
+  SuccessResponse,
+} from "tsoa";
 import ContributionHeader from "../models/contributionheader";
 import ContributionDetails from "../models/contributionDetails";
-import { ClearScheduleStatusResponse } from "../schemas/response-schema";
+import {
+  ClearScheduleStatusResponse,
+  ContributionHeaderResponse,
+  OverdueScheduleFilterElements,
+  SearchResultsetResponse,
+} from "../schemas/response-schema";
+import * as moment from "moment";
 import Status from "../utils/config";
 import app from "../utils/app";
 import sequelize from "../utils/database";
 import { Op } from "sequelize";
 import { RemoveContributionScheduleRequest } from "../schemas/request-schema";
+import { overdueScheduleParams } from "../utils/constants";
 
 @Route("/contribution")
 export class ContributionScheduleController {
@@ -165,6 +180,175 @@ export class ContributionScheduleController {
       if (err) {
         return app.errorHandler(err);
       }
+    }
+  }
+
+  /**
+   * 5810 API Catalogue Number
+   * Retrieves a list of header with filter criterias
+   * @return Contribution Header list with Array<Contribution_Header>
+   */
+  @Security("api_key")
+  @Post("/retrieveSchedulePaymentStatus")
+  @SuccessResponse("200", Status.SUCCESS_MSG)
+  @Response("400", Status.BAD_REQUEST_MSG)
+  @Response("404", Status.NOT_FOUND_MSG)
+  @Response("500", Status.FAILURE_MSG)
+  async getOverdueScheduleByFilter(
+    @Body() requestObj: OverdueScheduleFilterElements,
+    rangeParams
+  ): Promise<SearchResultsetResponse<ContributionHeaderResponse> | any> {
+    try {
+      let element;
+      element = app.mapPaymentScheduleFilterElements(
+        requestObj,
+        overdueScheduleParams,
+        rangeParams.filter
+      );
+
+      return await sequelize.transaction(async (t) => {
+        let headerData = [];
+        let headerObj = {};
+        for (let i of element.params) {
+          let whereCdtn = {};
+          if (rangeParams.filter == "OVERDUE") {
+            whereCdtn = {
+              [Op.and]: {
+                "$ContributionHeader.schedule_status_cd$": { [Op.ne]: "CS10" },
+                "$ContributionHeader.earning_period_end_date$": {
+                  [Op.gte]: rangeParams.fromDate,
+                },
+                "$ContributionHeader.payment_due_date$": {
+                  [Op.lt]: moment().format("YYYY-MM-DD"),
+                },
+                "$ContributionHeader.employer_nest_id$": i.employerNestId,
+              },
+            };
+          } else if (rangeParams.filter == "DUE") {
+            whereCdtn = {
+              [Op.and]: {
+                "$ContributionHeader.schedule_status_cd$": { [Op.ne]: "CS10" },
+                "$ContributionHeader.earning_period_end_date$": {
+                  [Op.gte]: rangeParams.fromDate,
+                },
+                "$ContributionHeader.employer_nest_id$": i.employerNestId,
+              },
+            };
+          } else if (rangeParams.filter == "PAID") {
+            whereCdtn = {
+              [Op.and]: {
+                "$ContributionHeader.schedule_status_cd$": { [Op.eq]: "CS10" },
+                "$ContributionHeader.earning_period_end_date$": {
+                  [Op.gte]: rangeParams.fromDate,
+                },
+                "$ContributionHeader.employer_nest_id$": i.employerNestId,
+              },
+            };
+          } else if (rangeParams.filter == "ALL") {
+            whereCdtn = {
+              [Op.and]: {
+                [Op.or]: {
+                  "$ContributionHeader.schedule_status_cd$": {
+                    [Op.ne]: "CS10",
+                  },
+                  "$ContributionHeader.earning_period_end_date$": {
+                    [Op.gte]: rangeParams.fromDate,
+                  },
+                  "$ContributionHeader.payment_due_date$": {
+                    [Op.lt]: moment().format("YYYY-MM-DD"),
+                  },
+                  "$ContributionHeader.employer_nest_id$": i.employerNestId,
+                },
+                [Op.or]: {
+                  "$ContributionHeader.schedule_status_cd$": {
+                    [Op.ne]: "CS10",
+                  },
+                  "$ContributionHeader.earning_period_end_date$": {
+                    [Op.gte]: rangeParams.fromDate,
+                  },
+                  "$ContributionHeader.employer_nest_id$": i.employerNestId,
+                },
+                [Op.or]: {
+                  "$ContributionHeader.schedule_status_cd$": {
+                    [Op.eq]: "CS10",
+                  },
+                  "$ContributionHeader.earning_period_end_date$": {
+                    [Op.gte]: rangeParams.fromDate,
+                  },
+                  "$ContributionHeader.employer_nest_id$": i.employerNestId,
+                },
+              },
+            };
+          }
+
+          const { rows } = await ContributionHeader.findAndCountAll({
+            limit: element.options.limit,
+            offset: element.options.offset,
+            order: element.options.sort,
+            distinct: true,
+            where: whereCdtn,
+            subQuery: false,
+            transaction: t,
+          });
+          // if (rows?.length == 0) {
+          //   return Status.NOT_FOUND;
+          // } else {
+          headerObj = await this.mapCompleteObj(rows, i, rangeParams.filter);
+          headerData.push(headerObj);
+          // }
+        }
+        headerData = [].concat(...headerData);
+        return {
+          rowcount: headerData.length,
+          results: headerData,
+        };
+      });
+    } catch (err) {
+      if (err) {
+        return app.errorHandler(err);
+      }
+    }
+  }
+
+  /**
+   * This method used to map object to get complete schedule payment status
+   * @param item
+   * @returns
+   */
+  async mapCompleteObj(item, currval, filter): Promise<any> {
+    try {
+      let objParams = {};
+      const contHeaderAttr = [];
+      if (item && item.length > 0) {
+        objParams = {
+          employerNestId: currval.employerNestId,
+          employerName: currval.employerName,
+          status: filter,
+        };
+
+        for (let newItem of item) {
+          let newObj = {
+            paymentDueDate: newItem?.dataValues?.paymentDueDate,
+            ...objParams,
+          };
+          contHeaderAttr.push(newObj);
+        }
+        return contHeaderAttr;
+      } else {
+        objParams = {
+          employerNestId: currval.employerNestId,
+          employerName: currval.employerName,
+          status: "N/A",
+          paymentDueDate: "",
+        };
+        let newObj = {
+          ...objParams,
+        };
+        contHeaderAttr.push(newObj);
+        return contHeaderAttr;
+      }
+    } catch (e) {
+      return false;
     }
   }
 }

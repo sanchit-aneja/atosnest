@@ -8,6 +8,7 @@ export const errorDetails = {
   CIA0602: ["CIA-0602", "Something went wrong, update fails"],
   CIA0603: ["CIA-0603", "One or more contribHeaderId not found"],
   CIA0604: ["CIA-0604", "Member Schedule Status Error"],
+  CIA0605: ["CIA-0605", "ScheduleStatusCd values allowed : CS1 to CS16"],
 };
 export const joiOption = {
   abortEarly: false, // include all errors
@@ -305,6 +306,11 @@ export const headerFilterParams = {
   taxPayFrequencyInd: "ContributionHeader.tax_pay_frequency_ind",
   pegaCaseRef: "ContributionHeader.pega_case_ref",
   scheduleStatusCd: "ContributionHeader.schedule_status_cd",
+};
+
+export const overdueScheduleParams = {
+  employerNestId: "ContributionHeader.employer_nest_id",
+  paymentDueDate: "ContributionHeader.payment_due_date",
 };
 
 export const memberFilterParams = {

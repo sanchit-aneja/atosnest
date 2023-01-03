@@ -7,6 +7,7 @@ import {
   DetailsEligibleFilterElements,
   DetailsFilterElements,
   HeaderFilterElements,
+  OverdueScheduleFilterElements,
 } from "../schemas/response-schema";
 import errorHandler from "../utils/errorHandler";
 
@@ -120,6 +121,64 @@ const app = {
     }
     params = request.params;
     return { options, params };
+  },
+
+  mapPaymentScheduleFilterElements(
+    request: OverdueScheduleFilterElements,
+    defFilter,
+    type
+  ) {
+    try {
+      const defOptions = {
+        limit: this.DEFAULT_LIMIT,
+        offset: this.DEFAULT_OFFSET,
+        sort: [],
+      };
+      let options;
+      let params = {};
+      let searchOptions = {};
+      if (!this.isNullEmpty(request.options)) {
+        options = defOptions;
+        request &&
+          Object.entries(request.options).forEach(([key, value]: any) => {
+            let optionsKey = key.toString().toLowerCase();
+            switch (optionsKey) {
+              case "limit":
+                options["limit"] = isNaN(value)
+                  ? this.DEFAULT_LIMIT
+                  : parseInt(value);
+                break;
+              case "offset":
+                options["offset"] = isNaN(value)
+                  ? this.DEFAULT_OFFSET
+                  : parseInt(value);
+                break;
+              case "sort":
+                if (type == "OVERDUE") {
+                  const tempArr = ["paymentDueDate.asc"];
+                  options["sort"] =
+                    value && value.length > 0
+                      ? this.mapFilterSorting(value, defFilter)
+                      : this.mapFilterSorting(tempArr, defFilter);
+                } else if (type == "DUE" || type == "PAID") {
+                  const tempArr = ["paymentDueDate.desc"];
+                  options["sort"] =
+                    value && value.length > 0
+                      ? this.mapFilterSorting(value, defFilter)
+                      : this.mapFilterSorting(tempArr, defFilter);
+                } else {
+                  options["sort"] = this.mapFilterSorting(value, defFilter);
+                }
+                break;
+            }
+          });
+      }
+      params = request.params;
+      searchOptions = request.searchOptions;
+      return { options, params, searchOptions };
+    } catch (e) {
+      return null;
+    }
   },
 
   mapHeaderFilterElements(request: HeaderFilterElements, defFilter, type) {
