@@ -62,6 +62,9 @@ const httpTrigger: AzureFunction = async function (
             blobName: `Contribution_Policy_File_${fileTimeStamp}.csv`,
           },
         },
+        headers: {
+          "Content-Type": "application/json",
+        },
       };
 
       context.log(
@@ -88,6 +91,9 @@ const httpTrigger: AzureFunction = async function (
               errorDetail: errorPayload.Error_Details,
             },
           ],
+        },
+        headers: {
+          "Content-Type": "application/json",
         },
       };
     }

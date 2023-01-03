@@ -199,7 +199,7 @@ export class ContributionCorrectionController {
           },
           {
             [Op.or]: {
-              schedule_status_cd: ["CS1", "CS3", "CS4"],
+              schedule_status_cd: ["CS1", "CS3", "CS4", "CS13"],
             },
           },
         ],
@@ -277,8 +277,8 @@ export class ContributionCorrectionController {
 
   async mapEligibleMembers(arr1, arr2): Promise<any> {
     try {
-      const intersection = arr1.filter(({ nestScheduleRef: id1 }) =>
-        arr2.some(({ nestScheduleRef: id2 }) => id2 === id1)
+      const intersection = arr1.filter(({ firstName: id1 }) =>
+        arr2.some(({ firstName: id2 }) => id2 === id1)
       );
 
       for (let r = 0; r < arr1.length; r++) {
@@ -287,16 +287,12 @@ export class ContributionCorrectionController {
         };
         for (let t = 0; t < intersection.length; t++) {
           if (
-            intersection[t]["dataValues"]["nestScheduleRef"] ==
-            arr1[r]["dataValues"]["nestScheduleRef"]
+            intersection[t]["dataValues"]["firstName"] ==
+            arr1[r]["dataValues"]["firstName"]
           ) {
             arr1[r]["dataValues"]["IncludedInCorrection"][
               "IncludedInCorrection"
             ] = "True";
-          } else {
-            arr1[r]["dataValues"]["IncludedInCorrection"][
-              "IncludedInCorrection"
-            ] = "False";
           }
         }
       }

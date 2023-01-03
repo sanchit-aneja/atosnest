@@ -319,6 +319,14 @@ export interface ErrorDetailsResponse {
   errorTypeId?: number;
 }
 
+interface OverdueFilterOptions {
+  /**
+   * @isDate
+   */
+  fromDate: Date;
+  filter: string;
+}
+
 interface FilterOptions {
   /**
    * @isInt
@@ -337,9 +345,19 @@ interface HeaderFilterParams {
   employerNestId?: string;
 }
 
+interface OverdueFilterParams {
+  employerNestId?: string;
+}
+
 export interface HeaderFilterElements {
   options?: FilterOptions;
   params: HeaderFilterParams;
+}
+
+export interface OverdueScheduleFilterElements {
+  options?: FilterOptions;
+  searchOptions: OverdueFilterOptions;
+  params: OverdueFilterParams;
 }
 
 interface DetailsFilterParams {

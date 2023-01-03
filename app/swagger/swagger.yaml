@@ -223,6 +223,15 @@ components:
         - results
       type: object
       additionalProperties: false
+    SearchOptions:
+      properties:
+        filter:
+          type: string
+        fromDate:
+          type: string
+          format: date
+      type: object
+      additionalProperties: false
     FilterOptions:
       properties:
         limit:
@@ -263,6 +272,14 @@ components:
           type: string
       type: object
       additionalProperties: false
+    RetrievePaymentStatusFilterParams:
+      properties:
+        employerNestId:
+          type: string
+        employerName:
+          type: string
+      type: object
+      additionalProperties: false
     HeaderFilterElements:
       properties:
         options:
@@ -279,6 +296,20 @@ components:
           $ref: "#/components/schemas/FilterOptions"
         params:
           $ref: "#/components/schemas/CorrectionEligibleFilterParams"
+      required:
+        - params
+      type: object
+      additionalProperties: false
+    RetrievePaymentStatusFilterElements:
+      properties:
+        options:
+          $ref: "#/components/schemas/FilterOptions"
+        searchOptions:
+          $ref: "#/components/schemas/SearchOptions"
+        params:
+          items:
+            $ref: "#/components/schemas/RetrievePaymentStatusFilterParams"
+          type: array
       required:
         - params
       type: object
@@ -1062,6 +1093,24 @@ components:
         - rdpartcontribreason
       type: object
       additionalProperties: false
+    PaymentStatusResponseData:
+      properties:
+        employerNestId:
+          type: string
+        employerName:
+          type: string
+        status:
+          type: string
+        paymentDueDate:
+          type: string
+          format: date
+      required:
+        - employerNestId
+        - employerName
+        - status
+        - paymentDueDate
+      type: object
+      additionalProperties: false
     RetriveCreateScheduleResponse:
       properties:
         contribHeaderId:
@@ -1140,6 +1189,20 @@ components:
         results:
           items:
             $ref: "#/components/schemas/RetriveContributionDetailsResponse"
+          type: array
+      required:
+        - totalRecordCount
+        - results
+      type: object
+      additionalProperties: false
+    RetrievePaymentStatusResponse:
+      properties:
+        rowcount:
+          type: number
+          format: double
+        results:
+          items:
+            $ref: "#/components/schemas/PaymentStatusResponseData"
           type: array
       required:
         - totalRecordCount
@@ -1777,7 +1840,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/ContributionDetailsRequestDTO"
-  /contribution/Submission/MemberContributionSubmissions/{submissionHeaderId}:
+  /contribution/Submission/MemberContributionSubmissions/{contribSubmissionRef}:
     get:
       operationId: GetMemberContributionSubmission
       responses:
@@ -1795,13 +1858,13 @@ paths:
           description: Record does not exist
         "500":
           description: Internal Server Error
-      description: "5404 API Catalogue Number\r\nRetrieves returns a list of all Member Contribution Submissions based on submissionHeaderId passed."
+      description: "5404 API Catalogue Number\r\nRetrieves returns a list of all Member Contribution Submissions based on contribSubmissionRef passed."
       security:
         - api_key: []
       parameters:
-        - description: submissionHeaderId of the Member Contribution Submission record to be fetched
+        - description: contribSubmissionRef of the Member Contribution Submission record to be fetched
           in: path
-          name: submissionHeaderId
+          name: contribSubmissionRef
           required: true
           schema:
             type: string
@@ -1993,7 +2056,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/sfdActionRequest"
-  /contribution/submission/update-submission:
+  /contribution/submission/update-submission/{submissionHeaderId}:
     put:
       operationId: UpdateSubmissionMembers
       responses:
@@ -2014,14 +2077,8 @@ paths:
         - api_key: []
       parameters:
         - description: is the Contribution Submission Header id
-          in: query
+          in: path
           name: submissionHeaderId
-          required: true
-          schema:
-            type: string
-        - description: is the event
-          in: query
-          name: event
           required: true
           schema:
             type: string
@@ -2162,7 +2219,7 @@ paths:
           description: Record does not exist
         "500":
           description: Internal Server Error
-      description: 5207 API Catalogue Number Update member status
+      description: "5207 API Catalogue Number Update member status"
       security:
         - api_key: []
       parameters: []
@@ -2173,5 +2230,33 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/UpdateMemberStatusRequest"
+  /contribution/retrieveSchedulePaymentStatus:
+    post:
+      operationId: RetrieveSchedulePaymentStatus
+      responses:
+        "200":
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: "#/components/schemas/RetrievePaymentStatusResponse"
+                  - {}
+        "400":
+          description: Invalid Request
+        "404":
+          description: Record does not exist
+        "500":
+          description: Internal Server Error
+      description: 5810 API Catalogue Number - Retrieve Schedule Payment Status
+      security:
+        - api_key: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RetrievePaymentStatusFilterElements"
 servers:
   - url: http://localhost:7071/api

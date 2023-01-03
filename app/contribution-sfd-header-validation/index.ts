@@ -91,6 +91,9 @@ const httpTrigger: AzureFunction = async function (
           },
         ],
       },
+      headers: {
+        "Content-Type": "application/json",
+      },
     };
   } else {
     context.res = {
@@ -103,6 +106,9 @@ const httpTrigger: AzureFunction = async function (
           correlationId: correlationId,
           blobName: `Contribution_Member_File_${fileTime}.csv`,
         },
+      },
+      headers: {
+        "Content-Type": "application/json",
       },
     };
   }
