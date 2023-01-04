@@ -156,7 +156,7 @@ class DataImportHelper {
 
           //Check blo stream
           if (blobStream == null) {
-            this.context.log(
+            selfContext.log(
               `copyFromSTDIN: blobStream is null`
             );
             done();
@@ -169,7 +169,7 @@ class DataImportHelper {
 
           // Add error callbacks for blobStream and copyQuery
           blobStream.on("error", async (_err) => {
-            this.context.log(
+            selfContext.log(
               `copyFromSTDIN: blobStream error ${_err}`
             );
             done();
@@ -179,7 +179,7 @@ class DataImportHelper {
             pool.end();
           });
           copyQuery.on("error", async (_err) => {
-            this.context.log(
+            selfContext.log(
               `copyFromSTDIN: copyQuery error ${_err}`
             );
             done();
@@ -200,7 +200,7 @@ class DataImportHelper {
         });
       } catch (err) {
         selfContext.log(err);
-        this.context.log(
+        selfContext.log(
           `copyFromSTDIN: Unknown error ${err}`
         );
         reject(
