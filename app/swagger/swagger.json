@@ -353,6 +353,45 @@
           "employerNestId": {
             "type": "string"
           },
+          "externalScheduleRef": {
+            "type": "string"
+          },
+          "scheduleType": {
+            "type": "string"
+          },
+          "subSchemeId": {
+            "type": "string"
+          },
+          "paymentPlanNo": {
+            "type": "string"
+          },
+          "paymentRef": {
+            "type": "string"
+          },
+          "nestPaymentRef": {
+            "type": "string"
+          },
+          "paymentSourceName": {
+            "type": "string"
+          },
+          "paymentMethod": {
+            "type": "string"
+          },
+          "paymentMethodDesc": {
+            "type": "string"
+          },
+          "paymentFrequency": {
+            "type": "string"
+          },
+          "paymentFrequencyDesc": {
+            "type": "string"
+          },
+          "taxPayFrequencyInd": {
+            "type": "string"
+          },
+          "pegaCaseRef": {
+            "type": "string"
+          },
           "scheduleStatusCd": {
             "type": "array",
             "items": {
