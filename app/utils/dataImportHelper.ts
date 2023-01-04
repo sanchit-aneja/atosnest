@@ -156,6 +156,9 @@ class DataImportHelper {
 
           //Check blo stream
           if (blobStream == null) {
+            this.context.log(
+              `copyFromSTDIN: blobStream is null`
+            );
             done();
             reject(
               `Error ::  Failed at blobStream null in copyFromSTDIN :: ${copyCommand} - ${err}`
@@ -166,6 +169,9 @@ class DataImportHelper {
 
           // Add error callbacks for blobStream and copyQuery
           blobStream.on("error", async (_err) => {
+            this.context.log(
+              `copyFromSTDIN: blobStream error ${_err}`
+            );
             done();
             reject(
               `Error ::  Failed at blobStream in copyFromSTDIN :: ${copyCommand} - ${_err}`
@@ -173,6 +179,9 @@ class DataImportHelper {
             pool.end();
           });
           copyQuery.on("error", async (_err) => {
+            this.context.log(
+              `copyFromSTDIN: copyQuery error ${_err}`
+            );
             done();
             reject(
               `Error ::  Failed at copyQuery in copyFromSTDIN :: ${copyCommand} - ${_err}`
@@ -191,6 +200,9 @@ class DataImportHelper {
         });
       } catch (err) {
         selfContext.log(err);
+        this.context.log(
+          `copyFromSTDIN: Unknown error ${err}`
+        );
         reject(
           `Error ::  Failed at in copyFromSTDIN :: ${copyCommand} - ${err}`
         );
