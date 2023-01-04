@@ -12,7 +12,9 @@
             "type": "string"
           }
         },
-        "required": ["membContribDetlId"],
+        "required": [
+          "membContribDetlId"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -25,7 +27,10 @@
             "type": "string"
           }
         },
-        "required": ["membContribDetlId", "schdlMembStatusCd"],
+        "required": [
+          "membContribDetlId",
+          "schdlMembStatusCd"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -41,7 +46,10 @@
             "type": "array"
           }
         },
-        "required": ["contribHeaderId", "contributionDetail"],
+        "required": [
+          "contribHeaderId",
+          "contributionDetail"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -294,7 +302,10 @@
             "type": "array"
           }
         },
-        "required": ["totalRecordCount", "results"],
+        "required": [
+          "totalRecordCount",
+          "results"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -390,7 +401,9 @@
             "$ref": "#/components/schemas/HeaderFilterParams"
           }
         },
-        "required": ["params"],
+        "required": [
+          "params"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -403,7 +416,9 @@
             "$ref": "#/components/schemas/CorrectionEligibleFilterParams"
           }
         },
-        "required": ["params"],
+        "required": [
+          "params"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -462,7 +477,10 @@
             "type": "string"
           }
         },
-        "required": ["errorCode", "errorDetail"],
+        "required": [
+          "errorCode",
+          "errorDetail"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -710,7 +728,9 @@
             "type": "array"
           }
         },
-        "required": ["contributionHeader"],
+        "required": [
+          "contributionHeader"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -723,7 +743,10 @@
             "type": "string"
           }
         },
-        "required": ["contribScheduleId", "schdlMembStatusCd"],
+        "required": [
+          "contribScheduleId",
+          "schdlMembStatusCd"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -736,7 +759,9 @@
             "type": "array"
           }
         },
-        "required": ["IneligibleSchedules"],
+        "required": [
+          "IneligibleSchedules"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -749,7 +774,10 @@
             "type": "string"
           }
         },
-        "required": ["groupId", "groupName"],
+        "required": [
+          "groupId",
+          "groupName"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -766,7 +794,10 @@
             "type": "array"
           }
         },
-        "required": ["totalRecordCount", "results"],
+        "required": [
+          "totalRecordCount",
+          "results"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -776,7 +807,9 @@
             "type": "string"
           }
         },
-        "required": ["clearSuccess"],
+        "required": [
+          "clearSuccess"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -793,7 +826,11 @@
             "type": "string"
           }
         },
-        "required": ["isStreaming", "docs", "totalRecordCount"],
+        "required": [
+          "isStreaming",
+          "docs",
+          "totalRecordCount"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -1034,7 +1071,9 @@
             "type": "string"
           }
         },
-        "required": ["schdlMembStatusDesc"],
+        "required": [
+          "schdlMembStatusDesc"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -1044,7 +1083,9 @@
             "type": "string"
           }
         },
-        "required": ["reasonDescription"],
+        "required": [
+          "reasonDescription"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -1054,7 +1095,9 @@
             "type": "string"
           }
         },
-        "required": ["IncludedInCorrection"],
+        "required": [
+          "IncludedInCorrection"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -1620,7 +1663,10 @@
             "type": "array"
           }
         },
-        "required": ["totalRecordCount", "results"],
+        "required": [
+          "totalRecordCount",
+          "results"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -1654,7 +1700,10 @@
             "type": "array"
           }
         },
-        "required": ["totalRecordCount", "results"],
+        "required": [
+          "totalRecordCount",
+          "results"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -1676,7 +1725,11 @@
             "type": "string"
           }
         },
-        "required": ["nestScheduleRef", "fitstName", "lastName"],
+        "required": [
+          "nestScheduleRef",
+          "fitstName",
+          "lastName"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -1689,7 +1742,9 @@
             "$ref": "#/components/schemas/DetailsFilterParams"
           }
         },
-        "required": ["params"],
+        "required": [
+          "params"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -1702,7 +1757,10 @@
             "type": "string"
           }
         },
-        "required": ["errorCode", "errorDetail"],
+        "required": [
+          "errorCode",
+          "errorDetail"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -1736,7 +1794,9 @@
             "type": "array"
           }
         },
-        "required": ["contributionDetail"],
+        "required": [
+          "contributionDetail"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -1749,7 +1809,9 @@
             "type": "array"
           }
         },
-        "required": ["contributionDetail"],
+        "required": [
+          "contributionDetail"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -1889,7 +1951,9 @@
             "type": "string"
           }
         },
-        "required": ["membContribDetlId"],
+        "required": [
+          "membContribDetlId"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -1903,7 +1967,9 @@
             "type": "array"
           }
         },
-        "required": ["contributionDetail"],
+        "required": [
+          "contributionDetail"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -1963,7 +2029,10 @@
             "type": "array"
           }
         },
-        "required": ["totalRecordCount", "results"],
+        "required": [
+          "totalRecordCount",
+          "results"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -2012,9 +2081,61 @@
             "type": "string"
           }
         },
-        "required": ["params"],
+        "required": [
+          "params"
+        ],
         "type": "object",
         "additionalProperties": false
+      },
+      "fupValidateHeadersRequest": {
+        "type": "object",
+        "required": [
+          "correlationId",
+          "blobName",
+          "fqsId",
+          "processType"
+        ],
+        "properties": {
+          "correlationId": {
+            "type": "string"
+          },
+          "blobName": {
+            "type": "string"
+          },
+          "fqsId": {
+            "type": "string"
+          },
+          "processType": {
+            "type": "string"
+          }
+        }
+      },
+      "fupValidateBodyRequest": {
+        "type": "object",
+        "required": [
+          "correlationId",
+          "blobName",
+          "fqsId",
+          "processType",
+          "contributionHeaderId"
+        ],
+        "properties": {
+          "correlationId": {
+            "type": "string"
+          },
+          "blobName": {
+            "type": "string"
+          },
+          "fqsId": {
+            "type": "string"
+          },
+          "processType": {
+            "type": "string"
+          },
+          "contributionHeaderId": {
+            "type": "string"
+          }
+        }
       },
       "SubmissionErrorRequest": {
         "properties": {
@@ -2953,6 +3074,93 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/sfdActionRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contribution/fileUpload/type2HeaderValidation": {
+      "post": {
+        "operationId": "FupValidateHeaders",
+        "description": "API 5811 - This function validates uploaded CSV file (File structure validations. H, T rows), type 2a & 2b",
+        "responses": {
+          "200": {
+            "description": "Success Response"
+          },
+          "400": {
+            "description": "Invalid Response"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/fupValidateHeadersRequest"
+              },
+              "examples": {
+                "ex1": {
+                  "summary": "A sample",
+                  "value": {
+                    "correlationId": "7b11c4ce-1c34-4416-848b-1730e766f126",
+                    "blobName": "Sample_File_Upload9.csv",
+                    "fqsId": "6b11c4ce-1c34-4416-848b-1730e766f122",
+                    "processType": "CS"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contribution/fileUpload/type2BodyValidation": {
+      "post": {
+        "operationId": "FupValidateBody",
+        "description": "API 5812 - This function validates uploaded CSV file (D row validations) type 2c and 2d",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Response"
+          },
+          "400": {
+            "description": "Invalid Response"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/fupValidateBodyRequest"
+              },
+              "examples": {
+                "ex1": {
+                  "summary": "A sample",
+                  "value": {
+                    "correlationId": "7b11c4ce-1c34-4416-848b-1730e766f126",
+                    "blobName": "Sample_File_Upload9.csv",
+                    "fqsId": "6b11c4ce-1c34-4416-848b-1730e766f122",
+                    "processType": "CS",
+                    "contributionHeaderId": "6611c4ce-1c34-4416-848b-1730e766f133"
+                  }
+                }
               }
             }
           }
