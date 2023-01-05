@@ -68,7 +68,8 @@ const httpTrigger: AzureFunction = async function (
     const _blobServiceClient = blobHelper.getBlobServiceClient();
     const readStream = await blobHelper.getBlobStream(
       payload.blobName,
-      _blobServiceClient
+      _blobServiceClient,
+      context
     );
     const fileData = await blobHelper.streamToString(readStream);
 
@@ -76,7 +77,7 @@ const httpTrigger: AzureFunction = async function (
     const result = await Type2Validations.start(
       blobHelper.stringToStream(fileData),
       context,
-      errors, 
+      errors,
       payload.processType
     );
 
@@ -97,7 +98,10 @@ const httpTrigger: AzureFunction = async function (
         `Something went wrong, error ${JSON.stringify(error.message)}`
       );
       const somethingError =
-        CommonContributionDetails.getSomethingWentWrongError("2B", payload.processType);
+        CommonContributionDetails.getSomethingWentWrongError(
+          "2B",
+          payload.processType
+        );
       error = [somethingError];
     }
     // Send error to FQS
