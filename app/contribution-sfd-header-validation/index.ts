@@ -37,7 +37,8 @@ const httpTrigger: AzureFunction = async function (
     const _blobServiceClient = blobHelper.getBlobServiceClient();
     const readStream = await blobHelper.getBlobStream(
       fileName,
-      _blobServiceClient
+      _blobServiceClient,
+      context
     );
     if (readStream == null) {
       throw new CustomError(

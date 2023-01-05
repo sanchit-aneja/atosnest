@@ -149,16 +149,16 @@ class DataImportHelper {
           }
           selfContext.log("Started..!");
           const copyQuery = client.query(copyFrom(copyCommand));
+          selfContext.log("Download blob");
           const blobStream = await blobHelper.getBlobStream(
             blobName,
-            selfBlobServiceClient
+            selfBlobServiceClient,
+            selfContext
           );
 
           //Check blo stream
           if (blobStream == null) {
-            selfContext.log(
-              `copyFromSTDIN: blobStream is null`
-            );
+            selfContext.log(`copyFromSTDIN: blobStream is null`);
             done();
             reject(
               `Error ::  Failed at blobStream null in copyFromSTDIN :: ${copyCommand} - ${err}`
@@ -169,9 +169,7 @@ class DataImportHelper {
 
           // Add error callbacks for blobStream and copyQuery
           blobStream.on("error", async (_err) => {
-            selfContext.log(
-              `copyFromSTDIN: blobStream error ${_err}`
-            );
+            selfContext.log(`copyFromSTDIN: blobStream error ${_err}`);
             done();
             reject(
               `Error ::  Failed at blobStream in copyFromSTDIN :: ${copyCommand} - ${_err}`
@@ -179,9 +177,7 @@ class DataImportHelper {
             pool.end();
           });
           copyQuery.on("error", async (_err) => {
-            selfContext.log(
-              `copyFromSTDIN: copyQuery error ${_err}`
-            );
+            selfContext.log(`copyFromSTDIN: copyQuery error ${_err}`);
             done();
             reject(
               `Error ::  Failed at copyQuery in copyFromSTDIN :: ${copyCommand} - ${_err}`
@@ -200,9 +196,7 @@ class DataImportHelper {
         });
       } catch (err) {
         selfContext.log(err);
-        selfContext.log(
-          `copyFromSTDIN: Unknown error ${err}`
-        );
+        selfContext.log(`copyFromSTDIN: Unknown error ${err}`);
         reject(
           `Error ::  Failed at in copyFromSTDIN :: ${copyCommand} - ${err}`
         );

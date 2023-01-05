@@ -68,7 +68,8 @@ const eventGridTrigger: AzureFunction = async function (
     );
     const readStream = await blobHelper.getBlobStream(
       payload.blobName,
-      _blobServiceClient
+      _blobServiceClient,
+      context
     );
     const fileData = await blobHelper.streamToString(readStream);
 
@@ -136,7 +137,10 @@ const eventGridTrigger: AzureFunction = async function (
         )}`
       );
       const somethingError =
-        CommonContributionDetails.getSomethingWentWrongError("2C", payload.processType);
+        CommonContributionDetails.getSomethingWentWrongError(
+          "2C",
+          payload.processType
+        );
       error = [somethingError];
     }
     // Write errors to DB and Error log file only when Type 2B passed

@@ -1,3 +1,4 @@
+import { Context } from "@azure/functions";
 import {
   BlobServiceClient,
   BlobGetPropertiesResponse,
@@ -19,27 +20,30 @@ const blobHelper = {
    * get blob data in stream format
    * @param blobName
    * @param blobServiceClient
+   * @param context
    * @returns
    */
   async getBlobStream(
     blobName: string,
     blobServiceClient: BlobServiceClient,
+    context: Context,
     containerName: string = process.env.contribution_BlobContainerName
   ): Promise<NodeJS.ReadableStream | null> {
     try {
       // Get container name and blob client ready
+      context.log("getBlobStream:Client intializing");
       const client = blobServiceClient.getContainerClient(containerName);
-      console.log("getBlobStream:Client Initiated");
+      context.log("getBlobStream:Client Initiated");
       const blobClient = client.getBlobClient(blobName);
-      console.log("getBlobStream:blobClient Initiated");
+      context.log("getBlobStream:blobClient Initiated");
       // Get blob content from position 0 to the end
       // In Node.js, get downloaded data by accessing downloadBlockBlobResponse.readableStreamBody
       // In browsers, get downloaded data by accessing downloadBlockBlobResponse.blobBody
       const downloadBlockBlobResponse = await blobClient.download(0);
-      console.log("getBlobStream:downloaded file");
+      context.log("getBlobStream:downloaded file");
       return downloadBlockBlobResponse.readableStreamBody;
     } catch (error) {
-      console.log("getBlobStream:failed", error);
+      context.log(`getBlobStream:failed , ${error}`);
       return null;
     }
   },
