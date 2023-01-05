@@ -29,14 +29,17 @@ const blobHelper = {
     try {
       // Get container name and blob client ready
       const client = blobServiceClient.getContainerClient(containerName);
+      console.log("getBlobStream:Client Initiated");
       const blobClient = client.getBlobClient(blobName);
-
+      console.log("getBlobStream:blobClient Initiated");
       // Get blob content from position 0 to the end
       // In Node.js, get downloaded data by accessing downloadBlockBlobResponse.readableStreamBody
       // In browsers, get downloaded data by accessing downloadBlockBlobResponse.blobBody
       const downloadBlockBlobResponse = await blobClient.download(0);
+      console.log("getBlobStream:downloaded file");
       return downloadBlockBlobResponse.readableStreamBody;
     } catch (error) {
+      console.log("getBlobStream:failed", error);
       return null;
     }
   },
