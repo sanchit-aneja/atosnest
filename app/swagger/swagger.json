@@ -2115,7 +2115,7 @@
       },
       "SubmissionErrorRequest": {
         "properties": {
-          "contributionSubmissionId": {
+          "submissionHeaderId": {
             "type": "string"
           },
           "errorCode": {
@@ -2129,7 +2129,7 @@
           }
         },
         "required": [
-          "contributionSubmissionId",
+          "submissionHeaderId",
           "errorCode",
           "payload",
           "payloadType"

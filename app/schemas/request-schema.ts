@@ -35,7 +35,7 @@ export interface RemoveContributionScheduleRequest {
 }
 
 export interface SubmissionErrorRequest {
-  contributionSubmissionId: string;
+  submissionHeaderId: string;
   errorCode: string;
   payload: string;
   payloadType: string;

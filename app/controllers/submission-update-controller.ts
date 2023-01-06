@@ -118,8 +118,7 @@ export class ContributionSubmissionUpdatesController {
         case NonPayReason.ChangePaymentSourceAndGroup:
         case NonPayReason.ChangeMemberGroupAndPay:
         case NonPayReason.TransferPaymentSource:    
-        case NonPayReason.NoContributionsPayable:
-        default:    
+        case NonPayReason.NoContributionsPayable:  
           if (detail.membContriAmt === "0.00") {
             record.schdlMembStatusCd = this.getStatusCode("Submitted");
           }else{
