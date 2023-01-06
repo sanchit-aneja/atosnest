@@ -15,10 +15,11 @@ const httpTrigger: AzureFunction = async function (
 ): Promise<void> {
   try {
     const queryReq = await req.body;
-    const filterParams = app.validateFilterParams(
-      queryReq,
-      memberFilterParams
-    );
+    const rangeParams = {};
+    if (queryReq.params.schdlMembStatusCd) {
+      rangeParams["schdlMembStatusCd"] = queryReq.params.schdlMembStatusCd;
+    }
+    const filterParams = app.validateFilterParams(queryReq, memberFilterParams);
     if (app.isNullEmpty(filterParams)) {
       const data = errorHandler.mapHandleErrorResponse(
         "",
@@ -33,11 +34,11 @@ const httpTrigger: AzureFunction = async function (
     }
     queryReq.params = filterParams;
     const ctrl = new MemberContributionDetailsController();
-    const item = await ctrl.getDetailsByFilter(queryReq);
+    const item = await ctrl.getDetailsByFilter(queryReq, rangeParams);
     if (item.results) {
       const resp = await app.successResponse(item);
       context.res = resp;
-    } else if (item.name == 'SequelizeConnectionError') {
+    } else if (item.name == "SequelizeConnectionError") {
       const data = errorHandler.mapHandleErrorResponse(
         "",
         "",
@@ -52,7 +53,8 @@ const httpTrigger: AzureFunction = async function (
         "",
         "",
         errorDetails.CIA0503[0],
-        errorDetails.CIA0503[1] + " No Records Found for Nest Schedule Ref & Employer Nest Id",
+        errorDetails.CIA0503[1] +
+          " No Records Found for Nest Schedule Ref & Employer Nest Id",
         "get"
       );
       const resp = await app.errorResponse(404, data);
