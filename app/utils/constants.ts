@@ -319,6 +319,7 @@ export const memberFilterParams = {
   contribHeaderId: "ContributionDetails.contrib_header_id",
   firstName: "ContributionDetails.first_name",
   lastName: "ContributionDetails.last_name",
+  schdlMembStatusCd: "ContributionDetails.schdl_memb_status_cd",
 };
 
 export const headerEligibleFilterParams = {

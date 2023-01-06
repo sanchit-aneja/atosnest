@@ -1235,10 +1235,17 @@ components:
           type: string
         lastName:
           type: string
+        schdlMembStatusCd:
+          items:
+            type: string
+          type: array
       required:
         - nestScheduleRef
+        - employerNestId
+        - contribHeaderId
         - fitstName
         - lastName
+        - schdlMembStatusCd
       type: object
       additionalProperties: false
     DetailsFilterElements:
@@ -2094,60 +2101,62 @@ paths:
   /contribution/fileUpload/type2HeaderValidation:
     post:
       operationId: FupValidateHeaders
-      description: API 5811 - This function validates uploaded CSV file (File structure validations. H, T rows), type 2a & 2b 
+      description: API 5811 - This function validates uploaded CSV file (File structure validations. H, T rows), type 2a & 2b
       responses:
         "200":
           description: Success Response
-        "400": 
+        "400":
           description: Invalid Response
         "500":
           description: Internal Server Error
       security:
-        - api_key: [] 
+        - api_key: []
       requestBody:
         required: true
-        content: 
+        content:
           application/json:
-            schema: 
+            schema:
               $ref: "#/components/schemas/fupValidateHeadersRequest"
             examples:
               ex1:
                 summary: A sample
-                value: { 
-                      "correlationId": "7b11c4ce-1c34-4416-848b-1730e766f126", 
-                      "blobName": "Sample_File_Upload9.csv",
-                      "fqsId": "6b11c4ce-1c34-4416-848b-1730e766f122",
-                      "processType": "CS"
-                      }
+                value:
+                  {
+                    "correlationId": "7b11c4ce-1c34-4416-848b-1730e766f126",
+                    "blobName": "Sample_File_Upload9.csv",
+                    "fqsId": "6b11c4ce-1c34-4416-848b-1730e766f122",
+                    "processType": "CS",
+                  }
   /contribution/fileUpload/type2BodyValidation:
     post:
       operationId: FupValidateBody
-      description: API 5812 - This function validates uploaded CSV file (D row validations) type 2c and 2d 
+      description: API 5812 - This function validates uploaded CSV file (D row validations) type 2c and 2d
       security:
         - api_key: []
       responses:
         "200":
           description: Success Response
-        "400": 
+        "400":
           description: Invalid Response
         "500":
           description: Internal Server Error
       requestBody:
         required: true
-        content: 
+        content:
           application/json:
-            schema: 
+            schema:
               $ref: "#/components/schemas/fupValidateBodyRequest"
             examples:
               ex1:
                 summary: A sample
-                value: { 
-                        "correlationId": "7b11c4ce-1c34-4416-848b-1730e766f126", 
-                        "blobName": "Sample_File_Upload9.csv",
-                        "fqsId": "6b11c4ce-1c34-4416-848b-1730e766f122",
-                        "processType": "CS",
-                        "contributionHeaderId": "6611c4ce-1c34-4416-848b-1730e766f133"
-                        }
+                value:
+                  {
+                    "correlationId": "7b11c4ce-1c34-4416-848b-1730e766f126",
+                    "blobName": "Sample_File_Upload9.csv",
+                    "fqsId": "6b11c4ce-1c34-4416-848b-1730e766f122",
+                    "processType": "CS",
+                    "contributionHeaderId": "6611c4ce-1c34-4416-848b-1730e766f133",
+                  }
   /contribution/submission/update-submission/{submissionHeaderId}:
     put:
       operationId: UpdateSubmissionMembers

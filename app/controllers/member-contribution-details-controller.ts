@@ -71,7 +71,8 @@ export class MemberContributionDetailsController {
   @Response("404", Status.NOT_FOUND_MSG)
   @Response("500", Status.FAILURE_MSG)
   async getDetailsByFilter(
-    @Body() requestObj: DetailsFilterElements
+    @Body() requestObj: DetailsFilterElements,
+    rangeParams
   ): Promise<
     | SearchMemberContributionResultResponse<RetriveContributionDetailsResponse>
     | any
@@ -85,6 +86,12 @@ export class MemberContributionDetailsController {
       let whereCdtn = {
         ...element.params,
       };
+
+      if (rangeParams.schdlMembStatusCd) {
+        whereCdtn["$ContributionDetails.schdl_memb_status_cd$"] = {
+          [Op.or]: rangeParams.schdlMembStatusCd,
+        };
+      }
       return await sequelize.transaction(async (t) => {
         const { rows, count } = await ContributionDetails.findAndCountAll({
           limit: element.options.limit,
@@ -259,7 +266,7 @@ export class MemberContributionDetailsController {
                 attributes: CONTR_MEMBER_DETAILS,
               },
             ],
-            order:[["contributiondetails", "memb_non_pay_reason", 'ASC' ]],
+            order: [["contributiondetails", "memb_non_pay_reason", "ASC"]],
             where: whereCdtn,
             subQuery: false,
             transaction: t,
