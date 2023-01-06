@@ -10,12 +10,12 @@ import { SubmissionErrorRequest } from "../schemas/request-schema";
 @Route("/contribution")
 export class ContributionSubmissionErrorsController {
   async getContributionHeaderSubmission(
-    contributionSubmissionId: any
+    submissionHeaderId: any
   ): Promise<any> {
     try {
       const doc = await ContributionHeaderSubmission.findAll({
         where: {
-          submissionHeaderId: contributionSubmissionId,
+          submissionHeaderId: submissionHeaderId,
         },
       });
 
