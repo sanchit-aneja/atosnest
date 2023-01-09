@@ -1529,7 +1529,7 @@ components:
           type: string
     SubmissionErrorRequest:
       properties:
-        contributionSubmissionId:
+        submissionHeaderId:
           type: string
         errorCode:
           type: string
@@ -1538,7 +1538,7 @@ components:
         payloadType:
           type: string
       required:
-        - contributionSubmissionId
+        - submissionHeaderId
         - errorCode
         - payload
         - payloadType
