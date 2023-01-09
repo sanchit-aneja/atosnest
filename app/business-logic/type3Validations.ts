@@ -540,28 +540,28 @@ export const Type3Validations = {
 
       if (errors) {
         return {
-          code: "ID34.00",
+          code: "ID34.0",
           dataRows: errors,
         };
       }
 
       return null;
     },
-    id34_01: async (dataRows: any, context: Context) => {
+    id34_1: async (dataRows: any, context: Context) => {
       const errors = dataRows.dataDetailRows.filter(
         (item) => item.pensEarnings === null
       );
 
       if (errors) {
         return {
-          code: "ID34.01",
+          code: "ID34.1",
           dataRows: errors,
         };
       }
 
       return null;
     },
-    id34_02: async (dataRows: any, context: Context) => {
+    id34_2: async (dataRows: any, context: Context) => {
       const errors = dataRows.dataDetailRows.filter(
         (item) =>
           ((!item.membNonPayReason || item.membNonPayReason === "") &&
@@ -572,7 +572,7 @@ export const Type3Validations = {
 
       if (errors) {
         return {
-          code: "ID34.02",
+          code: "ID34.2",
 
           dataRows: errors,
         };
@@ -581,15 +581,16 @@ export const Type3Validations = {
       return null;
     },
   },
-  getDatarows: async (contribHeaderId, context) => {
-    const dataHeaderRow: ContributionHeader = await ContributionHeader.findOne({
-      where: { contrib_header_id: contribHeaderId },
-    });
-
-    const dataDetailRows: ContributionDetails[] =
+  getDatarows: async (contribHeaderId, dataHeaderRow, context) => {
+    const alldataDetailRows: ContributionDetails[] =
       await ContributionDetails.findAll({
-        where: { contrib_header_id: contribHeaderId, record_changed_flag: "Y" },
+        where: { contrib_header_id: contribHeaderId },
       });
+
+    const dataDetailRows = alldataDetailRows.filter(
+      (item: any) => item.recordChangedFlag === "Y"
+    );
+
     let paymentGroupSource = {};
     try {
       paymentGroupSource =
@@ -603,6 +604,7 @@ export const Type3Validations = {
       dataHeaderRow: dataHeaderRow,
       dataDetailRows: dataDetailRows,
       paymentGroupSource: paymentGroupSource,
+      totalRows: alldataDetailRows.length,
     };
   },
   validateDataRows: async (dataRows: any, context: Context) => {
@@ -638,14 +640,30 @@ export const Type3Validations = {
     }
     return { Type3Errors, errorIds };
   },
+  getHeaderRows: async (contribHeaderId: string): Promise<any> => {
+    return new Promise(async function (resolve) {
+      try {
+        const dataHeaderRow: ContributionHeader =
+          await ContributionHeader.findOne({
+            where: { contrib_header_id: contribHeaderId },
+          });
+        resolve(dataHeaderRow);
+      } catch (error) {
+        console.log(error);
+        resolve(null);
+      }
+    });
+  },
   start: async function (
     contribHeaderId: string,
+    dataHeaderRow: any,
     context: Context
   ): Promise<any> {
     return new Promise(async function (resolve, reject) {
       try {
         const dataRows = await Type3Validations.getDatarows(
           contribHeaderId,
+          dataHeaderRow,
           context
         );
 
@@ -675,7 +693,16 @@ export const Type3Validations = {
           allIds,
           Type3Errors
         );
-        resolve({ errorIds, sucessIds });
+        const totalReadytoSubmit = sucessIds.length;
+        const totalRequireAttention = dataRows.dataDetailRows.length;
+        const totalTobeReviewed = errorIds.length;
+        const totalRowsinSchedule = dataRows.totalRows;
+        resolve({
+          totalReadytoSubmit,
+          totalRequireAttention,
+          totalTobeReviewed,
+          totalRowsinSchedule,
+        });
       } catch (error) {
         context.log(`Something went wrong : ${error.message}`);
         reject(error);
@@ -686,9 +713,10 @@ export const Type3Validations = {
     let transaction;
     try {
       transaction = await sequelize.transaction();
-
+      console.log("sssss");
+      console.log(allIds);
       await ContributionDetails.update(
-        { record_changed_flag: null },
+        { recordChangedFlag: null },
         {
           where: {
             membContribDetlId: {

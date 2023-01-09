@@ -49,7 +49,14 @@ const eventGridTrigger: AzureFunction = async function (
     );
 
     // Step 2: vaildation Type 3
-    await Type3Validations.start(payload.contribHeaderId, context);
+    const dataHeaderRow = await Type3Validations.getHeaderRows(
+      payload.contribHeaderId
+    );
+    await Type3Validations.start(
+      payload.contribHeaderId,
+      dataHeaderRow,
+      context
+    );
 
     context.log(
       `Type 3 Validation done for contribHeaderId ${payload.contribHeaderId}`

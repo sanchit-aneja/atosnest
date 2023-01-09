@@ -82,6 +82,7 @@ describe("Type 3 Validation Interactions", () => {
 
     await Type3Validations.start(
       "9dc2eea5-4a04-481d-bb44-ebad33393719",
+      [],
       context
     );
 
