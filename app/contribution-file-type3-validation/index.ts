@@ -14,8 +14,11 @@ const eventGridTrigger: AzureFunction = async function (
       `Started Type 3 vaildation for externalScheduleRef  ${externalScheduleRef}`
     );
 
-    // Step 2: vaildation Type 2A
-    await Type3Validations.start(externalScheduleRef, context);
+    // Step 2: vaildation Type 3
+    const dataHeaderRow = await Type3Validations.getHeaderRows(
+      externalScheduleRef
+    );
+    await Type3Validations.start(externalScheduleRef, dataHeaderRow, context);
 
     context.log(
       `Type 3 Validation done for externalScheduleRef ${externalScheduleRef}`
