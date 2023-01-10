@@ -1578,6 +1578,25 @@ components:
           type: string
       type: object
       additionalProperties: false
+    ValidateForSubmissionResponse:
+      properties:
+        CountRequiresAttention:
+          type: number
+          format: double
+        CountReadyToSubmit:
+          type: number
+          format: double
+        CountToBeReviewed:
+          type: number
+          format: double
+        CountMemberInSchedule:
+          type: number
+          format: double
+      required:
+        - CountRequiresAttention
+        - CountReadyToSubmit
+        - CountToBeReviewed
+        - CountMemberInSchedule
     ContributionSubmissionUpdateResponse:
       properties:
         countSubmitted:
@@ -2183,6 +2202,31 @@ paths:
           required: true
           schema:
             type: string
+  /contribution/submission/ValidateForSubmission/{ContributionHeaderId}:
+    post:
+      operationId: ValidateForSubmission
+      responses:
+        "200":
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidateForSubmissionResponse"
+        "400":
+          description: Invalid Request
+        "404":
+          description: Record does not exist
+      description: "5407 API Catalogue Number\r\nValidate For Submission"
+      security:
+        - api_key: []
+      parameters:
+        - description: is the Contribution Submission Header id
+          in: path
+          name: submissionHeaderId
+          required: true
+          schema:
+            type: string
+  /contribution/updateIneligibility/membEnrolRe
   /contribution/updateIneligibility/membEnrolRef={membEnrolmentRef}&IneligibilityReason={ineligibilityReason}&EffectiveDate={effectiveDate}:
     put:
       operationId: UpdateIneligibility
