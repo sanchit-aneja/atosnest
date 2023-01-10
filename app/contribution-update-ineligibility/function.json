@@ -6,7 +6,7 @@
       "direction": "in",
       "name": "req",
       "methods": ["put"],
-      "route": "contribution/updateIneligibility/membEnrolRef={membEnrolmentRef}&IneligibilityReason={ineligibilityReason}&EffectiveDate={effectiveDate}"
+      "route": "contribution/updateIneligibility/{membEnrolmentRef}/{ineligibilityReason}/{effectiveDate}"
     },
     {
       "type": "http",
