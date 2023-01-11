@@ -21,7 +21,7 @@ export class ContributionFileUploadController {
   @Response("404", Status.NOT_FOUND_MSG)
   @Response("500", Status.FAILURE_MSG)
   async fileUpload(@Body() params: FileUploadRequest): Promise<any> {
-    let result = 200;
+    let result = 202;
     try {
       // get blob
       const container = process.env.contribution_BlobContainerName;
