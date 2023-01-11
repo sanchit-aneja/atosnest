@@ -21,7 +21,8 @@ const saveContributionDetails = {
     contributionHeaderId,
     currentDRowIndex,
     updateResult: Type2SaveResult,
-    processType
+    processType, 
+    fileId
   ): Promise<Type2SaveResult> {
     const nino = CommonContributionDetails.getRowColumn(
       row,
@@ -94,7 +95,7 @@ const saveContributionDetails = {
     } else if(processType==='CS') {
   
       const fileMemberDetails =
-        CommonContributionDetails.convertToSTGMemberDetails(row);
+        CommonContributionDetails.convertToSTGMemberDetails(row, fileId);
       await StgFileMemberDetails.create({
         ...fileMemberDetails,
       });
@@ -113,6 +114,7 @@ const saveContributionDetails = {
     readStream: NodeJS.ReadableStream,
     context: Context,
     payload, 
+    fileId 
   ): Promise<Type2SaveResult> {
     const contributionHeaderId = payload.contributionHeaderId;
     const processType = payload.processType;
@@ -141,7 +143,8 @@ const saveContributionDetails = {
           contributionHeaderId,
           currentDRowIndex,
           updateResult, 
-          processType
+          processType, 
+          fileId
         );
         currentDRowIndex++;
       }

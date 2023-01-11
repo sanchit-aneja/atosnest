@@ -677,10 +677,10 @@ const commonContributionDetails = {
    * @param row
    * @returns STGMemberDetails object
    */
-  convertToSTGMemberDetails: function (row) {
+  convertToSTGMemberDetails: function (row, fileId) {
     // Currently this row index may change, this was done bcased on Contribution template - specification v1.9
     let customRow = {
-      uploadFileId: "63cdcf03-19ef-4ffd-b178-f50fe5c4e075",
+      uploadFileId: fileId,
       forename: row[EnumRowDColumns.FORE_NAME],
       surname: row[EnumRowDColumns.SURE_NAME],
       nino: row[EnumRowDColumns.NINO],

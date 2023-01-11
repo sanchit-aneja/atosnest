@@ -106,7 +106,8 @@ const eventGridTrigger: AzureFunction = async function (
       await SaveContributionDetails.updateMemberDetails(
         blobHelper.stringToStream(fileData),
         context,
-        payload
+        payload, 
+        fileId
       );
 
     if (updateResult.isFailed) {
