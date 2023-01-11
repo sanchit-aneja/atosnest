@@ -3,6 +3,7 @@ import { DataTypes, Model, Sequelize } from "sequelize";
 import sequelize from "../utils/database";
 import * as moment from "moment";
 import app from "../utils/app";
+import {File as ContributionFile} from "../models";
 
 class StgFileMemberDetails extends Model {}
 
@@ -143,5 +144,11 @@ StgFileMemberDetails.init(
     timestamps: false,
   }
 );
+
+StgFileMemberDetails.belongsTo(ContributionFile, {
+  targetKey: 'fileId', 
+  foreignKey: 'uploadFileId',
+  as: 'file'
+})
 
 export default StgFileMemberDetails;

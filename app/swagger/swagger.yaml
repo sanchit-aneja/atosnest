@@ -1901,6 +1901,44 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/ContributionDetailsRequestDTO"
+
+  /contribution/fileupload/retrieveNotUploadedMembers:
+    get:
+      operationId: RetrieveNotUploadedMembers
+      description: A list of STG_File_Member_Detail Objects is returned based on the requested Contrib_Header_Id
+      responses:
+        "200":
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: "#/components/schemas/SearchResultsetResponse_MemberContributionDetailsResponse_"
+                  - {}
+        "400":
+          description: Invalid Request
+        "404":
+          description: Record does not exist
+        "500":
+          description: Internal Server Error
+      security:
+        - api_key: []
+      parameters:
+        - description: contribHeaderId of the STG_File_Member_Detail based on which record to be fetched
+          in: query
+          name: contribHeaderId
+          required: true
+          schema:
+            type: string
+            example: 104d1200-d977-42eb-9b2e-6c0f2f9bc83c 
+        - description: type of the STG_File_Member_Detail based on which record to be fetched
+          in: query
+          name: type
+          required: true
+          schema:
+            type: string
+            enum: [NR, EN, NE]
+            example: NR   
   /contribution/Submission/MemberContributionSubmissions/{contribSubmissionRef}:
     get:
       operationId: GetMemberContributionSubmission
