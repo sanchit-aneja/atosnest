@@ -1,5 +1,5 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions"
-import { ContributionSubmissionUpdatesController } from "../controllers/submission-update-controller";
+import { ContributionSubmissionController } from "../controllers";
 import { errorDetails } from "../utils/constants";
 import errorHandler from "../utils/errorHandler";
 import app from "../utils/app";
@@ -26,7 +26,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
           const resp = await app.errorResponse(400, data);
           context.res = resp;    
       }
-    const controller = new ContributionSubmissionUpdatesController();
+    const controller = new ContributionSubmissionController();
     const result = await controller.updateSubmissionMembers(submissionHeaderId, event);
 
     context.res = {

@@ -99,24 +99,11 @@ export class ContributionFileUploadController {
 
       return stageFileMembersNotUploaded
 
-    // Select <stg_file_member_details attributes> from stg_file_member_details stg, File fil, file_header_map fhm, contribution_header ch
-    // where stg.Upload_File_Id = fil.file_id
-    // and stg.reject_type = parameter (at the time of writing story this attribute not added to model so name may be different)
-    // and fhm. file_id = fil.file_id
-    // and fil.file_type = “CSU” (=file upload by employer)
-    // and fhm.contrib_header_id = ch.contrib_header_id
-    // write rows found to results and return. 
-    // No rows found? return an empty set.
-
     } catch (error) {
       throw error;
     }
-    
-    
 
   }
-
-
 
 
 }

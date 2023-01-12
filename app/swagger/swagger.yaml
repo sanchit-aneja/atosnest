@@ -1665,6 +1665,36 @@ components:
         - countUnsubmitted
       type: object
       additionalProperties: false
+    Type2HeaderValidationResponse:
+      properties:
+        initatorApp:
+          type: string
+          example: contriIndex
+        contributionHeaderId:
+          type: string
+          example: GUID
+      required:
+        - params
+      type: object
+      additionalProperties: false
+    Type2BodyValidationResponse:
+      properties:
+        initatorApp:
+          type: string
+          example: contriIndex
+        fileId:
+          type: string
+          example: GUID
+        paidMembers:
+          type: boolean
+          example: true
+        newMembers:
+          type: boolean
+          example: false
+      required:
+        - params
+      type: object
+      additionalProperties: false
     FileUploadRequest:
       properties:
         key:
@@ -2213,6 +2243,12 @@ paths:
       responses:
         "200":
           description: Success Response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: "#/components/schemas/Type2HeaderValidationResponse"
+                  - {}
         "400":
           description: Invalid Response
         "500":
@@ -2233,7 +2269,7 @@ paths:
                     "correlationId": "7b11c4ce-1c34-4416-848b-1730e766f126",
                     "blobName": "Sample_File_Upload9.csv",
                     "fqsId": "6b11c4ce-1c34-4416-848b-1730e766f122",
-                    "processType": "CS",
+                    "processType": "CS or CS",
                   }
   /contribution/fileUpload/type2BodyValidation:
     post:
@@ -2244,6 +2280,12 @@ paths:
       responses:
         "200":
           description: Success Response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: "#/components/schemas/Type2BodyValidationResponse"
+                  - {}
         "400":
           description: Invalid Response
         "500":
@@ -2262,7 +2304,7 @@ paths:
                     "correlationId": "7b11c4ce-1c34-4416-848b-1730e766f126",
                     "blobName": "Sample_File_Upload9.csv",
                     "fqsId": "6b11c4ce-1c34-4416-848b-1730e766f122",
-                    "processType": "CS",
+                    "processType": "CS or CC",
                     "contributionHeaderId": "6611c4ce-1c34-4416-848b-1730e766f133",
                   }
   /contribution/submission/update-submission/{submissionHeaderId}:
@@ -2291,6 +2333,49 @@ paths:
           required: true
           schema:
             type: string
+      
+  /contribution/submission/updateSubmissionStatus:
+    put:
+      operationId: UpdateSubmissionStatus
+      responses:
+        "200":
+          description: Success Response
+          content:
+            application/json:
+              schema: {}
+              example: ok              
+        "400":
+          description: Invalid Request
+        "404":
+          description: Record does not exist
+      description: "5407 API Catalogue Number\r\nValidate For Submission"
+      security:
+        - api_key: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - correlationId
+                - blobName
+                - fqsId
+                - processType
+              properties:
+                fileStatus:
+                  type: string
+                submissionHeaderId:
+                  type: string 
+            examples:
+              ex1:
+                summary: A sample
+                value:
+                  {
+                    "fileStatus": "N",
+                    "submissionHeaderId": "7b11c4ce-1c34-4416-848b-1730e766f126",
+                  }
+
   /contribution/updateIneligibility/{membEnrolmentRef}/{ineligibilityReason}/{effectiveDate}:
     put:
       operationId: UpdateIneligibility
