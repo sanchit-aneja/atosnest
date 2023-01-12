@@ -266,6 +266,47 @@ components:
           format: date
       type: object
       additionalProperties: false
+    HeaderCorrectionFilterParams:
+      properties:
+        contribHeaderId:
+          type: string
+        nestScheduleRef:
+          type: string
+        employerNestId:
+          type: string
+        scheduleStatusCd:
+          type: array
+          items:
+            type: string
+        earningPeriodEndDate:
+          type: string
+          format: date
+        scheduleType:
+          type: string
+        subSchemeId:
+          type: string
+        paymentPlanNo:
+          type: string
+        paymentRef:
+          type: string
+        nestPaymentRef:
+          type: string
+        paymentSourceName:
+          type: string
+        paymentMethod:
+          type: string
+        paymentMethodDesc:
+          type: string
+        paymentFrequency:
+          type: string
+        paymentFrequencyDesc:
+          type: string
+        taxPayFrequencyInd:
+          type: string
+        pegaCaseRef:
+          type: string
+      type: object
+      additionalProperties: false
     CorrectionEligibleFilterParams:
       properties:
         contribHeaderId:
@@ -286,6 +327,16 @@ components:
           $ref: "#/components/schemas/FilterOptions"
         params:
           $ref: "#/components/schemas/HeaderFilterParams"
+      required:
+        - params
+      type: object
+      additionalProperties: false
+    HeaderCorrectionFilterElements:
+      properties:
+        options:
+          $ref: "#/components/schemas/FilterOptions"
+        params:
+          $ref: "#/components/schemas/HeaderCorrectionFilterParams"
       required:
         - params
       type: object
@@ -2240,32 +2291,7 @@ paths:
           required: true
           schema:
             type: string
-  /contribution/submission/ValidateForSubmission/{ContributionHeaderId}:
-    post:
-      operationId: ValidateForSubmission
-      responses:
-        "200":
-          description: Success Response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidateForSubmissionResponse"
-        "400":
-          description: Invalid Request
-        "404":
-          description: Record does not exist
-      description: "5407 API Catalogue Number\r\nValidate For Submission"
-      security:
-        - api_key: []
-      parameters:
-        - description: is the Contribution Submission Header id
-          in: path
-          name: submissionHeaderId
-          required: true
-          schema:
-            type: string
-  /contribution/updateIneligibility/membEnrolRe
-  /contribution/updateIneligibility/membEnrolRef={membEnrolmentRef}&IneligibilityReason={ineligibilityReason}&EffectiveDate={effectiveDate}:
+  /contribution/updateIneligibility/{membEnrolmentRef}/{ineligibilityReason}/{effectiveDate}:
     put:
       operationId: UpdateIneligibility
       responses:
@@ -2302,6 +2328,30 @@ paths:
         - description: effective date parameter is less than the corresponding contribution_header.earning_period_start_date
           in: path
           name: effectiveDate
+          required: true
+          schema:
+            type: string
+  /contribution/submission/ValidateForSubmission/{contribHeaderId}:
+    post:
+      operationId: ValidateForSubmission
+      responses:
+        "200":
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidateForSubmissionResponse"
+        "400":
+          description: Invalid Request
+        "404":
+          description: Record does not exist
+      description: "5407 API Catalogue Number\r\nValidate For Submission"
+      security:
+        - api_key: []
+      parameters:
+        - description: is the Contribution Submission Header id
+          in: path
+          name: contribHeaderId
           required: true
           schema:
             type: string
@@ -2441,5 +2491,33 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/RetrievePaymentStatusFilterElements"
+  /contribution/retrievescheduleheadersforcorrection:
+    post:
+      operationId: GetCorrectionHeaderByFilter
+      responses:
+        "200":
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: "#/components/schemas/SearchResultsetResponse_ContributionHeaderResponse_"
+                  - {}
+        "400":
+          description: Invalid Request
+        "404":
+          description: Record does not exist
+        "500":
+          description: Internal Server Error
+      description: "5901 API Catalogue Number\r\nRetrieves a list of correction header with filter criterias"
+      security:
+        - api_key: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HeaderCorrectionFilterElements"
 servers:
   - url: http://localhost:7071/api

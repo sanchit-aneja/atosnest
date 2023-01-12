@@ -19,7 +19,10 @@ import {
   RetriveEligibleContributionDetailsResponse,
   SearchMemberContributionResultResponse,
 } from "../schemas/response-schema";
-import { headerEligibleFilterParams } from "../utils/constants";
+import {
+  headerEligibleFilterParams,
+  headerFilterParams,
+} from "../utils/constants";
 
 @Route("/contribution")
 export class ContributionCorrectionController {
@@ -366,6 +369,79 @@ export class ContributionCorrectionController {
       return membArr;
     } catch (e) {
       return false;
+    }
+  }
+
+  /**
+   * 5901 API Catalogue Number
+   * Retrieves a list of header with filter criterias
+   * @return Contribution Header list with Array<Contribution_Header>
+   */
+  @Security("api_key")
+  @Post("/retrievescheduleheadersforcorrection")
+  @SuccessResponse("200", Status.SUCCESS_MSG)
+  @Response("400", Status.BAD_REQUEST_MSG)
+  @Response("404", Status.NOT_FOUND_MSG)
+  @Response("500", Status.FAILURE_MSG)
+  async getCorrectionHeaderByFilter(
+    @Body() requestObj: any,
+    rangeParams
+  ): Promise<any> {
+    try {
+      const element = app.mapHeaderFilterElements(
+        requestObj,
+        headerFilterParams,
+        "CH"
+      );
+      let whereCdtn = {
+        [Op.and]: {
+          ...element.params,
+          "$ContributionHeader.earning_period_start_date$": {
+            [Op.gte]: rangeParams?.startDate || "1900-01-01",
+          },
+          "$ContributionHeader.earning_period_end_date$": {
+            [Op.lt]: rangeParams?.endDate || "9999-12-31",
+          },
+          [Op.or]: {
+            "$ContributionHeader.schedule_type$": ["CS", "CE"],
+          },
+        },
+      };
+      return await sequelize.transaction(async (t) => {
+        const { rows, count } = await ContributionHeader.findAndCountAll({
+          limit: element.options.limit,
+          offset: element.options.offset,
+          order: element.options.sort,
+          include: [
+            {
+              association: "contributiondetails",
+              where: {
+                schdlMembStatusCd: { [Op.eq]: "MCS13" },
+              },
+              attributes: [],
+            },
+            {
+              association: "rdschedulestatus",
+              attributes: ["scheduleStatusDesc"],
+            },
+          ],
+          where: whereCdtn,
+          subQuery: false,
+          transaction: t,
+        });
+        if (count > 0) {
+          return {
+            totalRecordCount: count,
+            results: rows,
+          };
+        } else {
+          return Status.NOT_FOUND;
+        }
+      });
+    } catch (err) {
+      if (err) {
+        return app.errorHandler(err);
+      }
     }
   }
 }
