@@ -1,0 +1,1 @@
+export {default as ContributionSubmissionController } from "./contribution-submission-controller";

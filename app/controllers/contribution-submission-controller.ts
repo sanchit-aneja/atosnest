@@ -1,9 +1,10 @@
 import { Put, Response, Route, Security, SuccessResponse } from "tsoa";
 import Status from "../utils/config";
 import app from "../utils/app";
-import { ContributionDetails, ContributionHeaderSubmission } from "../models";
+import { ContributionDetails, ContributionHeaderSubmission, File as ContributionFile, FileHeaderMap } from "../models";
 import { MemberContributionDetailsController } from "./member-contribution-details-controller";
 import { ContributionSubmissionUpdateResponse } from "../schemas/response-schema";
+import sequelize from "../utils/database";
 
 enum NonPayReason {
   MemberOptOut = "CON16",
@@ -27,7 +28,7 @@ enum ScheduleMemberStatusCode {
 }
 
 @Route("/contribution")
-export class ContributionSubmissionUpdatesController {
+export default class ContributionSubmissionController {
   async getContributionHeaderSubmission(submissionHeaderId: any): Promise<any> {
     try {
       const doc = await ContributionHeaderSubmission.findAll({
@@ -193,4 +194,23 @@ export class ContributionSubmissionUpdatesController {
       }
     }
   }
+
+  //api 5406
+  static async updateSubmissionStatus(params){
+
+    try {
+      const result = await sequelize.query(`update public."File" 
+      set file_status= 'and' 
+      where file_id = (select file_id from 
+                          public."File_Header_Map" 
+                          where submission_header_id ='${params.submissionHeaderId}')`);
+
+      return result;
+
+    } catch (error) {
+      throw error;
+    }
+  
+  }
+
 }
