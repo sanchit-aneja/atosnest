@@ -15,11 +15,17 @@ const blobTrigger: AzureFunction = async function (
   const correlationId = uuidv4();
 
   const kafkaMsg = {
-    initatorApp: "contriIndex",
-    contriActionTrigger: "blobTrigger",
-    nextContriActionTrigger: "headerValidation",
-    correlationId: correlationId,
-    blobName: triggerParts[1],
+    eventHeaders: {
+      correlationId: correlationId,
+    },
+    eventBody: {
+      payloadType: "ECWrapper",
+      intentAttributes: {
+        blobName: triggerParts[1],
+        contriActionTrigger: "blobTrigger",
+        initatorApp: "contriIndex",
+      },
+    },
   };
   const kafkaMessage = {
     key: "blobTriggerMessage",
