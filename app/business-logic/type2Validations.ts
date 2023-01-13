@@ -652,7 +652,6 @@ const Type2Validations = {
           })
           .on("error", (e) => {
             reject(e);
-            // context.log("error", e);
           })
           .on("end", async (_e) => {
             if (!trailerFound) {
