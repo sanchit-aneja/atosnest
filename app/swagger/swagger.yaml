@@ -814,6 +814,77 @@ components:
         - errorCode
       type: object
       additionalProperties: false
+    SearchResultsetResponse_StageFileMemberDetails_:
+      properties:
+        totalRecordCount:
+          type: number
+          format: double
+        results:
+          items:
+            $ref: "#/components/schemas/StageFileMemberDetails"
+          type: array
+      required:
+        - totalRecordCount
+        - results
+      type: object
+      additionalProperties: false
+    StageFileMemberDetails:
+      properties:
+        UploadFileId:
+          type: string
+        Forename:
+          type: string
+        Surname:
+          type: string
+        nino:
+          type: string
+        alternativeId:
+          type: string
+        pensEarnings:
+          type: number
+          format: float
+        memberEarnings:
+          type: number
+          format: float
+        emplContriAmt:
+          type: number
+          format: float
+        membContriAmt:
+          type: number
+          format: float
+        reasonPartNonPayment:
+          type: string
+        effectivePartNonPaymentDate:
+          type: string
+        newGroupName:
+          type: string
+        effectiveGroupChangeDate:
+          type: string
+          format: date
+        newPaymentSourceName:
+          type: string
+        newGroupPensEarnings:
+          type: string
+        newGroupEmplContriAmt:
+          type: number
+          format: float
+        newGroupMembContriAmt:
+          type: number
+          format: float
+        optoutRefNum:
+          type: number
+          format: float
+        optoutDeclarationFlag:
+          type: string
+        secEnrolPensEarnings:
+          type: number
+          format: float
+        secEnrolEmplContriAmt:
+          type: number
+          format: float
+        secEnrolMembContriAmt:
+          type: number
+          format: float
     RDScheduleMemberStatusResponse:
       properties:
         schdlMembStatusDesc:
@@ -1986,7 +2057,7 @@ paths:
   /contribution/fileupload/retrieveNotUploadedMembers:
     get:
       operationId: RetrieveNotUploadedMembers
-      description: A list of STG_File_Member_Detail Objects is returned based on the requested Contrib_Header_Id
+      description: Api -5206 A list of STG_File_Member_Detail Objects is returned based on the requested Contrib_Header_Id
       responses:
         "200":
           description: Success Response
@@ -1994,7 +2065,7 @@ paths:
             application/json:
               schema:
                 anyOf:
-                  - $ref: "#/components/schemas/SearchResultsetResponse_MemberContributionDetailsResponse_"
+                  - $ref: "#/components/schemas/SearchResultsetResponse_StageFileMemberDetails_"
                   - {}
         "400":
           description: Invalid Request
@@ -2078,7 +2149,7 @@ paths:
     post:
       operationId: FileUploadMonitor
       responses:
-        "200":
+        "202":
           description: Success Response
         "400":
           description: Invalid Request
@@ -2348,7 +2419,7 @@ paths:
           description: Invalid Request
         "404":
           description: Record does not exist
-      description: "5407 API Catalogue Number\r\nValidate For Submission"
+      description: "5406 API Catalogue Number\r\n Update Status for Submission"
       security:
         - api_key: []
       requestBody:

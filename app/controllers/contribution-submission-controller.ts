@@ -1,7 +1,7 @@
 import { Put, Response, Route, Security, SuccessResponse } from "tsoa";
 import Status from "../utils/config";
 import app from "../utils/app";
-import { ContributionDetails, ContributionHeaderSubmission, File as ContributionFile, FileHeaderMap } from "../models";
+import { ContributionDetails, ContributionHeaderSubmission} from "../models";
 import { MemberContributionDetailsController } from "./member-contribution-details-controller";
 import { ContributionSubmissionUpdateResponse } from "../schemas/response-schema";
 import sequelize from "../utils/database";
@@ -131,7 +131,9 @@ export default class ContributionSubmissionController {
           break;
       }
     } catch (err) {
-      console.log(err);
+      if (err) {
+        return app.errorHandler(err);
+      }
     }
   }
 
@@ -207,8 +209,10 @@ export default class ContributionSubmissionController {
 
       return result;
 
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      if (err) {
+        return app.errorHandler(err);
+      }
     }
   
   }

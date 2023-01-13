@@ -51,7 +51,7 @@ export class ContributionFileUploadController {
   static async retrieveNotUploadedMembers(params){
     try {
       const contribHeaderId = params.contribHeaderId;
-      const rejectType = params.type;
+      const rejectType = params.Type;
 
       const contributionHeader = await ContributionHeader.findAll({
         where: {
@@ -99,8 +99,10 @@ export class ContributionFileUploadController {
 
       return stageFileMembersNotUploaded
 
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      if (err) {
+        return app.errorHandler(err);
+      }
     }
 
   }

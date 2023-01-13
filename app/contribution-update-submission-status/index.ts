@@ -8,8 +8,6 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
   
   try {
     context.log('HTTP trigger function processed a request.');
-    // const name = (req.query.name || (req.body && req.body.name));
-    const submissionHeaderId = (req.body?.submissionHeaderId);
     const fileStatus = req.body?.fileStatus;
     let validFileStatus = ["N","V","I","A","S","P","X","F","D"];
     let isFileStatusValid = validFileStatus.indexOf(fileStatus)> -1;
@@ -43,7 +41,6 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     
   
   } catch (error) {
-    // const responseMessage = "ok";
     context.res = {
         status: 400, /* Defaults to 200 */
         body: error.message
