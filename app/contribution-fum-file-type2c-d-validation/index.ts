@@ -10,6 +10,7 @@ import {
 import { FQSHelper } from "../utils";
 import { v4 as uuidv4 } from "uuid";
 import * as Joi from "joi";
+import app from "../utils/app";
 
 const eventGridTrigger: AzureFunction = async function (
   context: Context,
@@ -117,15 +118,14 @@ const eventGridTrigger: AzureFunction = async function (
     }
 
     // Sending message to Type 3
-    context.res = {
-      status: 200 /* Defaults to 200 */,
-      body: {
-        initatorApp: "contriIndex",
-        fileId: fileId,
-        paidMembers: updateResult.paidMembers > 0,
-        newMembers: updateResult.newMembers > 0,
-      },
+    const result = {
+      initatorApp: "contriIndex",
+      fileId: fileId,
+      paidMembers: updateResult.paidMembers > 0,
+      newMembers: updateResult.newMembers > 0,
     };
+    const resp = await app.successResponse(result);
+    context.res = resp;
 
     context.log(
       `${timeStamp} - Validation done for correlation Id ${payload.correlationId}, fqsId:${payload.fqsId}`
@@ -175,19 +175,21 @@ const eventGridTrigger: AzureFunction = async function (
       JSON.stringify(reqPayload)
     );
 
-    // Send Error response
+
     context.res = {
-      status: 400 /* Defaults to 200 */,
+      status: 400,
       body: {
         errors: [
           {
-            errorCode: "CoI-0007",
-            errorDetail: `Please check more details in FQS with ID ${payload.fqsId}`,
+            errorCode: "CIA-0602",
+            errorDetail: "Something went wrong, update fails",
           },
         ],
       },
-    };
-  }
+    }
+ 
+  }  
+
   context.log(
     `${timeStamp} - Type 2C & D Vaildation done for correlation Id ${payload.correlationId}`
   );
