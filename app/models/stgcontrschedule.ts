@@ -26,16 +26,7 @@ StgContrSchedule.init(
     },
     scheduleReference: {
       type: DataTypes.STRING(32),
-      allowNull: false,
       field: "schedule_reference",
-      validate: {
-        notEmpty: {
-          msg: "scheduleReference field cannot be empty",
-        },
-        notNull: {
-          msg: "scheduleReference field cannot be null",
-        },
-      },
     },
     groupSchemeID: {
       type: DataTypes.STRING(16),
@@ -137,7 +128,6 @@ StgContrSchedule.init(
 StgContrSchedule.beforeCreate(async (stgcontrschedule, _options) => {
   const schema = Joi.object({
     scheduleId: Joi.number().required(),
-    scheduleReference: Joi.string().alphanum().max(32).trim(true).required(),
   });
   const { error } = schema.validate(stgcontrschedule, joiOption);
   if (error) throw error;

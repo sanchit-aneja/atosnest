@@ -213,7 +213,7 @@ export class ContributionCorrectionController {
           attributes: ["origContribHeaderId"],
         });
         if (headerData) {
-          const { rows, count } = await ContributionDetails.findAndCountAll({
+          const { rows } = await ContributionDetails.findAndCountAll({
             limit: element.options.limit,
             offset: element.options.offset,
             order: element.options.sort,
