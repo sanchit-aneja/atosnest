@@ -1,11 +1,13 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions"
 import { ContributionFileUploadController } from "../controllers/contribution-file-upload";
 import * as Joi from "joi";
+import app from "../utils/app";
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
-    try {
+  let payload;  
+  try {
         context.log('HTTP trigger function processed a request.');
-        const payload = req.query;
+        payload = req.query;
         let requestSchema = Joi.object().keys({
             contribHeaderId: Joi.string().required(),
             Type: Joi.string().required().valid("NR", "EN", "NE"),
@@ -30,7 +32,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
         let responseMessage;
         const result = await ContributionFileUploadController.retrieveNotUploadedMembers(req.query); 
         if(!result.count){
-            responseMessage = "No rows found";
+            responseMessage = [];
         }else{
             responseMessage = result;
         }
@@ -39,10 +41,11 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
             body: responseMessage
         };
     } catch (error) {
-        context.res = {
-            status: 500, /* Defaults to 200 */
-            body: 'Internal Server Error'
-        };  
+
+      const data = await app.mapErrorResponse("", "", 400, "Internal Server Error", "");
+      const resp = await app.errorResponse(400, data);
+      context.res = resp;
+      
     }
 };
 

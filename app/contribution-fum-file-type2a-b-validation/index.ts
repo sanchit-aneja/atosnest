@@ -4,6 +4,7 @@ import { Type2Validations, CommonContributionDetails } from "../business-logic";
 import { FQSHelper } from "../utils";
 import { fqsStage, fqsStatus } from "../utils/fqsBody";
 import * as Joi from "joi";
+import app from "../utils/app";
 
 const httpTrigger: AzureFunction = async function (
   context: Context,
@@ -82,13 +83,13 @@ const httpTrigger: AzureFunction = async function (
     );
 
     // Sending message to Type 2C & D
-    context.res = {
-      status: 200 /* Defaults to 200 */,
-      body: {
-        initatorApp: "contriIndex",
-        contributionHeaderId: result.header_id,
-      },
+    
+    const responseBody = {
+      initatorApp: "contriIndex",
+      contributionHeaderId: result.header_id,
     };
+    const resp = await app.successResponse(responseBody);
+    context.res = resp;
     context.log(
       `Validation done for correlation Id ${payload.correlationId} fqsId:${payload.fqsId}`
     );
@@ -121,18 +122,18 @@ const httpTrigger: AzureFunction = async function (
 
     context.log("Sending Error data to FQS", JSON.stringify(reqPayload));
 
-    // Send Error response
-    context.res = {
-      status: 400 /* Defaults to 200 */,
-      body: {
-        errors: [
-          {
-            errorCode: "CoI-0007",
-            errorDetail: `Please check more details in FQS with ID ${payload.fqsId}`,
-          },
-        ],
-      },
-    };
+
+    const data = await app.mapErrorResponse(
+      "",
+      "",
+      "CoI-0007",
+      `Please check more details in FQS with ID ${payload.fqsId}`,
+      "get"
+    );
+
+    const resp = await app.errorResponse(400, data);
+    context.res = resp;
+
   }
   context.log(
     `Vaildation done for correlation Id ${payload.correlationId} fqsId: ${payload.fqsId}`

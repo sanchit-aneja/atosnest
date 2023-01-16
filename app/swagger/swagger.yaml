@@ -2053,10 +2053,11 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/ContributionDetailsRequestDTO"
-  /contribution/fileupload/retrieveNotUploadedMembers:
+
+  /contribution/fileUpload/retrieveNotUploadedMembers:
     get:
       operationId: RetrieveNotUploadedMembers
-      description: Api -5206 A list of STG_File_Member_Detail Objects is returned based on the requested Contrib_Header_Id
+      description: Api -5206 A list of STG_File_Member_Detail Objects which are not uploaded is returned based on the requested Contrib_Header_Id
       responses:
         "200":
           description: Success Response
@@ -2084,7 +2085,7 @@ paths:
             example: 104d1200-d977-42eb-9b2e-6c0f2f9bc83c
         - description: type of the STG_File_Member_Detail based on which record to be fetched
           in: query
-          name: type
+          name: Type
           required: true
           schema:
             type: string

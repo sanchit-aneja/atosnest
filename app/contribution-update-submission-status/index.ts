@@ -25,27 +25,25 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
 
       }
       let result = await ContributionSubmissionController.updateSubmissionStatus(req.body);
-    let responseMessage;
-    if(result && result[1] && result[1]["rowCount"]){
-      context.res = {
-        // status: 200, /* Defaults to 200 */
-        body: "ok"
-      };
-    }else{
-      context.res = {
-        status: 404, 
-        body: "No rows found"
-      };
-    }
 
+      if(result && result[1] && result[1]["rowCount"]){
+      
+      const result = "ok";
+      const resp = await app.successResponse(result);
+      context.res = resp;
+    }else{
+     
+      const data = await app.mapErrorResponse("", "", 404, "No rows found", "");
+      const resp = await app.errorResponse(404, data);
+      context.res = resp;
     
+    }
   
   } catch (error) {
-    context.res = {
-        status: 400, /* Defaults to 200 */
-        body: error.message
-    };
-  
+
+    const data = await app.mapErrorResponse("", "", 400, error.message, "");
+    const resp = await app.errorResponse(400, data);
+    context.res = resp;  
   }
   
 };
