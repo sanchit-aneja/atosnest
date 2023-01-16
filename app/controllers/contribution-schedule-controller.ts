@@ -290,12 +290,8 @@ export class ContributionScheduleController {
             subQuery: false,
             transaction: t,
           });
-          // if (rows?.length == 0) {
-          //   return Status.NOT_FOUND;
-          // } else {
           headerObj = await this.mapCompleteObj(rows, i, rangeParams.filter);
           headerData.push(headerObj);
-          // }
         }
         headerData = [].concat(...headerData);
         return {

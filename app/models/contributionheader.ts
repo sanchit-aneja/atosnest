@@ -214,6 +214,12 @@ ContributionHeader.init(
     taxPayFrequencyInd: {
       type: DataTypes.STRING(1),
       field: "tax_pay_frequency_ind",
+      validate: {
+        isIn: {
+          args: [["Y", "N"]],
+          msg: "Value of taxPayFrequencyInd field must be Y or N",
+        },
+      },
     },
     paymentDueDate: {
       type: DataTypes.DATE,
@@ -397,9 +403,10 @@ ContributionHeader.addHook("beforeValidate", (contributionheader, _options) => {
     taxPayFrequencyInd: Joi.string()
       .alphanum()
       .max(1)
+      .valid("Y", "N")
+      .insensitive()
       .trim(true)
-      .optional()
-      .allow(null, ""),
+      .optional(),
     paymentDueDate: Joi.date().iso().optional().allow(null),
     pegaCaseRef: Joi.string()
       .alphanum()

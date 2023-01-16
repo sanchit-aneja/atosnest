@@ -127,6 +127,12 @@ ContributionDetails.init(
     autoCalcFlag: {
       type: DataTypes.STRING(1),
       field: "auto_calc_flag",
+      validate: {
+        isIn: {
+          args: [["Y", "N"]],
+          msg: "Value of autoCalcFlag field must be Y or N",
+        },
+      },
     },
     pensEarnings: {
       type: DataTypes.DECIMAL,
@@ -232,7 +238,7 @@ ContributionDetails.init(
       field: "last_updated_timestamp",
     },
     empGroupId: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.NUMBER,
       allowNull: false,
       field: "emp_group_id",
       validate: {
@@ -245,7 +251,7 @@ ContributionDetails.init(
       },
     },
     newEmpGroupId: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.NUMBER,
       field: "new_emp_group_id",
     },
     employerNestId: {
@@ -431,7 +437,13 @@ ContributionDetails.beforeUpdate((contributionDetails, _options) => {
       scmPartyId: Joi.string().max(16).optional().allow(null, ""),
       nino: Joi.string().max(9).optional().allow(null, ""),
       alternativeId: Joi.string().max(16).optional().allow(null, ""),
-      autoCalcFlag: Joi.string().max(1).min(1).optional().allow(null, ""),
+      autoCalcFlag: Joi.string()
+        .valid("Y", "N")
+        .insensitive()
+        .max(1)
+        .min(1)
+        .optional()
+        .allow(null, ""),
       membNonPayReason: Joi.string().max(5).optional().allow(null, ""),
       newGroupName: Joi.string().max(40).optional().allow(null, ""),
 
@@ -462,7 +474,7 @@ ContributionDetails.beforeUpdate((contributionDetails, _options) => {
       pensEarnings: Joi.number().optional().allow(null, ""),
       emplContriAmt: Joi.number().optional().allow(null, ""),
       membContriAmt: Joi.number().optional().allow(null, ""),
-      newEmpGroupId: Joi.number().integer().optional().allow(null, ""),
+      newEmpGroupId: Joi.number().max(6).optional().allow(null, ""),
     });
 
     Joi.assert(contributionDetails, schema, {

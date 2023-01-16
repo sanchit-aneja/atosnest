@@ -2,7 +2,7 @@ import { AzureFunction, Context, HttpRequest } from "@azure/functions";
 import { ContributionScheduleController } from "../controllers/contribution-schedule-controller";
 import app from "../utils/app";
 import Status from "../utils/config";
-import { errorDetails, overdueScheduleParams } from "../utils/constants";
+import { errorDetails } from "../utils/constants";
 import errorHandler from "../utils/errorHandler";
 
 /**

@@ -2053,7 +2053,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/ContributionDetailsRequestDTO"
-
   /contribution/fileupload/retrieveNotUploadedMembers:
     get:
       operationId: RetrieveNotUploadedMembers
@@ -2082,15 +2081,18 @@ paths:
           required: true
           schema:
             type: string
-            example: 104d1200-d977-42eb-9b2e-6c0f2f9bc83c 
+            example: 104d1200-d977-42eb-9b2e-6c0f2f9bc83c
         - description: type of the STG_File_Member_Detail based on which record to be fetched
           in: query
           name: type
           required: true
           schema:
             type: string
-            enum: [NR, EN, NE]
-            example: NR   
+            enum:
+              - NR
+              - EN
+              - NE
+            example: NR
   /contribution/Submission/MemberContributionSubmissions/{contribSubmissionRef}:
     get:
       operationId: GetMemberContributionSubmission
@@ -2336,12 +2338,10 @@ paths:
               ex1:
                 summary: A sample
                 value:
-                  {
-                    "correlationId": "7b11c4ce-1c34-4416-848b-1730e766f126",
-                    "blobName": "Sample_File_Upload9.csv",
-                    "fqsId": "6b11c4ce-1c34-4416-848b-1730e766f122",
-                    "processType": "CS or CS",
-                  }
+                  correlationId: 7b11c4ce-1c34-4416-848b-1730e766f126
+                  blobName: Sample_File_Upload9.csv
+                  fqsId: 6b11c4ce-1c34-4416-848b-1730e766f122
+                  processType: CS or CS
   /contribution/fileUpload/type2BodyValidation:
     post:
       operationId: FupValidateBody
@@ -2371,13 +2371,11 @@ paths:
               ex1:
                 summary: A sample
                 value:
-                  {
-                    "correlationId": "7b11c4ce-1c34-4416-848b-1730e766f126",
-                    "blobName": "Sample_File_Upload9.csv",
-                    "fqsId": "6b11c4ce-1c34-4416-848b-1730e766f122",
-                    "processType": "CS or CC",
-                    "contributionHeaderId": "6611c4ce-1c34-4416-848b-1730e766f133",
-                  }
+                  correlationId: 7b11c4ce-1c34-4416-848b-1730e766f126
+                  blobName: Sample_File_Upload9.csv
+                  fqsId: 6b11c4ce-1c34-4416-848b-1730e766f122
+                  processType: CS or CC
+                  contributionHeaderId: 6611c4ce-1c34-4416-848b-1730e766f133
   /contribution/submission/update-submission/{submissionHeaderId}:
     put:
       operationId: UpdateSubmissionMembers
@@ -2404,7 +2402,6 @@ paths:
           required: true
           schema:
             type: string
-      
   /contribution/submission/updateSubmissionStatus:
     put:
       operationId: UpdateSubmissionStatus
@@ -2414,7 +2411,7 @@ paths:
           content:
             application/json:
               schema: {}
-              example: ok              
+              example: ok
         "400":
           description: Invalid Request
         "404":
@@ -2437,16 +2434,13 @@ paths:
                 fileStatus:
                   type: string
                 submissionHeaderId:
-                  type: string 
+                  type: string
             examples:
               ex1:
                 summary: A sample
                 value:
-                  {
-                    "fileStatus": "N",
-                    "submissionHeaderId": "7b11c4ce-1c34-4416-848b-1730e766f126",
-                  }
-
+                  fileStatus: "N"
+                  submissionHeaderId: 7b11c4ce-1c34-4416-848b-1730e766f126
   /contribution/updateIneligibility/{membEnrolmentRef}/{ineligibilityReason}/{effectiveDate}:
     put:
       operationId: UpdateIneligibility
@@ -2608,7 +2602,7 @@ paths:
           description: Record does not exist
         "500":
           description: Internal Server Error
-      description: "5207 API Catalogue Number Update member status"
+      description: 5207 API Catalogue Number Update member status
       security:
         - api_key: []
       parameters: []
