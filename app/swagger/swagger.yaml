@@ -2403,6 +2403,31 @@ paths:
           required: true
           schema:
             type: string
+  /contribution/UpdateHeaderStatus:
+    put:
+      operationId: UpdateHeaderStatus
+      responses:
+        "200":
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContributionHeaderResponse"
+        "400":
+          description: Invalid Request
+        "404":
+          description: Record does not exist
+
+      description: "5106 API Catalogue Number\r\nUpdate header status"
+      security:
+        - api_key: []
+      parameters:
+        - description: is the Contribution  Header id
+          in: query
+          name: contribHeaderId
+          required: true
+          schema:
+            type: string
   /contribution/submission/updateSubmissionStatus:
     put:
       operationId: UpdateSubmissionStatus
