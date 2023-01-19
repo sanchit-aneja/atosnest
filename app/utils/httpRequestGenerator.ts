@@ -16,7 +16,6 @@ export function httpRequestGenerator(
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      "api-key": process.env.api_key,
       ...headers,
     },
     data,
