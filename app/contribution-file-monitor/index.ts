@@ -13,10 +13,11 @@ const httpTrigger: AzureFunction = async function (
   const payload = req.body;
 
   const controller = new ContributionFileUploadController();
-  const status = await controller.fileUpload(payload);
+  const result = await controller.fileUpload(context, payload);
 
   context.res = {
-    status: status,
+    status: result.status,
+    body: result.FQSId
   };
 };
 
