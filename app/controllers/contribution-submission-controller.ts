@@ -1,7 +1,11 @@
-import { Put, Response, Route, Security, SuccessResponse } from "tsoa";
+import { Get, Put, Response, Route, Security, SuccessResponse } from "tsoa";
 import Status from "../utils/config";
 import app from "../utils/app";
-import { ContributionDetails, ContributionHeaderSubmission} from "../models";
+import {
+  ContributionDetails,
+  ContributionHeader,
+  ContributionHeaderSubmission,
+} from "../models";
 import { MemberContributionDetailsController } from "./member-contribution-details-controller";
 import { ContributionSubmissionUpdateResponse } from "../schemas/response-schema";
 import sequelize from "../utils/database";
@@ -20,11 +24,11 @@ enum NonPayReason {
 
 enum ScheduleMemberStatusCode {
   NoContributionsDue = "MCS9",
-  ProcessingPayment = "MCS12", 
+  ProcessingPayment = "MCS12",
   AwaitingPayment = "MCS16",
   PaymentFailed = "MCS15",
-  Paid = "MCS13", 
-  Submitted = "MCS10"
+  Paid = "MCS13",
+  Submitted = "MCS10",
 }
 
 @Route("/contribution")
@@ -80,9 +84,8 @@ export default class ContributionSubmissionController {
     }
   }
 
-
-  getStatusCode(event){
-    switch(event){
+  getStatusCode(event) {
+    switch (event) {
       case "submitted":
         return ScheduleMemberStatusCode.NoContributionsDue;
       case "processing payment":
@@ -93,24 +96,21 @@ export default class ContributionSubmissionController {
         return ScheduleMemberStatusCode.PaymentFailed;
       case "Paid":
         return ScheduleMemberStatusCode.Paid;
-      default: 
+      default:
         return ScheduleMemberStatusCode.NoContributionsDue;
     }
   }
 
-
   async updateSubmissionMember(detail: any, event) {
     try {
-      
       let record: any = {};
-          
-      switch (detail.membNonPayReason) {
 
+      switch (detail.membNonPayReason) {
         case NonPayReason.PayForPreviousAndNewGroup:
           break;
         case NonPayReason.InsufficientEarnings:
         case NonPayReason.MemberOptOut:
-          record.schdlMembStatusCd = this.getStatusCode(event);          
+          record.schdlMembStatusCd = this.getStatusCode(event);
           await ContributionDetails.update(record, {
             where: { membContribDetlId: detail.membContribDetlId },
           });
@@ -118,12 +118,12 @@ export default class ContributionSubmissionController {
         case NonPayReason.MemberFamilyLeave:
         case NonPayReason.ChangePaymentSourceAndGroup:
         case NonPayReason.ChangeMemberGroupAndPay:
-        case NonPayReason.TransferPaymentSource:    
-        case NonPayReason.NoContributionsPayable:  
+        case NonPayReason.TransferPaymentSource:
+        case NonPayReason.NoContributionsPayable:
           if (detail.membContriAmt === "0.00") {
             record.schdlMembStatusCd = this.getStatusCode("Submitted");
-          }else{
-            record.schdlMembStatusCd = this.getStatusCode(event) 
+          } else {
+            record.schdlMembStatusCd = this.getStatusCode(event);
           }
           await ContributionDetails.update(record, {
             where: { membContribDetlId: detail.membContribDetlId },
@@ -150,7 +150,7 @@ export default class ContributionSubmissionController {
   @Response("404", Status.NOT_FOUND_MSG)
   @Response("500", Status.FAILURE_MSG)
   async updateSubmissionMembers(
-    submissionHeaderId: any, 
+    submissionHeaderId: any,
     event: any
   ): Promise<ContributionSubmissionUpdateResponse> {
     try {
@@ -198,8 +198,7 @@ export default class ContributionSubmissionController {
   }
 
   //api 5406
-  static async updateSubmissionStatus(params){
-
+  static async updateSubmissionStatus(params) {
     try {
       const result = await sequelize.query(`update public."File" 
       set file_status= 'and' 
@@ -208,13 +207,181 @@ export default class ContributionSubmissionController {
                           where submission_header_id ='${params.submissionHeaderId}')`);
 
       return result;
-
     } catch (err) {
       if (err) {
         return app.errorHandler(err);
       }
     }
-  
   }
 
+  /**
+   * 5912 API Catalogue Number
+   * Retrieves the Group Name list based on contribHeaderId passed.
+   * @param contribHeaderId of the Contribution Header record to be fetched
+   * @return Member Details list with Array<GroupName> based on contribHeaderId
+   */
+  @Security("api_key")
+  @Get("Submission/PreCorrectionSummary/{contribHeaderId}")
+  @SuccessResponse("200", Status.SUCCESS_MSG)
+  @Response("400", Status.BAD_REQUEST_MSG)
+  @Response("404", Status.NOT_FOUND_MSG)
+  @Response("500", Status.FAILURE_MSG)
+  async getPreCorrectionSummary(contribHeaderId: string): Promise<any> {
+    try {
+      let whereCdtn = {
+        contrib_header_id: contribHeaderId,
+        schedule_type: "CC",
+      };
+      return await sequelize.transaction(async (t) => {
+        const headerData = await ContributionHeader.findOne({
+          where: whereCdtn,
+          attributes: [
+            "contribHeaderId",
+            "origContribHeaderId",
+            "nestScheduleRef",
+            "earningPeriodStartDate",
+            "earningPeriodEndDate",
+            "scheduleStatusCd",
+            "paymentFrequency",
+            "paymentFrequencyDesc",
+            "paymentSourceName",
+            "paymentMethod",
+            "paymentMethodDesc",
+            "paymentDueDate",
+            "paymentPlanNo",
+          ],
+          transaction: t,
+        });
+        if (headerData) {
+          const responseData = await this.mapCompleteObj(headerData);
+          return {
+            totalRecordCount: responseData.length,
+            results: responseData,
+          };
+        } else {
+          return Status.NOT_FOUND;
+        }
+      });
+    } catch (err) {
+      if (err) {
+        return app.errorHandler(err);
+      }
+    }
+  }
+
+  /**
+   * This method used to get complete result object for pre summary correction
+   * @param item
+   * @returns
+   */
+  async mapCompleteObj(item): Promise<any> {
+    try {
+      let contrDetailAttr = [];
+      let finalObj = {};
+      let totalCurrAmt = 0;
+      let totalAmt = 0;
+
+      const membData = await this.getMemberSummary(
+        item?.dataValues?.contribHeaderId
+      );
+
+      for (let membItem of membData) {
+        const statusCount = await this.getMembCount(
+          item?.dataValues?.contribHeaderId,
+          membItem?.dataValues?.schdlMembStatusCd
+        );
+        let memberSummaryObj = {
+          schdlMembStatusCd: membItem?.dataValues?.schdlMembStatusCd,
+          statusCount: statusCount[0].count,
+        };
+        totalCurrAmt +=
+          parseFloat(membItem.dataValues.currEmplContriAmt) +
+          parseFloat(membItem.dataValues.currMembContriAmt);
+        totalAmt +=
+          parseFloat(membItem.dataValues.emplContriAmt) +
+          parseFloat(membItem.dataValues.membContriAmt);
+        contrDetailAttr.push(memberSummaryObj);
+      }
+
+      contrDetailAttr = Object.values(
+        contrDetailAttr.reduce(
+          (acc, cur) => Object.assign(acc, { [cur.schdlMembStatusCd]: cur }),
+          {}
+        )
+      );
+      let origNestScheduleRef = await ContributionHeader.findOne({
+        where: {
+          contrib_header_id: item?.dataValues?.origContribHeaderId,
+        },
+        attributes: ["nestScheduleRef"],
+      });
+      origNestScheduleRef = origNestScheduleRef
+        ? origNestScheduleRef["dataValues"]["nestScheduleRef"]
+        : null;
+      finalObj = {
+        contribHeaderId: item?.dataValues?.contribHeaderId,
+        origContribHeaderId: item?.dataValues?.origContribHeaderId,
+        nestScheduleRef: item?.dataValues?.nestScheduleRef,
+        origNestScheduleRef: origNestScheduleRef,
+        origPaymentDueDate: item?.dataValues?.paymentDueDate,
+        earningsPeriodStartDate: item?.dataValues?.earningPeriodStartDate,
+        earningsPeriodEndDate: item?.dataValues?.earningPeriodEndDate,
+        paymentFrequency: item?.dataValues?.paymentFrequency,
+        paymentFrequencyDesc: item?.dataValues?.paymentFrequencyDesc,
+        paymentSourceName: item?.dataValues?.paymentSourceName,
+        paymentMethod: item?.dataValues?.paymentMethod,
+        paymentMethodDesc: item?.dataValues?.paymentMethodDesc,
+        paymentPlanId: item?.dataValues?.paymentPlanNo,
+        totContrSubmissionAmt: Number(totalCurrAmt).toFixed(2),
+        ccTotContrSubmissionAmt: Number(totalAmt).toFixed(2),
+        memberSummary: contrDetailAttr,
+      };
+
+      return finalObj;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /*
+   * This method should return member summary
+   */
+  async getMemberSummary(contribHeaderId: string): Promise<any> {
+    try {
+      return ContributionDetails.findAll({
+        where: {
+          contrib_header_id: contribHeaderId,
+          member_excluded_flag: "N",
+        },
+        attributes: [
+          "schdlMembStatusCd",
+          "currEmplContriAmt",
+          "currMembContriAmt",
+          "emplContriAmt",
+          "membContriAmt",
+        ],
+        group: [
+          "schdlMembStatusCd",
+          "currEmplContriAmt",
+          "currMembContriAmt",
+          "emplContriAmt",
+          "membContriAmt",
+        ],
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async getMembCount(contribHeaderId: string, schdlMembStatusCd: string) {
+    return ContributionDetails.count({
+      where: {
+        schdl_memb_status_cd: schdlMembStatusCd,
+        contrib_header_id: contribHeaderId,
+        member_excluded_flag: "N",
+      },
+      attributes: ["schdlMembStatusCd"],
+      group: "schdlMembStatusCd",
+    });
+  }
 }
