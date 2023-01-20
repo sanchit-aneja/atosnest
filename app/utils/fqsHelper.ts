@@ -3,7 +3,8 @@ import { Context } from "@azure/functions";
 import { httpRequestGenerator } from "./httpRequestGenerator";
 import { FQSBody, EventBody, IntentAttributes, FQSError } from "./fqsBody";
 
-const ROOT_ENDPOINT = process.env.fqs_Host;
+const ROOT_ENDPOINT = process.env.contribution_FqsHost;
+const API_KEY = process.env.contribution_FqsApiKey;
 
 class FQSHelper {
   private _context: Context;
@@ -43,7 +44,7 @@ class FQSHelper {
         null,
         {
           "Correlation-ID": correlationId,
-          "api-key": process.env.fqs_api_key,
+          "api-key": API_KEY
         }
       )
         .then((response: AxiosResponse) => {
@@ -73,7 +74,7 @@ class FQSHelper {
         payload,
         {
           "Correlation-ID": correlationId,
-          "api-key": process.env.fqs_api_key,
+          "api-key": API_KEY
         }
       )
         .then((response: AxiosResponse) => {
@@ -100,7 +101,7 @@ class FQSHelper {
         payload,
         {
           "Correlation-ID": correlationId,
-          "api-key": process.env.fqs_api_key,
+          "api-key": API_KEY
         }
       )
         .then((response: AxiosResponse) => {
