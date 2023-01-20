@@ -207,7 +207,10 @@ export class ContributionIneligibilityController {
       where: {
         memb_enrolment_ref: membEnrolmentRef,
       },
-      attributes: ["contribHeaderId", "schdlMembStatusCd"],
+      attributes: [
+        ["contrib_header_id", "contribScheduleId"],
+        "schdlMembStatusCd",
+      ],
     });
     return { IneligibleSchedules: resultData };
   }

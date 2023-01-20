@@ -624,6 +624,65 @@ components:
         - results
       type: object
       additionalProperties: false
+    GetPreCorrectionSummaryResult_GetPreCorrectionSummaryResponse:
+      properties:
+        results:
+          $ref: "#/components/schemas/GetPreCorrectionSummaryResponse"
+      required:
+        - results
+      type: object
+      additionalProperties: false
+    GetPreCorrectionSummaryResponse:
+      properties:
+        contribHeaderId:
+          type: string
+        origContribHeaderId:
+          type: string
+        nestScheduleRef:
+          type: string
+        origNestScheduleRef:
+          type: string
+        origPaymentDueDate:
+          type: string
+          format: date
+        earningsPeriodStartDate:
+          type: string
+          format: date
+        earningsPeriodEndDate:
+          type: string
+          format: date
+        paymentFrequency:
+          type: string
+        paymentFrequencyDesc:
+          type: string
+        paymentSourceName:
+          type: string
+        paymentMethod:
+          type: string
+        paymentMethodDesc:
+          type: string
+        paymentPlanId:
+          type: string
+        totContrSubmissionAmt:
+          type: number
+          format: double
+        ccTotContrSubmissionAmt:
+          type: number
+          format: double
+        memberSummary:
+          items:
+            $ref: "#/components/schemas/MemberSummaryResponse"
+          type: array
+      type: object
+      additionalProperties: false
+    MemberSummaryResponse:
+      properties:
+        schdlMembStatusCd:
+          type: string
+        statusCount:
+          type: number
+      type: object
+      additionalProperties: false
     ClearScheduleStatusResponse:
       properties:
         clearSuccess:
@@ -2695,5 +2754,31 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/HeaderCorrectionFilterElements"
+  /contribution/Submission/PreCorrectionSummary/{contribHeaderId}:
+    get:
+      operationId: GetPreCorrectionSummary
+      responses:
+        "200":
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: "#/components/schemas/GetPreCorrectionSummaryResult_GetPreCorrectionSummaryResponse"
+                  - {}
+        "404":
+          description: Record does not exist
+        "500":
+          description: Internal Server Error
+      description: "5912 API Catalogue Number\r\nRetrieves the Group Name list based on contribHeaderId passed."
+      security:
+        - api_key: []
+      parameters:
+        - description: of the Contribution Header record to be fetched
+          in: path
+          name: contribHeaderId
+          required: true
+          schema:
+            type: string
 servers:
   - url: http://localhost:7071/api
