@@ -582,30 +582,32 @@ export const Type3Validations = {
     },
   },
   getDatarows: async (contribHeaderId, dataHeaderRow, context) => {
-    const alldataDetailRows: ContributionDetails[] =
-      await ContributionDetails.findAll({
-        where: { contrib_header_id: contribHeaderId },
+    return new Promise(async function (resolve) {
+      const alldataDetailRows: ContributionDetails[] =
+        await ContributionDetails.findAll({
+          where: { contrib_header_id: contribHeaderId },
+        });
+
+      const dataDetailRows = alldataDetailRows.filter(
+        (item: any) => item.recordChangedFlag === "Y"
+      );
+
+      let paymentGroupSource = {};
+      try {
+        paymentGroupSource =
+          await Type3Validations.getCustomerIndexPaymentGroupSource(
+            contribHeaderId,
+            context
+          );
+      } catch (error) {}
+
+      resolve({
+        dataHeaderRow: dataHeaderRow,
+        dataDetailRows: dataDetailRows,
+        paymentGroupSource: paymentGroupSource,
+        totalRows: alldataDetailRows.length,
       });
-
-    const dataDetailRows = alldataDetailRows.filter(
-      (item: any) => item.recordChangedFlag === "Y"
-    );
-
-    let paymentGroupSource = {};
-    try {
-      paymentGroupSource =
-        await Type3Validations.getCustomerIndexPaymentGroupSource(
-          contribHeaderId,
-          context
-        );
-    } catch (error) {}
-
-    return {
-      dataHeaderRow: dataHeaderRow,
-      dataDetailRows: dataDetailRows,
-      paymentGroupSource: paymentGroupSource,
-      totalRows: alldataDetailRows.length,
-    };
+    });
   },
   validateDataRows: async (dataRows: any, context: Context) => {
     let Type3Errors: any = [];
@@ -661,7 +663,7 @@ export const Type3Validations = {
   ): Promise<any> {
     return new Promise(async function (resolve, reject) {
       try {
-        const dataRows = await Type3Validations.getDatarows(
+        const dataRows: any = await Type3Validations.getDatarows(
           contribHeaderId,
           dataHeaderRow,
           context
@@ -713,8 +715,7 @@ export const Type3Validations = {
     let transaction;
     try {
       transaction = await sequelize.transaction();
-      console.log("sssss");
-      console.log(allIds);
+
       await ContributionDetails.update(
         { recordChangedFlag: null },
         {

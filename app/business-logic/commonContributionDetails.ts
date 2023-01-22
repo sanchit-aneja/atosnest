@@ -523,7 +523,7 @@ const commonContributionDetails = {
    */
   getOnlyDRows: async function (
     readStream: NodeJS.ReadableStream,
-    context: Context, 
+    context: Context,
     processType
   ): Promise<Array<any>> {
     let errorMessages = [];
@@ -841,6 +841,7 @@ const commonContributionDetails = {
         fileContent,
         process.env.contribution_DocumentIndexBlobContainerName
       );
+
       if (isUploadToBlob) {
         const documentDownloadLink = await new DocumentIndexHelper(
           context

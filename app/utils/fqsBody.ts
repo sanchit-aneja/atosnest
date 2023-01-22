@@ -27,6 +27,7 @@ export const enum fqsStage {
   HEADER = "validateHeader",
   BODY = "validateBody",
   MATCH = "matchContribution",
+  TYPE3 = "ValidateType3",
 }
 
 export const enum fqsStatus {

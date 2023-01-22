@@ -1,5 +1,6 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions";
 import blobHelper from "../utils/blobHelper";
+import { fqsStage, fqsStatus } from "../utils/fqsBody";
 import {
   SaveContributionDetails,
   Type2CValidations,
@@ -12,7 +13,7 @@ import { v4 as uuidv4 } from "uuid";
 import * as Joi from "joi";
 import app from "../utils/app";
 
-const eventGridTrigger: AzureFunction = async function (
+const httpTrigger: AzureFunction = async function (
   context: Context,
   req: HttpRequest
 ): Promise<void> {
@@ -57,7 +58,18 @@ const eventGridTrigger: AzureFunction = async function (
     context.log(
       `Started vaildation for correlation Id ${payload.correlationId}, fqsId:${payload.fqsId}`
     );
+    const fqsBody = fqsHelper.getFQSBody(
+      payload.fqsId,
+      payload.blobName,
+      fqsStage.BODY,
+      fqsStatus.INPROGRESS
+    );
 
+    await fqsHelper.updateFQSProcessingStatus(
+      payload.fqsId,
+      payload.correlationId,
+      fqsBody
+    );
     // initialization of errors and update FQS
     const errors = await CommonContributionDetails.getAllErrors();
 
@@ -107,7 +119,7 @@ const eventGridTrigger: AzureFunction = async function (
       await SaveContributionDetails.updateMemberDetails(
         blobHelper.stringToStream(fileData),
         context,
-        payload, 
+        payload,
         fileId
       );
 
@@ -175,7 +187,6 @@ const eventGridTrigger: AzureFunction = async function (
       JSON.stringify(reqPayload)
     );
 
-
     context.res = {
       status: 400,
       body: {
@@ -186,13 +197,12 @@ const eventGridTrigger: AzureFunction = async function (
           },
         ],
       },
-    }
- 
-  }  
+    };
+  }
 
   context.log(
     `${timeStamp} - Type 2C & D Vaildation done for correlation Id ${payload.correlationId}`
   );
 };
 
-export default eventGridTrigger;
+export default httpTrigger;

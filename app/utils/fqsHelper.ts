@@ -44,7 +44,7 @@ class FQSHelper {
         null,
         {
           "Correlation-ID": correlationId,
-          "api-key": API_KEY
+          "api-key": process.env.nest_api_key,
         }
       )
         .then((response: AxiosResponse) => {
@@ -74,7 +74,7 @@ class FQSHelper {
         payload,
         {
           "Correlation-ID": correlationId,
-          "api-key": API_KEY
+          "api-key": process.env.nest_api_key,
         }
       )
         .then((response: AxiosResponse) => {
@@ -101,7 +101,7 @@ class FQSHelper {
         payload,
         {
           "Correlation-ID": correlationId,
-          "api-key": API_KEY
+          "api-key": process.env.nest_api_key,
         }
       )
         .then((response: AxiosResponse) => {

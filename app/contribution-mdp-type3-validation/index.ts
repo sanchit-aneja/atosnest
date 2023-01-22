@@ -1,7 +1,7 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions";
 import { Type3Validations } from "../business-logic/type3Validations";
 import app from "../utils/app";
-const eventGridTrigger: AzureFunction = async function (
+const httpTrigger: AzureFunction = async function (
   context: Context,
   req: HttpRequest
 ): Promise<void> {
@@ -53,4 +53,4 @@ const eventGridTrigger: AzureFunction = async function (
   }
 };
 
-export default eventGridTrigger;
+export default httpTrigger;
