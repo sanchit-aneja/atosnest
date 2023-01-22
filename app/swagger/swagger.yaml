@@ -1708,6 +1708,31 @@ components:
           type: string
         contributionHeaderId:
           type: string
+    fupValidateType3Request:
+      type: object
+      required:
+        - correlationId
+        - blobName
+        - fqsId
+        - processType
+        - contributionHeaderId
+        - paidMembers
+        - newMembers
+      properties:
+        correlationId:
+          type: string
+        blobName:
+          type: string
+        fqsId:
+          type: string
+        processType:
+          type: string
+        contributionHeaderId:
+          type: string
+        paidMembers:
+          type: boolean
+        newMembers:
+          type: boolean
     SubmissionErrorRequest:
       properties:
         submissionHeaderId:
@@ -1821,6 +1846,17 @@ components:
         newMembers:
           type: boolean
           example: false
+      required:
+        - params
+      type: object
+      additionalProperties: false
+    Type3ValidationResponse:
+      properties:
+        initatorApp:
+          type: string
+          example: contriIndex
+        status:
+          type: string
       required:
         - params
       type: object
@@ -2436,6 +2472,43 @@ paths:
                   fqsId: 6b11c4ce-1c34-4416-848b-1730e766f122
                   processType: CS or CC
                   contributionHeaderId: 6611c4ce-1c34-4416-848b-1730e766f133
+  /contribution/fileUpload/type3Validation:
+    post:
+      operationId: FupValidateType3
+      description: API 5813 - This function validates Type4
+      security:
+        - api_key: []
+      responses:
+        "200":
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: "#/components/schemas/Type3ValidationResponse"
+                  - {}
+        "400":
+          description: Invalid Response
+        "500":
+          description: Internal Server Error
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/fupValidateType3Request"
+            examples:
+              ex1:
+                summary: A sample
+                value:
+                  correlationId: 7b11c4ce-1c34-4416-848b-1730e766f126
+                  blobName: Sample_File_Upload9.csv
+                  fqsId: 6b11c4ce-1c34-4416-848b-1730e766f122
+                  processType: CS or CC
+                  contributionHeaderId: 6611c4ce-1c34-4416-848b-1730e766f133
+                  fileId: 265cb4ed-28f1-44e7-855c-7e629a102138
+                  paidMembers: true
+                  newMembers: false
   /contribution/submission/update-submission/{submissionHeaderId}:
     put:
       operationId: UpdateSubmissionMembers
