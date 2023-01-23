@@ -102,17 +102,14 @@ class DataImportHelper {
     try {
       await StgContrMember.destroy({
         restartIdentity: true,
-        truncate: true,
         where: {},
       });
       await StgContrPolicy.destroy({
         restartIdentity: true,
-        truncate: true,
         where: {},
       });
       await StgContrSchedule.destroy({
         restartIdentity: true,
-        truncate: true,
         where: {},
       });
     } catch (error) {
