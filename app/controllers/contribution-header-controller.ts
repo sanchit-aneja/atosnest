@@ -503,4 +503,5 @@ export class ContributionHeaderController {
       }
     }
   }
+
 }

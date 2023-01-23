@@ -1950,6 +1950,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/HeaderFilterElements"
+          
   /contribution/submission/createsubmission/{contribHeaderId}:
     put:
       operationId: CreateContributionSubmission
@@ -2148,7 +2149,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/ContributionDetailsRequestDTO"
-
   /contribution/fileUpload/retrieveNotUploadedMembers:
     get:
       operationId: RetrieveNotUploadedMembers
@@ -2430,7 +2430,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/fupValidateHeadersRequest"
-            examples:
+            example:
               ex1:
                 summary: A sample
                 value:
@@ -2745,6 +2745,45 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/CorrectionEligibleFilterElements"
+  /contribution/getCorrectionMembers:
+    post:
+      operationId: GetCorrectionMembersByFilter
+      responses:
+        "200":
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: "#/components/schemas/SearchMemberContributionResultResponse_RetriveContributionDetailsResponse_"
+                  - {}
+        "400":
+          description: Invalid Request
+        "404":
+          description: Record does not exist
+        "500":
+          description: Internal Server Error
+      description: "5911 API Catalogue Number\r\nRetrieves a list of correction members details with filter criterias"
+      security:
+        - api_key: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DetailsFilterElements"
+            example: {
+                "options": {
+                  "limit":"10",
+                  "offset":0,
+                  "sort": "date desc"
+                },
+                "params":{
+                    "contribHeaderId":"c7bdb1aa-732b-4e64-bd8d-1ea48e825b33"
+                }
+              }
+
   /contribution/updateMemberStatus:
     put:
       operationId: UpdateMemberStatus
