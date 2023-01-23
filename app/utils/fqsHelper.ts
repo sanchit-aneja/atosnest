@@ -81,6 +81,7 @@ class FQSHelper {
           resolve(response);
         })
         .catch((e) => {
+          this.log(e);
           this.log("error making fqs processing status PUT request");
           reject(e);
         });
@@ -108,7 +109,9 @@ class FQSHelper {
           resolve(response);
         })
         .catch((e) => {
+          this.log(e);
           this.log("error making fqs finished status PUT request");
+
           reject(e);
         });
     });
