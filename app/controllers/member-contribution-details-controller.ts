@@ -21,6 +21,7 @@ import {
 import {
   contributionDetailsUpdateHelper,
   ContributionDetailsUpdateError,
+  ContributionHeader,
 } from "../models";
 import Status from "../utils/config";
 import sequelize from "../utils/database";
@@ -35,6 +36,7 @@ import {
   errorDetails,
   READONLY_CONTRIBUTION_DETAILS_COLUMNS_FOR_UPDATE,
   CONTR_MEMBER_DETAILS,
+  headerEligibleFilterParams,
 } from "../utils/constants";
 import errorHandler from "../utils/errorHandler";
 
@@ -382,4 +384,98 @@ export class MemberContributionDetailsController {
       return false;
     }
   }
+
+  async getCorrectionMembersDetailsByFilter(
+    @Body() requestObj: DetailsFilterElements,
+    rangeParams
+  ): Promise<
+    | SearchMemberContributionResultResponse<RetriveContributionDetailsResponse>
+    | any
+  > {
+    try {
+      const filterParams = app.validateFilterParams(requestObj, headerEligibleFilterParams);
+      const element = app.mapDetailsFilterElements(
+        requestObj,
+        headerEligibleFilterParams,
+        "CH"
+      );
+      let whereCdtn = {
+        ...element.params,
+      };
+      let contribHeader = await ContributionHeader.findOne({
+        attributes:['scheduleType'],
+        where: whereCdtn
+      })
+      if(!contribHeader){
+        throw new Error('Schedule does not exist')
+      }
+
+      if(contribHeader['scheduleType']!='CC'){
+        throw new Error("Schedule must be correction");
+      }
+
+      // if (rangeParams.schdlMembStatusCd) {
+      //   whereCdtn["$ContributionDetails.schdl_memb_status_cd$"] = {
+      //     [Op.or]: rangeParams.schdlMembStatusCd,
+      //   };
+      // }
+      return await sequelize.transaction(async (t) => {
+        const { rows, count } = await ContributionDetails.findAndCountAll({
+          limit: element.options.limit,
+          offset: element.options.offset,
+          order: element.options.sort,
+          distinct: true,
+          include: [
+            {
+              association: "rdschedulememberstatus",
+              attributes: ["schdlMembStatusDesc"],
+            },
+            {
+              association: "rdpartcontribreason",
+              attributes: ["reasonDescription"],
+            },
+            {
+              association: "errorDetails",
+              attributes: [
+                "errorLogId",
+                "errorFileId",
+                "errorTypeId",
+                "errorSequenceNum",
+                "sourceRecordId",
+                "errorCode",
+                "errorMessage",
+              ],
+            }
+          ],
+          where: whereCdtn,
+          subQuery: false,
+          transaction: t,
+        });
+        if (rows?.length > 0) {
+          for(let i =0; i<rows.length; i++ ){
+            Object.assign(rows[i]["dataValues"], {
+              "CurrentSCMPosition": {
+                "SCMpensEarnings": "1000.00",
+                "SCMemplContriAmt": "30.00",
+                "SCMmembContriAmt": "50.00",
+                "SCMplanStatus": "IH"
+            },
+            })
+          }
+          
+          return {
+            totalRecordCount: count,
+            results: rows,
+          };
+        } else {
+          return Status.BAD_REQUEST;
+        }
+      });
+    } catch (err) {
+      if (err) {
+        return app.errorHandler(err);
+      }
+    }
+  }
+
 }
