@@ -345,7 +345,7 @@ export const READONLY_CONTRIBUTION_HEADER_COLUMNS_FOR_UPDATE = [
   "lastUpdatedTimestamp",
   "nestScheduleRef",
   "externalScheduleRef",
-  "scheduleType",
+ // "scheduleType",
   "employerNestId",
   "subSchemeId",
   "earningPeriodStartDate",
