@@ -23,7 +23,7 @@ const httpTrigger: AzureFunction = async function (
       rangeParams["fromDate"] = queryReq.searchOptions.fromDate;
     }
 
-    if (app.isNullEmpty(queryReq)) {
+    if (app.isNullEmpty(queryReq) || queryReq?.params.length <= 0) {
       const data = errorHandler.mapHandleErrorResponse(
         "",
         "",
