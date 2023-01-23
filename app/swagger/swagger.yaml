@@ -968,6 +968,26 @@ components:
         - IncludedInCorrection
       type: object
       additionalProperties: false
+    CurrentSCMPositionResponse: 
+      properties:
+        SCMpensEarnings:
+          type: number
+          format: float
+        SCMemplContriAmt:
+          type: number
+          format: float
+        SCMmembContriAmt:
+          type: number
+          format: float
+        SCMplanStatus:
+          type: string
+      required:
+          - SCMpensEarnings
+          - SCMemplContriAmt
+          - SCMmembContriAmt
+          - SCMplanStatus
+      type: object
+      additionalProperties: false
     RetriveContributionDetailsResponse:
       properties:
         contribHeaderId:
@@ -1101,6 +1121,160 @@ components:
           $ref: "#/components/schemas/RDScheduleMemberStatusResponse"
         rdpartcontribreason:
           $ref: "#/components/schemas/RDPartContribReasonResponse"
+      required:
+        - nestScheduleRef
+        - membEnrolmentRef
+        - membContribDetlId
+        - membContriDueDate
+        - empGroupId
+        - groupName
+        - schdlMembStatusCd
+        - membPartyId
+        - membNonPayReason
+        - emplContriPct
+        - membContriPct
+        - firstName
+        - lastName
+        - errorDetails
+        - rdschedulememberstatus
+        - rdpartcontribreason
+      type: object
+      additionalProperties: false
+    GetCorrectionMemberDetailsResponse:
+      properties:
+        contribHeaderId:
+          type: string
+        origScheduleRef:
+          type: string
+        employerNestId:
+          type: string
+        updatedBy:
+          type: string
+        membPaymentDueDate:
+          type: string
+          format: date
+        recordEndDate:
+          type: string
+          format: date
+        createdBy:
+          type: string
+        newEmpGroupId:
+          type: integer
+          format: int32
+        recordStartDate:
+          type: string
+          format: date
+        memberExcludedFlag:
+          type: string
+        nestScheduleRef:
+          type: string
+        membEnrolmentRef:
+          type: string
+        membContribDetlId:
+          type: string
+        membPlanRef:
+          type: string
+        membContriDueDate:
+          type: string
+          format: date
+        empGroupId:
+          type: integer
+          format: int32
+        groupName:
+          type: string
+        schdlMembStatusCd:
+          type: string
+        membPartyId:
+          type: string
+        scmPartyId:
+          type: string
+        nino:
+          type: string
+        alternativeId:
+          type: string
+        autoCalcFlag:
+          type: string
+        emplContriAmt:
+          type: number
+          format: float
+        pensEarnings:
+          type: number
+          format: float
+        membContriAmt:
+          type: number
+          format: float
+        membLeaveEarnings:
+          type: number
+          format: float
+        membNonPayReason:
+          type: string
+        newGroupPensEarnings:
+          type: number
+          format: float
+        newGroupName:
+          type: string
+        optoutDeclarationFlag:
+          type: string
+        newGroupEmplContriAmt:
+          type: number
+          format: double
+        optoutRefNum:
+          type: string
+        newGroupMembContriAmt:
+          type: number
+          format: float
+        newPaymentPlanNo:
+          type: string
+        secEnrolMembContriAmt:
+          type: number
+          format: float
+        newPaymentSourceName:
+          type: string
+        membNonPayEffDate:
+          type: string
+          format: date
+        secEnrolPensEarnings:
+          type: number
+          format: float
+        channelType:
+          type: string
+        enrolmentType:
+          type: string
+        emplContriPct:
+          type: number
+          format: float
+        membContriPct:
+          type: number
+          format: float
+        newGroupEmplContriPct:
+          type: number
+          format: float
+        secEnrolEmplContriAmt:
+          type: number
+          format: double
+        firstName:
+          type: string
+        secEnrolmentType:
+          type: string
+        lastName:
+          type: string
+        newGroupMembContriPct:
+          type: number
+          format: float
+        recordChangedFlag:
+          type: string
+        origMembNonPayReason:
+          type: string
+        memTaxReliefEligibility:
+          type: string
+        errorDetails:
+          $ref: "#/components/schemas/ErrorDetailsResponse"
+        rdschedulememberstatus:
+          $ref: "#/components/schemas/RDScheduleMemberStatusResponse"
+        rdpartcontribreason:
+          $ref: "#/components/schemas/RDPartContribReasonResponse"
+        CurrentSCMPosition:
+          $ref: "#/components/schemas/CurrentSCMPositionResponse"
       required:
         - nestScheduleRef
         - membEnrolmentRef
@@ -1370,6 +1544,20 @@ components:
         results:
           items:
             $ref: "#/components/schemas/RetriveContributionDetailsResponse"
+          type: array
+      required:
+        - totalRecordCount
+        - results
+      type: object
+      additionalProperties: false
+    SearchMemberContributionResultResponse_GetCorrectionMemberDetailsResponse_:
+      properties:
+        totalRecordCount:
+          type: number
+          format: double
+        results:
+          items:
+            $ref: "#/components/schemas/GetCorrectionMemberDetailsResponse"
           type: array
       required:
         - totalRecordCount
