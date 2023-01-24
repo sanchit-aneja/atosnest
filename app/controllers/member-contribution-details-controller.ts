@@ -402,6 +402,7 @@ export class MemberContributionDetailsController {
       let whereCdtn = {
         ...element.params,
       };
+      this.log(JSON.stringify(whereCdtn));
       let contribHeader = await ContributionHeader.findOne({
         attributes:['scheduleType'],
         where: whereCdtn
