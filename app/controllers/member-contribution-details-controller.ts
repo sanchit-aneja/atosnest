@@ -386,8 +386,7 @@ export class MemberContributionDetailsController {
   }
 
   async getCorrectionMembersDetailsByFilter(
-    @Body() requestObj: DetailsFilterElements,
-    rangeParams
+    @Body() requestObj: DetailsFilterElements
   ): Promise<
     | SearchMemberContributionResultResponse<RetriveContributionDetailsResponse>
     | any
@@ -415,11 +414,6 @@ export class MemberContributionDetailsController {
         throw new Error("Schedule must be correction");
       }
 
-      // if (rangeParams.schdlMembStatusCd) {
-      //   whereCdtn["$ContributionDetails.schdl_memb_status_cd$"] = {
-      //     [Op.or]: rangeParams.schdlMembStatusCd,
-      //   };
-      // }
       return await sequelize.transaction(async (t) => {
         const { rows, count } = await ContributionDetails.findAndCountAll({
           limit: element.options.limit,
