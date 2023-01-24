@@ -2,29 +2,39 @@ import { ContributionDetails, ContributionHeader } from "../models";
 import { v4 as uuidv4 } from "uuid";
 import { Op } from "sequelize";
 import app from "../utils/app";
-export const correctionsCreateSchedule = {
+import { errorDetails } from "../utils/constants";
+export const correctionsCreateSchedule = {  
   /**
    * Validate Header Id
-   * @param contribHeaderId
+   * @param contribHeaderId The contribution header id to validate and check
+   * This function will attempt to find a contribution header given via the parameter and 
+   * validate that it,
+   *    1.  Is of the schedule type to correct.
+   *    2.  Has contribution details to correct.
+   * If there is an error then the object will contain an errorCode property with the error
+   * to log. If successful then the headerRow will be populated.
    */
   ValidateAndGetHeaderId: async function (contribHeaderId) {
     const dataHeaderRow: ContributionHeader = await ContributionHeader.findOne({
-      where: { contrib_header_id: contribHeaderId, schedule_type: "CS" },
+      where: { contrib_header_id: contribHeaderId, schedule_type: { [Op.in]: ["CS", "EC"]} },
     });
 
     if (dataHeaderRow) {
-      const dertailCount = await ContributionDetails.count({
+      const detailCount = await ContributionDetails.count({
         where: {
           contrib_header_id: contribHeaderId,
           schdl_memb_status_cd: "MCS13",
         },
       });
 
-      if (dertailCount > 0) {
-        return dataHeaderRow;
+      if (detailCount > 0) {
+        return { headerRow: dataHeaderRow };
+      } else {
+        return { errorDetailsObject: {errorMessage: errorDetails.CIA0601, errorCode: 404 }};
       }
-
-      return null;
+    } else {
+      // No rows returned from query
+      return { errorDetailsObject: {errorMessage: errorDetails.CIA0606, errorCode: 400 }};
     }
   },
   CreateSchedule: async function (dataHeaderRow: any, scheduleType) {
