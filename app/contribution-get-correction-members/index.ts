@@ -11,7 +11,6 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     let params;
     try {
       const queryReq = await req.body;
-      const rangeParams = {};
       context.log('HTTP trigger function processed a request.');
       
       params = req.body.params;
@@ -38,7 +37,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
       }
 
       const ctrl = new MemberContributionDetailsController();
-      const item = await ctrl.getCorrectionMembersDetailsByFilter(queryReq, rangeParams);
+      const item = await ctrl.getCorrectionMembersDetailsByFilter(queryReq);
       if (item.results) {
         const resp = await app.successResponse(item);
         context.res = resp;
@@ -58,7 +57,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
           "",
           errorDetails.CIA0503[0],
           errorDetails.CIA0503[1] +
-            " No Records Found for Nest Schedule Ref & Employer Nest Id",
+            "No correction Records found for provided Contribution header Id" + req.body.contribHeaderId,
           "get"
         );
         const resp = await app.errorResponse(404, data);
