@@ -7,7 +7,7 @@ import { ContributionSubmissionController } from "../controllers";
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
   
   try {
-    context.log('HTTP trigger function processed a request.');
+    context.log('HTTP trigger function processed a request.' + JSON.stringify(req.body));
     const fileStatus = req.body?.fileStatus;
     let validFileStatus = ["N","V","I","A","S","P","X","F","D"];
     let isFileStatusValid = validFileStatus.indexOf(fileStatus)> -1;
