@@ -9,6 +9,7 @@ export const errorDetails = {
   CIA0603: ["CIA-0603", "One or more contribHeaderId not found"],
   CIA0604: ["CIA-0604", "MCD row not suitable for update"],
   CIA0605: ["CIA-0605", "ScheduleStatusCd values allowed : CS1 to CS16"],
+  CIA0606: ["CIA-0606", "ContributionHeaderId does not exist in header table"],
 };
 export const joiOption = {
   abortEarly: false, // include all errors

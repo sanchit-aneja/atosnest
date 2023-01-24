@@ -2249,7 +2249,8 @@ paths:
           required: true
           schema:
             type: string
-  /contribution/schedule/{contribHeaderId}/scheduleType/{scheduleType}:
+  # /contribution/schedule/{contribHeaderId}:
+  /contribution/schedule/CreateDraftCorrectionSchedule:
     put:
       operationId: CreateSchedule
       responses:
@@ -2270,14 +2271,8 @@ paths:
         - api_key: []
       parameters:
         - description: is the Contribution Header id
-          in: path
-          name: contribHeaderId
-          required: true
-          schema:
-            type: string
-        - description: is the schedule Type
-          in: path
-          name: scheduleType
+          in: query
+          name: ContributionHeaderId
           required: true
           schema:
             type: string

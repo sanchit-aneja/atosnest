@@ -6,7 +6,7 @@
       "direction": "in",
       "name": "req",
       "methods": ["put"],
-      "route": "contribution/schedule/{contribHeaderId}/scheduleType/{scheduleType}"
+      "route": "contribution/schedule/CreateDraftCorrectionSchedule"
     },
     {
       "type": "http",
